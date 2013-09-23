@@ -1,0 +1,139 @@
+;; -*- mode: emacs-lisp; coding: emacs-mule; -*-
+;; --------------------------------------------------------------------------
+;; Desktop File for Emacs
+;; --------------------------------------------------------------------------
+;; Created Mon Sep 23 15:48:07 2013
+;; Desktop file format version 206
+;; Emacs version 24.3.1
+
+;; Global section:
+(setq desktop-missing-file-warning nil)
+(setq tags-file-name nil)
+(setq tags-table-list nil)
+(setq search-ring '("version" "rep" "c-mode" "Constraint" "anything"))
+(setq regexp-search-ring nil)
+(setq register-alist nil)
+(setq file-name-history '("/home/barry/repo/entropyzero/Core-C++/MatchingLibrary/Matching/DocumentComparer.cpp" "~/repo/entropyzero/Core-C++/" "~/.emacs" "~/repo/entropyzero/Core-C++/UnitTest/TestMain.cpp" "~/repo/entropyzero/Core-C++/MatchingLibrary/NRL/Constraint.h" "~/repo/entropyzero/Core-C++/UnitTest/NRL/ConstraintInterpreterEqualsTest.h" "~/.emacs" "~/repo/entropyzero/Core-C++/UnitTest/NRL/ConstraintInterpreterTest.h"))
+
+;; Buffer section -- buffers listed in same order as in buffer list:
+(desktop-create-buffer 206
+  "/home/barry/repo/entropyzero/Core-C++/CMakeLists.txt"
+  "CMakeLists.txt"
+  'cmake-mode
+  '(linum-mode)
+  506
+  '(nil nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/barry/repo/entropyzero/Core-C++/MatchingLibrary/Rules/RuleFileLoader.cpp"
+  "RuleFileLoader.cpp"
+  'c++-mode
+  '(abbrev-mode linum-mode)
+  13026
+  '(10247 nil)
+  nil
+  nil
+  '((tab-width . 4) (indent-tabs-mode . t) (buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/barry/repo/entropyzero/Core-C++/MatchingLibrary/NRL/KeywordNode.cpp"
+  "KeywordNode.cpp"
+  'c++-mode
+  '(abbrev-mode linum-mode)
+  591
+  '(698 nil)
+  nil
+  nil
+  '((tab-width . 4) (indent-tabs-mode . t) (buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/barry/repo/entropyzero/Core-C++/MatchingLibrary/NRL/NRLLexer.cpp"
+  "NRLLexer.cpp"
+  'c++-mode
+  '(abbrev-mode linum-mode)
+  1278
+  '(nil nil)
+  nil
+  nil
+  '((tab-width . 4) (indent-tabs-mode . t) (buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/barry/repo/entropyzero/Core-C++/MatchingLibrary/Matching/DocumentComparer.cpp"
+  "DocumentComparer.cpp"
+  'c++-mode
+  '(abbrev-mode linum-mode)
+  18123
+  '(2 nil)
+  nil
+  nil
+  '((tab-width . 4) (indent-tabs-mode . t) (buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/barry/repo/entropyzero/Core-C++/MatchingLibrary/NRL/KeywordNode.h"
+  "KeywordNode.h"
+  'c++-mode
+  '(abbrev-mode linum-mode)
+  579
+  '(nil nil)
+  nil
+  nil
+  '((tab-width . 4) (indent-tabs-mode . t) (buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/barry/repo/entropyzero/Core-C++/UnitTest/NRL/KeywordNodeTest.h"
+  "KeywordNodeTest.h"
+  'c++-mode
+  '(abbrev-mode linum-mode)
+  86
+  '(nil nil)
+  nil
+  nil
+  '((tab-width . 4) (indent-tabs-mode . t) (buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/barry/repo/entropyzero/Core-C++/UnitTest/TestMain.cpp"
+  "TestMain.cpp"
+  'c++-mode
+  '(abbrev-mode linum-mode)
+  2373
+  '(2317 nil)
+  nil
+  nil
+  '((tab-width . 4) (indent-tabs-mode . t) (buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/barry/repo/entropyzero/Core-C++/UnitTest/NRL/ConstraintInterpreterTest.h"
+  "ConstraintInterpreterTest.h"
+  'c++-mode
+  '(abbrev-mode linum-mode)
+  12140
+  '(12141 nil)
+  nil
+  nil
+  '((tab-width . 4) (indent-tabs-mode . t) (buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/barry/.emacs"
+  ".emacs"
+  'emacs-lisp-mode
+  '(linum-mode eldoc-mode)
+  4999
+  '(5011 nil)
+  nil
+  nil
+  '((tab-width . 2) (indent-tabs-mode) (buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/barry/repo/entropyzero/Core-C++/MatchingLibrary/NRL/Constraint.h"
+  "Constraint.h"
+  'c++-mode
+  '(abbrev-mode linum-mode)
+  2558
+  '(nil nil)
+  nil
+  nil
+  '((tab-width . 4) (indent-tabs-mode . t) (buffer-file-coding-system . undecided-unix)))
+
