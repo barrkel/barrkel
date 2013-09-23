@@ -1,0 +1,6 @@
+This directory contains subdirectories that are specific to operating system and architecture, but also
+machine purpose.
+
+For example, if this is a work machine that often deals with a specific project, it is appropriate to have
+a subdirectory in here that adds scripts / utilities etc. specific to that purpose.
+

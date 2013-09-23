@@ -1,0 +1,2 @@
+This directory contains .NET executables, sometimes with shell wrappers that convert Windows paths to
+Cygwin paths.

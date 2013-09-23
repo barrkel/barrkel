@@ -1,0 +1,51 @@
+#!/bin/bash
+
+function die # message
+{
+    echo "$@"
+    exit 1
+}
+
+function ensure_mkdir # directory...
+{
+    local dir
+    for dir; do
+        test -d "$dir" && continue
+        mkdir -p "$dir" || die "Could not create '$dir'"
+        echo "Created '$dir'"
+    done
+}
+
+barrkel=$(cd $(dirname $0); pwd)
+
+if [ "$1" != "y" ]; then
+    echo "This will set up the barrkel home directory system using '$barrkel' as the barrkel home directory."
+    echo "Press Enter to continue, or run this script as '$(basename $0) y' to avoid this prompt"
+    read
+fi
+
+cd "$barrkel" || die "could not chdir to '$barrkel'"
+hostname=$(hostname)
+test -n "$hostname" || die "could not discover hostname"
+
+test -f "$home/config/$hostname" || die "Please create host config file '$home/config/$hostname'"
+ensure_mkdir "$home/host/$hostname/"{bin,home,home.d}
+
+rm -rf staging || die "Couldn't remove '$home/staging'"
+ensure_mkdir "$home/staging"
+
+# Verify that nothing has changed
+test -d "$home/cache" && {
+    cd "$home/cache" || die "Couldn't chdir to '$home/cache'"
+    ls -a | while read -r line; do
+        
+    done
+}
+
+# Build bits in home directory
+
+# Link bits into home directory
+
+
+
+
