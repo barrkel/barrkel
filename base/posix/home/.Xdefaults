@@ -1,0 +1,430 @@
+! .Xdefaults
+
+
+! RXVT section
+!
+!       geometry: geom
+!	      Create the window with the specified X window geometry  [default
+!	      80x24]; option -geometry.
+Rxvt*geometry:120x43
+
+!       background: colour
+!	      Use  the	specified  colour  as  the  window's background colour
+!	      [default White]; option -bg.
+Rxvt*background:rgb:00/00/20
+
+!       foreground: colour
+!	      Use the specified	colour	as  the  window's  foreground	colour
+!	      [default Black]; option -fg.
+Rxvt*foreground:rgb:C0/C0/C0
+
+!       colorn: colour
+!	      Use  the specified colour for the colour value n, where 0-7 cor-
+!	      responds to low-intensity (normal) colours and 8-15  corresponds
+!	      to  high-intensity  (bold	=  bright  foreground, blink = bright
+!	      background)  colours.   The  canonical  names  are  as  follows:
+!	      0=black,	1=red,	2=green,  3=yellow, 4=blue, 5=magenta, 6=cyan,
+!	      7=white, but the actual colour names used are listed in the COL-
+!	      ORS AND GRAPHICS section.
+
+!black
+Rxvt*color0:rgb:00/00/20
+! red
+!Rxvt*color1:rgb:FF/50/50
+Rxvt*color1:rgb:FF/42/5F
+! green
+Rxvt*color2:rgb:72/A0/32
+! blue
+Rxvt*color4:skyblue
+
+! yellow
+Rxvt*color3:rgb:B0/B0/00
+!rgb:77/FA/00
+! magenta - a dark slate gray
+Rxvt*color5:rgb:55/40/59
+! cyan
+Rxvt*color6:rgb:00/FA/94
+! white
+Rxvt*color7:rgb:C0/C0/C0
+
+! bold colors can generally afford to be dimmer than non-bold
+! Rxvt*color8: (bold black - should match background otherwise you get a real black background only for bold)
+Rxvt*color8:rgb:00/00/20
+! bold red
+Rxvt*color9:red
+! bold green
+Rxvt*color10:rgb:00/74/30
+! bold blue
+Rxvt*color12:skyblue
+! bold yellow
+Rxvt*color11:rgb:77/FA/00
+! bold magenta
+Rxvt*color13:rgb:55/40/59
+! bold cyan
+Rxvt*color14:rgb:20/C0/A0
+! bold white
+Rxvt*color15:rgb:D0/D0/D0
+
+!       colorBD: colour
+!	      Use  the	specified  colour  to display bold characters when the
+!	      foreground colour is the default.
+Rxvt*colorBD:rgb:C0/C0/C0
+
+!       colorUL: colour
+!	      Use the specified colour to display underlined  characters  when
+!	      the foreground colour is the default.
+
+!       colorRV: colour
+!	      Use  the	specified  colour  as the background for reverse video
+!	      characters.
+
+!       cursorColor: colour
+!	      Use the specified colour for the cursor.	The default is to  use
+!	      the foreground colour; option -cr.
+!
+!       cursorColor2: colour
+!	      Use the specified colour for the colour of the cursor text.  For
+!	      this to take effect, cursorColor must also  be  specified.   The
+!	      default is to use the background colour.
+!
+!       reverseVideo: boolean
+!	      True:  simulate  reverse	video  by  foreground  and  background
+!	      colours; option -rv.  False: regular screen  colours  [default];
+!	      option +rv.  See note in COLORS AND GRAPHICS section.
+!
+!       jumpScroll: boolean
+!	      True:   specify  that  jump  scrolling  should  be  used.	When
+!	      scrolling quickly, fewer screen updates are performed [default];
+!	      option -j.  False: specify that smooth scrolling should be used;
+!	      option +j.
+Rxvt*jumpScroll:True
+
+!
+!       inheritPixmap: boolean
+!	      True: make the background inherit the  parent  windows'  pixmap,
+!	      giving  artificial transparency.	False: do not inherit the par-
+!	      ent windows' pixmap.
+!
+!       scrollColor: colour
+!	      Use the specified colour for the scrollbar [default !B2B2B2].
+!
+!       troughColor: colour
+!	      Use  the	specified  colour  for	the  scrollbar's  trough  area
+!	      [default	!969696].   Only  relevant for normal (non XTerm/NeXT)
+!	      scrollbar.
+!
+!       backgroundPixmap: file[;geom]
+!	      Use the  specified  XPM  file  (note  the	`.xpm'	extension  is
+!	      optional)	for  the  background  and also optionally specify its
+!	      scaling with a geometry string WxH+X+Y, in which "W" / "H" spec-
+!	      ify the horizontal/vertical scale (percent) and "X" / "Y" locate
+!	      the image centre (percent).  A scale of  0  displays  the	image
+!	      with  tiling.  A scale of 1 displays the image without any scal-
+!	      ing.  A scale of 2 to 9 specifies an integer number of images in
+!	      that  direction.	No image will be magnified beyond 10 times its
+!	      original size.  The maximum permitted scale is  1000.   [default
+!	      0x0+50+50]
+!Rxvt*backgroundPixmap:/home/barrkel/bash-background/blue.xpm
+
+!
+!       menu: file[;tag]
+!	      Read  in	the specified menu file (note the `.menu' extension is
+!	      optional) and also optionally specify a starting	tag  to	find.
+!	      See  the	reference  documentation for details on the syntax for
+!	      the menuBar.
+!
+!       path: path
+!	      Specify the colon-delimited search path for finding  files  (XPM
+!	      and  menus),  in addition to the paths specified by the RXVTPATH
+!	      and PATH environment variables.
+!
+!       font: fontname
+!	      Select the main text font used [default 7x14]; option -fn.
+!Rxvt*font:-*-lucidatypewriter-medium-*-*-*-12-*-*-*-*-*-*-*
+Rxvt*font:-windows-dina-medium-r-*-*-13-*-*-*-*-*-*-*
+!Rxvt*font:Dina-9
+
+!       fontn: fontname
+!	      Specify the alternative font n.  The default font values:
+!
+!       boldFont: fontname
+!	      Specify the name of the bold font to use if colorBD has not been
+!	      specified	and  it is not possible to map the default foreground
+!	      colour to colour 8-15 [default NONE].  This  font	must  be  the
+!	      same height and width as the normal font; option -fb.
+!
+!       mfont: fontname
+!	      Select the main multiple-character text font used [default k14];
+!	      option -fk.
+!
+!       mfontn: fontname
+!	      Specify the alternative multiple-character font n.  If  compiled
+!	      for  multiple-character  fonts, the Roman and multiple-character
+!	      font sizes should match.
+!
+!       multichar_encoding: mode
+!	      Set the encoding mode to be used when multicharacter encoding is
+!	      received;	eucj:	EUC  Japanese  encoding	[default  for Kanji].
+!	      sjis: Shift JIS encoding.	big5: BIG5 encoding.  gb:  GB	encod-
+!	      ing.   kr: EUC Korean encoding.  noenc: no encoding; option -km.
+!
+!       greek_keyboard: mode
+!	      Set the  Greek  keyboard	translation  mode  to  be  used;  iso:
+!	      ISO-8859	mapping	(elot-928)  [default].	ibm: IBM-437 mapping
+!	      (DOS codepage 737); option -grk.
+!
+!       greektoggle_key: keysym
+!	      Set the key to toggle keyboard input between no translation  and
+!	      Greek translation	[default Mode_switch].	For more details, see
+!	      the distributed file README.greek.
+!
+!       selectstyle: mode
+!	      Set mouse selection style to old which is 2.20, oldword which is
+!	      xterm style with 2.20 old word selection, or anything else which
+!	      gives xterm style selection.
+!
+!       scrollstyle: mode
+!	      Set scrollbar style to rxvt, next or xterm
+!
+!       title: string
+!	      Set window title string, the default title is  the  command-line
+!	      specified after the -e option, if any, otherwise the application
+!	      name; option -title.
+Rxvt*title:Barry's Bash
+
+!       iconName: string
+!	      Set the name used to label the window's icon or displayed in  an
+!	      icon  manager  window, it also sets the window's title unless it
+!	      is explicitly set; option -n.
+!
+!       mapAlert: boolean
+!	      True: de-iconify (map) on receipt of a bell  character.	False:
+!	      no de-iconify (map) on receipt of a bell character [default].
+!
+!       visualBell: boolean
+!	      True:  use  visual  bell	on receipt of a bell character; option
+!	      -vb.  False: no visual bell [default]; option +vb.
+Rxvt*visualBell:True
+
+!       loginShell: boolean
+!	      True: start as a login shell by prepending a `-' to  argv[0]  of
+!	      the  shell;  option  -ls.	False:  start	as a normal sub-shell
+!	      [default]; option +ls.
+!
+!       utmpInhibit: boolean
+!	      True: inhibit writing record into	the  system  log  file	utmp;
+!	      option  -ut.   False: write record into the system log file utmp
+!	      [default]; option +ut.
+!
+!       print-pipe: string
+!	      Specify a command pipe for vt100 printer [default lpr(1)].   Use
+!	      Print to initiate a screen dump to the printer and Ctrl-Print or
+!	      Shift-Print to include the scrollback as well.
+!
+!       scrollBar: boolean
+!	      True: enable the scrollbar [default]; option -sb.	False:  dis-
+!	      able the scrollbar; option +sb.
+!
+!       scrollBar_right: boolean
+!	      True:  place  the	scrollbar  on the right of the window; option
+!	      -sr.  False: place the scrollbar on  the	left  of  the  window;
+!	      option +sr.
+Rxvt*scrollBar_right:True
+
+!       scrollBar_floating: boolean
+!	      True:  display  an  rxvt scrollbar without a trough; option -st.
+!	      False: display an rxvt scrollbar with a trough; option +st.
+!
+!       scrollBar_align: mode
+!	      Align the top, bottom or centre [default] of the scrollbar thumb
+!	      with the pointer on middle button press/drag.
+!
+!       scrollTtyOutput: boolean
+!	      True:  scroll  to	bottom when tty receives output; option(+si).
+!	      False: do	not  scroll  to  bottom  when	tty  receives  output;
+!	      option(-si).
+!
+!       scrollWithBuffer: boolean
+!	      True:  scroll with scrollback buffer when tty recieves new lines
+!	      (and scrollTtyOutput is  False);	option(+sw).   False:  do  not
+!	      scroll  with  scrollback	buffer	when  tty  recieves new lines;
+!	      option(-sw).
+!
+!       scrollTtyKeypress: boolean
+!	      True: scroll to bottom when a non-special key is pressed.	Spe-
+!	      cial  keys  are  those which are intercepted by rxvt for special
+!	      handling and are not passed onto the shell; option(-sk).	False:
+!	      do  not  scroll  to  bottom  when	a non-special key is pressed;
+!	      option(+sk).
+!
+!       smallfont_key: keysym
+!	      If enabled, use Alt-keysym to toggle to a smaller font  [default
+!	      Alt-<]
+!
+!       bigfont_key: keysym
+!	      If  enabled,  use Alt-keysym to toggle to a bigger font [default
+!	      Alt->]
+!
+!       saveLines: number
+!	      Save number lines in the scrollback buffer [default  64].	This
+!	      resource is limited on most machines to 65535; option -sl.
+Rxvt*saveLines:30000
+
+!       internalBorder: number
+!	      Internal	border	of  number pixels. This resource is limited to
+!	      100; option -b.
+!
+!       externalBorder: number
+!	      External border of number pixels.	This resource is  limited  to
+!	      100; option -w, -bw, -borderwidth.
+!
+!       termName: termname
+!	      Specifies	the terminal type name to be set in the TERM environ-
+!	      ment variable; option -tn.
+Rxvt*termName:rxvt
+
+!       linespace: number
+!	      Specifies number of lines (pixel height) to insert between  each
+!	      row of the display [default 0]; option -lsp.
+Rxvt*lineSpace:1
+
+!       meta8: boolean
+!	      True:  handle  Meta (Alt) + keypress to set the 8th bit.	False:
+!	      handle Meta (Alt) + keypress as an escape prefix [default].
+!
+!       mouseWheelScrollPage: boolean
+!	      True: the mouse wheel scrolls a page  full.   False:  the	mouse
+!	      wheel scrolls five lines [default].
+!
+!       multibyte_cursor: boolean
+!	      True:   consider	multibyte  glyphs  as	single	character  for
+!	      backspace, delete and cursor movement keys; option -mcc.	False:
+!	      move through all components of all glyphs; option +mcc.
+!
+!       backspacekey: string
+!	      The string to send when the backspace key is pressed.  If set to
+!	      DEC or unset it will send Delete	(code  127)  or,  if  shifted,
+!	      Backspace	(code 8) - which can be reversed with the appropriate
+!	      DEC private mode escape sequence.
+!
+!       deletekey: string
+!	      The string to send when the delete key (not  the	keypad	delete
+!	      key)  is pressed.	If unset it will send the sequence tradition-
+!	      ally associated with the Execute key.
+!
+!       cutchars: string
+!	      The characters used as delimiters for double-click  word	selec-
+!	      tion.  The built-in default:
+!	      BACKSLASH `"'&()*,;<=>?@[]{|}
+!
+!       preeditType: style
+!	      OverTheSpot, OffTheSpot, Root; option -pt.
+!
+!       inputMethod: name
+!	      name of inputMethod to use; option -im.
+!
+!       modifier: modifier
+!	      Set  the	key  to	be interpreted as the Meta key to: alt, meta,
+!	      hyper, super, mod1, mod2, mod3, mod4, mod5; option -mod.
+!
+!       answerbackString: string
+!	      Specify the reply rxvt sends to the shell when an ENQ  (control-
+!	      E) character is passed through.  It may contain escape values as
+!	      described in the entry on keysym following.
+!
+!       keysym.sym: string
+!	      Associate string with keysym sym (0xFF00 - 0xFFFF).  It may con-
+!	      tain escape values (\a: bell, \b: backspace, \e, \E: escape, \n:
+!	      newline, \r: return, \t: tab, \000:  octal  number)  or  control
+!	      characters  (^?: delete, ^@: null, ^A ...) and may enclosed with
+!	      double quotes so that it can start or end with whitespace.   The
+!	      intervening  resource  name  keysym.  cannot  be	omitted.  This
+!	      resource is only available when compiled with KEYSYM_RESOURCE.
+!
+! Options: XPM,transparent,utmp,menubar,frills,linespace,multichar_languages,scrollbars=rxvt+NeXT+xterm,.Xdefaults
+! Usage: rxvt [options] [-e command args]
+! where resources (long-options) include:
+!  termName:           string
+!  geometry:           geometry
+!  reverseVideo:       boolean
+!  loginShell:         boolean
+!  jumpScroll:         boolean
+!  scrollBar:          boolean
+!  scrollBar_right:    boolean
+!  scrollBar_floating: boolean
+!  scrollTtyOutput:    boolean
+!  scrollTtyKeypress:  boolean
+!  scrollWithBuffer:   boolean
+!  inheritPixmap:      boolean
+!  inheritPixmapforce: boolean
+!  utmpInhibit:        boolean
+!  visualBell:         boolean
+!  mapAlert:           boolean
+!  meta8:              boolean
+!  mouseWheelScrollPage:   boolean
+!  multibyte_cursor:   boolean
+!  tripleclickwords:   boolean
+!  background:         color
+!  foreground:         color
+!  color0:             color
+!  color1:             color
+!  color2:             color
+!  color3:             color
+!  color4:             color
+!  color5:             color
+!  color6:             color
+!  color7:             color
+!  color8:             color
+!  color9:             color
+!  color10:            color
+!  color11:            color
+!  color12:            color
+!  color13:            color
+!  color14:            color
+!  color15:            color
+!  colorBD:            color
+!  colorUL:            color
+!  colorRV:            color
+!  scrollColor:        color
+!  troughColor:        color
+!  path:               search path
+!  backgroundPixmap:   file[;geom]
+!  menu:               name[;tag]
+!  boldFont:           fontname
+!  font:               fontname
+!  font1:              fontname
+!  font2:              fontname
+!  font3:              fontname
+!  font4:              fontname
+!  font5:              fontname
+!  font6:              fontname
+!  mfont:              fontname
+!  mfont1:             fontname
+!  mfont2:             fontname
+!  mfont3:             fontname
+!  mfont4:             fontname
+!  mfont5:             fontname
+!  mfont6:             fontname
+!  multichar_encoding: mode
+!  title:              string
+!  iconName:           string
+!  cursorColor:        color
+!  cursorColor2:       color
+!  pointerColor:       color
+!  borderColor:        color
+!  saveLines:          number
+!  externalBorder:     number
+!  internalBorder:     number
+!  lineSpace:          number
+!  thickness:          number
+!  backspacekey:       string
+!  deletekey:          string
+!  selectstyle:        mode
+!  scrollstyle:        mode
+!  scrollBar_align:    mode
+!  print-pipe:         string
+!  modifier:           modifier
+!  cutchars:           string
+!  answerbackString:   string
+!  keysym.sym:         keysym
+
