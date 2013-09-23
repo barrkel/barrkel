@@ -20,10 +20,6 @@
 ;; reduce wordy prompts
 (defalias 'yes-or-no-p 'y-or-n-p)
 
-;; set selection highlight to something readable
-(set-face-background 'region "white")
-(set-face-foreground 'region "black")
-
 ;; remove horrific git backend
 (delete 'Git vc-handled-backends)
 
@@ -40,6 +36,32 @@
 (let ((default-directory "~/.emacs.d/plugins/"))
   (normal-top-level-add-to-load-path '("."))
   (normal-top-level-add-subdirs-to-load-path))
+
+;; line numbers
+(require 'linum)
+(global-linum-mode 1)
+(setq linum-format "%4d ")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; COLORS ETC
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; set selection highlight to something readable
+(set-face-background 'region "white")
+(set-face-foreground 'region "black")
+
+;; search, active and inactive
+(set-face-foreground 'isearch "black")
+(set-face-background 'isearch "green")
+(set-face-foreground 'lazy-highlight "black")
+(set-face-background 'lazy-highlight "blue")
+
+(show-paren-mode t)
+(set-face-background 'show-paren-match-face "black")
+(set-face-foreground 'show-paren-match-face "white")
+(set-face-attribute 'show-paren-match-face nil :weight 'extra-bold)
+
+;; note: list faces with list-faces-display
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; TABS
@@ -73,7 +95,7 @@
 ;; (setq tab-alway-indent t)
 (global-set-key (kbd "C-@") 'indent-for-tab-command)
 (global-set-key (kbd "TAB") 'self-insert-command)
-;; like C-k b in Joe
+;; move mark begin to be like C-k b in Joe
 (global-set-key (kbd "C-c b") 'set-mark-command)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -135,6 +157,7 @@ buffer instead of replacing the text in region."
         (m (if mark-active (region-end) 0)))
     (if (= p m)
         ;; No active region
+		(shell-command command t)
         (if (eq arg nil)
             (shell-command command)
           (shell-command command t))
@@ -165,7 +188,10 @@ buffer instead of replacing the text in region."
 (global-set-key (kbd "M-<insert>") 'yank)
 ;;(global-set-key (kbd "S-<delete>") 'kill-region) ;; default
 
-;; misc key bindings
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; MISC KEY REBINDINGS
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (global-set-key (kbd "RET") 'newline-and-indent)
 (global-set-key (kbd "C-x /") 'generalized-shell-command)
 (global-set-key (kbd "C-c /") 'generalized-shell-command)
@@ -175,11 +201,9 @@ buffer instead of replacing the text in region."
 (global-set-key (kbd "C-c r") 'insert-file)
 (global-set-key (kbd "C-<next>") 'next-buffer)
 (global-set-key (kbd "C-<prior>") 'previous-buffer)
+;; this is C-/; I'm using C-z for undo
+(global-set-key (kbd "C-_") 'comment-or-uncomment-region)
 
-;; line numbers
-(require 'linum)
-(global-linum-mode 1)
-(setq linum-format "%7d ")
 
 ;; don't ask multiple times about exiting with unsaved buffers
 (defun my-save-buffers-kill-emacs (&optional arg)
