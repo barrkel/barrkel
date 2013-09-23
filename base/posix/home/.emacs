@@ -27,7 +27,8 @@
 (menu-bar-mode -1)
 
 ;; get an empty buffer on startup
-(setf inhibit-splash-screen t)
+(setq inhibit-splash-screen t)
+(setq inhibit-startup-message t)
 (switch-to-buffer (get-buffer-create "empty"))
 (delete-other-windows)
 
