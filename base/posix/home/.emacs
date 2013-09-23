@@ -47,6 +47,17 @@
                '("melpa" . "http://melpa.milkbox.net/packages/")
                'APPEND))
 
+;; minibuffer completion - icicles, very heavyweight
+;;(require 'icicles)
+;;(icy-mode 1)
+
+;; incremental search buffer switch with C-x b - lightweight
+(iswitchb-mode 1)
+
+;; don't let the cursor go into minibuffer prompt
+(setq minibuffer-prompt-properties
+      (quote (read-only t point-entered minibuffer-avoid-prompt face minibuffer-prompt)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; COLORS ETC
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -144,17 +155,15 @@
           (lambda ()
             (set-tab-style t 4)))
 
+;; C & C++
+(add-hook 'c-mode-common-hook
+          (lambda()
+            (local-set-key (kbd "C-c o") 'ff-find-other-file)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; END MODE CONFIG
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
-;; incremental search buffer switch with C-x b
-(iswitchb-mode 1)
-
-;; don't let the cursor go into minibuffer prompt
-(setq minibuffer-prompt-properties
-      (quote (read-only t point-entered minibuffer-avoid-prompt face minibuffer-prompt)))
 
 ;; pipe selection through shell command if any, otherwise output 
 (defun generalized-shell-command (command arg)
