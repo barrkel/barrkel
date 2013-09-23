@@ -86,10 +86,12 @@
   (setq indent-tabs-mode a-use-tabs)
   (setq tab-width a-tab-width)
   (setq tab-stop-list (number-sequence a-tab-width 200 a-tab-width))
-  (setq c-basic-offset a-tab-width)
+  (setq c-basic-offset a-tab-width) ;; c / c++ etc
+  (setq js-indent-level a-tab-width) ;; js
+  (setq default-tab-width a-tab-width) ;; java
   (if a-style
-	  (setq c-default-style a-style)
-	(setq c-default-style "bsd")))
+      (setq c-default-style a-style)
+    (setq c-default-style "bsd")))
 
 ;; map completion to C-SPC
 ;; (setq tab-alway-indent t)
@@ -115,16 +117,17 @@
 ;; elisp mode
 (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
 (add-hook 'emacs-lisp-mode-hook
-		  (lambda ()
-			(global-set-key (kbd "C-^") 'eval-region)))
+          (lambda ()
+            (set-tab-style nil 2)
+            (global-set-key (kbd "C-^") 'eval-region)))
 
 ;; Go
 (require 'go-mode-load)
 
 ;; shell script
 (add-hook 'sh-mode-hook
-		  (lambda ()
-			(set-tab-style nil 4)))
+          (lambda ()
+            (set-tab-style nil 4)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -137,7 +140,7 @@
 
 ;; don't let the cursor go into minibuffer prompt
 (setq minibuffer-prompt-properties
-	  (quote (read-only t point-entered minibuffer-avoid-prompt face minibuffer-prompt)))
+      (quote (read-only t point-entered minibuffer-avoid-prompt face minibuffer-prompt)))
 
 ;; pipe selection through shell command if any, otherwise output 
 (defun generalized-shell-command (command arg)
@@ -151,16 +154,17 @@ command as in C-u M-x `shell-command-on-region' (C-u M-|). If a region
 is selected AND an argument is passed (via C-u) send output to another
 buffer instead of replacing the text in region."
   (interactive (list
-				(read-from-minibuffer "Shell command: " nil nil nil 'shell-command-history)
-				current-prefix-arg))
+                (read-from-minibuffer "Shell command: " nil nil nil 'shell-command-history)
+                current-prefix-arg))
   (let ((p (if mark-active (region-beginning) 0))
         (m (if mark-active (region-end) 0)))
     (if (= p m)
         ;; No active region
-		(shell-command command t)
-        (if (eq arg nil)
-            (shell-command command)
-          (shell-command command t))
+        (shell-command command t)
+      ;; actually, jut run the file
+      ;; (if (eq arg nil)
+      ;;     (shell-command command)
+      ;;   (shell-command command t))
       ;; Active region
       (if (eq arg nil)
           (shell-command-on-region p m command t t)
@@ -173,9 +177,9 @@ buffer instead of replacing the text in region."
   (interactive)
   (beginning-of-line)
   (let ((start (point)))
-	(end-of-line)
-	(forward-char) ;; eat newline too, but don't fail on last line of file
-	(delete-region start (point))))
+    (end-of-line)
+    (forward-char) ;; eat newline too, but don't fail on last line of file
+    (delete-region start (point))))
 
 ;; clipboard reconfiguration
 (global-set-key (kbd "C-y") 'delete-line-command)
@@ -212,21 +216,21 @@ With prefix ARG, silently save all file-visiting buffers, then kill."
   (interactive "P")
   (save-some-buffers arg t)
   (and (or (not (fboundp 'process-list))
-       ;; process-list is not defined on MSDOS.
-       (let ((processes (process-list))
-         active)
-         (while processes
-           (and (memq (process-status (car processes)) '(run stop open listen))
-            (process-query-on-exit-flag (car processes))
-            (setq active t))
-           (setq processes (cdr processes)))
-         (or (not active)
-         (progn (list-processes t)
-            (yes-or-no-p "Active processes exist; kill them and exit anyway? ")))))
+           ;; process-list is not defined on MSDOS.
+           (let ((processes (process-list))
+                 active)
+             (while processes
+               (and (memq (process-status (car processes)) '(run stop open listen))
+                    (process-query-on-exit-flag (car processes))
+                    (setq active t))
+               (setq processes (cdr processes)))
+             (or (not active)
+                 (progn (list-processes t)
+                        (yes-or-no-p "Active processes exist; kill them and exit anyway? ")))))
        ;; Query the user for other things, perhaps.
        (run-hook-with-args-until-failure 'kill-emacs-query-functions)
        (or (null confirm-kill-emacs)
-       (funcall confirm-kill-emacs "Really exit Emacs? "))
+           (funcall confirm-kill-emacs "Really exit Emacs? "))
        (kill-emacs)))
 (fset 'save-buffers-kill-emacs 'my-save-buffers-kill-emacs)
 
@@ -263,18 +267,18 @@ With prefix ARG, silently save all file-visiting buffers, then kill."
 (defvar dumb-indent-string "	"
   "The indent string to use in dumb-indenting mode")
 
-   
+
 (defun dumb-indent-return ()
   "Insert a new line, then the same whitespace that the previous line started with"
   (interactive)
   (let (start prior-indent)
-	(save-excursion
-	  (beginning-of-line)
-	  (setq start (point))
-	  (forward-to-indentation 0)
-	  (setq prior-indent (buffer-substring start (point))))
-	(newline)
-	(insert prior-indent)))
+    (save-excursion
+      (beginning-of-line)
+      (setq start (point))
+      (forward-to-indentation 0)
+      (setq prior-indent (buffer-substring start (point))))
+    (newline)
+    (insert prior-indent)))
 
 (global-set-key (kbd "C-j RET") 'dumb-indent-return)
 
@@ -291,8 +295,8 @@ With prefix ARG, silently save all file-visiting buffers, then kill."
   ;; key bindings
   :keymap
   '(
-;;	((kbd "RET"))
-  )
+    ;;	((kbd "RET"))
+    )
 
   :group 'indent)
 
