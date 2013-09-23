@@ -109,7 +109,7 @@
 (set-face 'font-lock-regexp-grouping-backslash "white" "black" 'extra-bold)
 (set-face 'font-lock-regexp-grouping-construct "red" "black" 'extra-bold)
 
-(set-face 'linum "red")
+(set-face 'linum "magenta")
 
 ;; this assumes that magenta has been repurposed to a dark color like slate gray
 (set-face 'mode-line "magenta" "white")
