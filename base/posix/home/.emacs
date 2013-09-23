@@ -10,6 +10,7 @@
 (setq scroll-preserve-screen-position t)
 
 ;; go into desktop mode if desktop save file exists in current directory
+;(add-to-list 'desktop-path default-directory)
 (if (file-exists-p ".emacs.desktop")
     (desktop-save-mode 1))
 
