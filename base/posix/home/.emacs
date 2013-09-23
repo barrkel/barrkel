@@ -62,20 +62,59 @@
 ;; COLORS ETC
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; marginally shorter definition helper
+(defun set-face (face fg &optional bg weight)
+  "Set face details.
+* face: the face to set up
+* fg: foreground color
+* bg: background color, defaults to black
+* weight: value for :weight, defaults to bold"
+  (set-face-foreground face fg)
+  (if bg
+      (set-face-background face bg)
+    (set-face-background face "black"))
+  (if weight
+      (set-face-attribute face nil :weight weight)
+    (set-face-attribute face nil :weight 'normal)))
+
+
 ;; set selection highlight to something readable
-(set-face-background 'region "white")
-(set-face-foreground 'region "black")
+(set-face 'region "black" "white")
 
 ;; search, active and inactive
-(set-face-foreground 'isearch "black")
-(set-face-background 'isearch "green")
-(set-face-foreground 'lazy-highlight "black")
-(set-face-background 'lazy-highlight "blue")
+(set-face 'isearch "black" "yellow")
+(set-face 'lazy-highlight "black" "green")
+(set-face 'highlight "black" "yellow")
+(set-face 'query-replace "black" "yellow")
 
+;; parenthesis highlighting
 (show-paren-mode t)
-(set-face-background 'show-paren-match-face "black")
-(set-face-foreground 'show-paren-match-face "white")
-(set-face-attribute 'show-paren-match-face nil :weight 'extra-bold)
+(set-face 'show-paren-match-face "yellow" "black" 'extra-bold)
+
+;; various syntactic and semantic highlights
+(set-face 'font-lock-builtin-face "blue")
+(set-face 'font-lock-keyword-face "blue")
+(set-face 'font-lock-comment-delimiter-face "green" "black" 'extra-bold)
+(set-face 'font-lock-comment-face "green" "black" 'extra-bold)
+(set-face 'font-lock-constant-face "white" "black" 'extra-bold)
+(set-face 'font-lock-doc-face "green")
+(set-face 'font-lock-string-face "yellow")
+(set-face 'font-lock-type-face "red")
+(set-face 'font-lock-preprocessor-face "magenta" "black" 'extra-bold)
+(set-face 'font-lock-function-name-face "cyan")
+(set-face 'font-lock-negation-char-face "white" "black" 'extra-bold)
+(set-face 'font-lock-variable-name-face "white")
+
+(set-face 'font-lock-regexp-grouping-backslash "white" "black" 'extra-bold)
+(set-face 'font-lock-regexp-grouping-construct "red" "black" 'extra-bold)
+
+(set-face 'linum "red")
+
+;; this assumes that magenta has been repurposed to a dark color like slate gray
+(set-face 'mode-line "magenta" "white")
+(set-face 'fringe "white" "black")
+
+(set-face 'show-paren-mismatch "white" "red" 'extra-bold)
 
 ;; note: list faces with list-faces-display
 
