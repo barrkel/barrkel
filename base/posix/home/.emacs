@@ -1,21 +1,17 @@
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(read-buffer-completion-ignore-case t)
- '(tab-width 4))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+(setq tab-width 4)
+
+;; case sensitivity is evil in user input
+(setq read-buffer-completion-ignore-case t)
+(setq read-file-name-completion-ignore-case t)
 
 ;; don't leap around the place, not with arrow keys
 (setq scroll-step 1 scroll-conservatively 10000)
 ;; or page up / down
 (setq scroll-preserve-screen-position t)
+
+;; go into desktop mode if desktop save file exists in current directory
+(if (file-exists-p ".emacs.desktop")
+    (desktop-save-mode 1))
 
 ;; reduce wordy prompts
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -29,8 +25,8 @@
 ;; get an empty buffer on startup
 (setq inhibit-splash-screen t)
 (setq inhibit-startup-message t)
-(switch-to-buffer (get-buffer-create "empty"))
-(delete-other-windows)
+;; (switch-to-buffer (get-buffer-create "empty"))
+;; (delete-other-windows)
 
 ;; plugins; everything in plugins, and subdirectories
 (add-to-list 'load-path "~/.emacs.d/plugins/")
@@ -42,6 +38,14 @@
 (require 'linum)
 (global-linum-mode 1)
 (setq linum-format "%4d ")
+
+;; melpa package repository
+(when (> emacs-major-version 23)
+  (require 'package)
+  (package-initialize)
+  (add-to-list 'package-archives
+               '("melpa" . "http://melpa.milkbox.net/packages/")
+               'APPEND))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; COLORS ETC
@@ -130,6 +134,15 @@
           (lambda ()
             (set-tab-style nil 4)))
 
+;; C
+(add-hook 'c-mode-hook
+          (lambda ()
+            (set-tab-style t 4)))
+
+;; C++
+(add-hook 'c++-mode-hook
+          (lambda ()
+            (set-tab-style t 4)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; END MODE CONFIG
