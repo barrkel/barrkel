@@ -28,17 +28,14 @@
 (setq inhibit-startup-message t)
 ;; (switch-to-buffer (get-buffer-create "empty"))
 ;; (delete-other-windows)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; PLUGINS
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; plugins; everything in plugins, and subdirectories
-(add-to-list 'load-path "~/.emacs.d/plugins/")
-(let ((default-directory "~/.emacs.d/plugins/"))
-  (normal-top-level-add-to-load-path '("."))
-  (normal-top-level-add-subdirs-to-load-path))
-
-;; line numbers
-(require 'linum)
-(global-linum-mode 1)
-(setq linum-format "%4d ")
+;;----------------------------------------
+;; package management
+;;----------------------------------------
 
 ;; melpa package repository
 (when (> emacs-major-version 23)
@@ -47,6 +44,30 @@
   (add-to-list 'package-archives
                '("melpa" . "http://melpa.milkbox.net/packages/")
                'APPEND))
+
+;; plugins; everything in plugins, and subdirectories
+(add-to-list 'load-path "~/.emacs.d/plugins/")
+(let ((default-directory "~/.emacs.d/plugins/"))
+  (normal-top-level-add-to-load-path '("."))
+  (normal-top-level-add-subdirs-to-load-path))
+
+;; note: packages that come via package management need to be loaded after package management
+
+;; line numbers
+(require 'linum)
+(global-linum-mode 1)
+(setq linum-format "%4d ")
+
+;; expand region
+(require 'expand-region)
+;; C-* (C-S-6) in rxvt
+(global-set-key (kbd "M-[ 1 ; 6 x") 'er/expand-region)
+(global-set-key (kbd "M-[ 1 ; 6 w") 'er/contract-region)
+
+
+;;----------------------------------------
+;; minibuffer
+;;----------------------------------------
 
 ;; minibuffer completion - icicles, very heavyweight
 ;;(require 'icicles)
@@ -59,6 +80,9 @@
 (setq minibuffer-prompt-properties
       (quote (read-only t point-entered minibuffer-avoid-prompt face minibuffer-prompt)))
 
+;; completion for M-x: seriously, why isn't this the default?
+(icomplete-mode)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; COLORS ETC
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -119,6 +143,7 @@
 
 ;; note: list faces with list-faces-display
 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; TABS
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -149,10 +174,10 @@
       (setq c-default-style a-style)
     (setq c-default-style "bsd")))
 
-;; map completion to C-SPC
-;; (setq tab-alway-indent t)
+;; map completion to C-<space>
 (global-set-key (kbd "C-@") 'indent-for-tab-command)
-(global-set-key (kbd "TAB") 'self-insert-command)
+(global-set-key (kbd "M-`") 'hippie-expand)
+(global-set-key (kbd "TAB") 'self-insert-command) ;; should be smarter
 ;; move mark begin to be like C-k b in Joe
 (global-set-key (kbd "C-c b") 'set-mark-command)
 
@@ -267,9 +292,20 @@ buffer instead of replacing the text in region."
 (global-set-key (kbd "C-c w") 'write-region)
 (global-set-key (kbd "C-c r") 'insert-file)
 (global-set-key (kbd "C-<next>") 'next-buffer)
+(global-set-key (kbd "M-[ 1 ; 6 n") 'next-buffer) ;; C-> in mintty
 (global-set-key (kbd "C-<prior>") 'previous-buffer)
 ;; this is C-/; I'm using C-z for undo
 (global-set-key (kbd "C-_") 'comment-or-uncomment-region)
+
+(defun duplicate-line ()
+  "Duplicate current line"
+  (interactive)
+  (save-excursion
+    (beginning-of-line)
+    (let ((start (point)))
+      (forward-line)
+      (copy-region-as-kill start (point))
+      (yank))))
 
 
 ;; don't ask multiple times about exiting with unsaved buffers
@@ -302,7 +338,38 @@ With prefix ARG, silently save all file-visiting buffers, then kill."
 ;; CUSTOM MACRO FUNCTIONS
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; my custom macros bound to keys past C-j, by convention
 (global-unset-key (kbd "C-j"))
+
+;; I don't think it's possible to implement the "keep region" wrap logic as a function
+;; that calls defadvice, because defadvice is a macro, and the arguments will be evaluated
+;; too soon. TODO for another day: implement the call to defadvice as a macro that can be
+;; applied to any command, to ensure it keeps its region.
+(defadvice replace-string (around replace-string-keep-region)
+  "Replace string in region and restore region after replacement has been made."
+  (let (deactivate-mark)
+    (save-excursion
+      ad-do-it))
+  (exchange-point-and-mark)
+  (exchange-point-and-mark))
+(ad-activate 'replace-string)
+(global-set-key (kbd "C-j r") 'replace-string)
+
+;; (defadvice  (around replace-string-keep-region)
+;;   "Replace string in region and restore region after replacement has been made."
+;;   (let (deactivate-mark)
+;;     (save-excursion
+;;       ad-do-it))
+;;   (exchange-point-and-mark)
+;;   (exchange-point-and-mark))
+
+;; make zap-to-char act like zap-up-to-char
+(defadvice zap-to-char (after my-zap-to-char-advice (arg char) activate)
+  "Kill up to the ARG'th occurence of CHAR, and leave CHAR.
+The CHAR is replaced and the point is put before CHAR."
+  (insert char)
+  (forward-char -1))
+;; note: bound to M-z
 
 (defun insert-braces-macro ()
   (interactive)
@@ -312,6 +379,7 @@ With prefix ARG, silently save all file-visiting buffers, then kill."
     (newline)
     (insert "}")
     (indent-according-to-mode)))
+
 
 ;;(defun insert-braces-macro ()
 ;;  (interactive)
@@ -330,7 +398,6 @@ With prefix ARG, silently save all file-visiting buffers, then kill."
 (defvar dumb-indent-string "	"
   "The indent string to use in dumb-indenting mode")
 
-
 (defun dumb-indent-return ()
   "Insert a new line, then the same whitespace that the previous line started with"
   (interactive)
@@ -345,21 +412,10 @@ With prefix ARG, silently save all file-visiting buffers, then kill."
 
 (global-set-key (kbd "C-j RET") 'dumb-indent-return)
 
-
-
-(define-minor-mode dumb-indenting
-  "Dumb auto-indent that just does predictable auto-indent like a text editor from the 80s."
-
-  ;; initial value
-  :init-value nil
-  ;; indicator for mode line
-  :lighter " Dumb Indent"
-
-  ;; key bindings
-  :keymap
-  '(
-    ;;	((kbd "RET"))
-    )
-
-  :group 'indent)
+;; narrowing / widening act on selected region
+;; C-x n n to narrow
+;; C-x n w to widen
+(put 'narrow-to-region 'disabled nil)
+;; C-x n p
+(put 'narrow-to-page 'disabled nil)
 
