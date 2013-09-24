@@ -198,7 +198,7 @@
 (global-set-key (kbd "C-c b") 'set-mark-command)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; BEGIN MODE CONFIG
+;; LANGUAGE MODE CONFIG
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; csharp-mode
@@ -248,6 +248,9 @@
           (lambda ()
             (visual-line-mode)
             (local-set-key (kbd "C-c o") 'ff-find-other-file)))
+
+;; Puppet
+(require 'puppet-mode-autoloads)
 
 ;; Ruby
 (add-hook 'ruby-mode-hook
