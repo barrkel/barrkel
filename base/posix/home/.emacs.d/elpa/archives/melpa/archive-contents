@@ -201,7 +201,7 @@
 	       (1 6 8)))
 	     "Weblog maintenance via XML-RPC APIs [bzr]" single])
  (web-mode .
-	   [(20130922 2211)
+	   [(20130923 2028)
 	    nil "major mode for editing html templates [github]" tar])
  (web .
       [(20130827 1312)
@@ -771,7 +771,7 @@
 		     [(20130917 1850)
 		      nil "Emacs24 theme with a light background. [github]" single])
  (soft-charcoal-theme .
-		      [(20130919 1008)
+		      [(20130923 1935)
 		       nil "Dark charcoal theme with soft colors [github]" single])
  (snippet .
 	  [(20130210 1815)
@@ -795,7 +795,7 @@
 	   [(20130312 1839)
 	    nil "Support sequential operation which omitted prefix keys. [github]" single])
  (smartparens .
-	      [(20130922 1729)
+	      [(20130923 2050)
 	       ((cl-lib
 		 (0 1))
 		(dash
@@ -1489,7 +1489,7 @@
 	    [(20091203 1917)
 	     nil "Provide a face for parens in lisp modes. [github]" single])
  (paredit-menu .
-	       [(20121025 1201)
+	       [(20130923 2054)
 		nil "Adds a menu to paredit.el as memory aid [hg]" single])
  (paredit-everywhere .
 		     [(20130430 1059)
@@ -1540,7 +1540,7 @@
 	   [(20130827 1626)
 	    nil "Extensions for the package library. [github]" single])
  (pabbrev .
-	  [(20121025 1200)
+	  [(20130923 2057)
 	   nil "Predictive abbreviation expansion [hg]" single])
  (p4 .
      [(20130918 1642)
@@ -1561,7 +1561,7 @@
 	     [(20121202 1703)
 	      nil "Major mode for source files of the Otter automated theorem prover [github]" single])
  (osx-pseudo-daemon .
-		    [(20130921 819)
+		    [(20130923 1152)
 		     nil "Daemon mode that plays nice with OSX. [github]" single])
  (osx-plist .
 	    [(20101130 1348)
@@ -1850,7 +1850,7 @@
 		     (9)))
 		   "decompilation extension for nrepl.el [github]" single])
  (nrepl .
-	[(20130919 757)
+	[(20130923 2230)
 	 ((clojure-mode
 	   (2 0 0))
 	  (cl-lib
@@ -2163,21 +2163,21 @@
 		 (1 2 0)))
 	       "git method for TRAMP [github]" single])
  (magit-topgit .
-	       [(20130910 1713)
+	       [(20130923 1703)
 		((cl-lib
 		  (0 3))
 		 (magit
 		  (1 3 0)))
 		"topgit plug-in for Magit [github]" single])
  (magit-svn .
-	    [(20130919 53)
+	    [(20130923 1703)
 	     ((cl-lib
 	       (0 3))
 	      (magit
 	       (1 3 0)))
 	     "git-svn plug-in for Magit [github]" single])
  (magit-stgit .
-	      [(20130910 1713)
+	      [(20130923 1703)
 	       ((cl-lib
 		 (0 3))
 		(magit
@@ -2207,7 +2207,7 @@
 			       [(20130730 1032)
 				nil "Advice for magit-log-edit-commit [github]" single])
  (magit .
-	[(20130922 344)
+	[(20130923 1703)
 	 ((cl-lib
 	   (0 3))
 	  (git-commit-mode
@@ -2312,7 +2312,7 @@
 	  [(20100506 129)
 	   nil "Automagic emacs lisp code annotation [wiki]" single])
  (linum-relative .
-		 [(20130427 2245)
+		 [(20130923 1602)
 		  nil "display relative line number in emacs. [github]" single])
  (linphone .
 	   [(20130524 1306)
@@ -2736,6 +2736,9 @@
  (hl-todo .
 	  [(20130504 359)
 	   nil "highlight TODO keywords in comments [github]" single])
+ (hl-spotlight .
+	       [(20130723 2214)
+		nil "Extension of hl-line.el to spotlight current few lines. [wiki]" single])
  (hl-sexp .
 	  [(20101130 1343)
 	   nil "highlight the current sexp [github]" single])
@@ -2771,6 +2774,9 @@
  (highlight-escape-sequences .
 			     [(20130601 212)
 			      nil "Highlight escape sequences [github]" single])
+ (highlight-current-line .
+			 [(20051013 1756)
+			  nil "highlight line where the cursor is. [wiki]" single])
  (highlight-cl .
 	       [(20091012 1730)
 		nil "Highlighting `cl' functions. [wiki]" single])
@@ -3043,7 +3049,7 @@
 		    [(20120821 1835)
 		     nil "Mode for the dot-language used by graphviz (att). [github]" single])
  (graphene .
-	   [(20130821 2016)
+	   [(20130923 2036)
 	    ((auto-complete
 	      (20130330))
 	     (smartparens
@@ -3539,7 +3545,7 @@
 		[(20120809 2118)
 		 nil "Automatically insert pair braces and quotes, insertion conditions & actions are highly customizable. [github]" single])
  (flash-region .
-	       [(20130919 1436)
+	       [(20130923 2017)
 		nil "Flash a region [github]" single])
  (fixmee .
 	 [(20121205 1450)
@@ -4444,7 +4450,7 @@
 		      (0 8 0)))
 		    "Yasnippets for clojure [github]" tar])
  (clojure-mode .
-	       [(20130911 542)
+	       [(20130923 2238)
 		nil "Major mode for Clojure code [github]" single])
  (clojure-cheatsheet .
 		     [(20130921 946)
@@ -4565,7 +4571,7 @@
 	       [(20101223 1020)
 		nil "Enhanced intelligent switch-to-other-buffer replacement. [wiki]" single])
  (buffer-move .
-	      [(20110305 249)
+	      [(20130923 1653)
 	       nil "Swap buffers without typing C-x b on each window [wiki]" single])
  (bs-ext .
 	 [(20130824 1159)
@@ -4784,7 +4790,7 @@
       [(20130817 845)
        nil "various useful ways to do `multi-occur' [wiki]" single])
  (anzu .
-       [(20130922 1939)
+       [(20130923 1826)
 	nil "Emacs Port of anzu.vim [github]" single])
  (anything-git-grep .
 		    [(20130609 1111)
