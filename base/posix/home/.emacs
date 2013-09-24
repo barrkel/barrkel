@@ -12,7 +12,9 @@
 ;; go into desktop mode if desktop save file exists in current directory
 ;(add-to-list 'desktop-path default-directory)
 (if (file-exists-p ".emacs.desktop")
-    (desktop-save-mode 1))
+    (progn
+     (setq desktop-path (list default-directory))
+     (desktop-save-mode 1)))
 
 ;; reduce wordy prompts
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -452,3 +454,4 @@ The CHAR is replaced and the point is put before CHAR."
 (put 'narrow-to-region 'disabled nil)
 ;; C-x n p
 (put 'narrow-to-page 'disabled nil)
+
