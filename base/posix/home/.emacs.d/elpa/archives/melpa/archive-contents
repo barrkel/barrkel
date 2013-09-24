@@ -1059,7 +1059,7 @@
 		      (2 2 1)))
 		    "run a ruby process in a compilation buffer [github]" single])
  (ruby-block .
-	     [(20130919 615)
+	     [(20130924 21)
 	      nil "highlight matching block [wiki]" single])
  (rubocop .
 	  [(20130919 1529)
@@ -1067,7 +1067,7 @@
 	     (1 0 0)))
 	   "An Emacs interface for RuboCop [github]" single])
  (rspec-mode .
-	     [(20130810 1844)
+	     [(20130910 1956)
 	      ((ruby-mode
 		(1 0)))
 	      "Enhance ruby-mode for RSpec [github]" tar])

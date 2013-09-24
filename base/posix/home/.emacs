@@ -20,14 +20,19 @@
 ;; remove horrific git backend
 (delete 'Git vc-handled-backends)
 
-;; no menu
-(menu-bar-mode -1)
-
 ;; get an empty buffer on startup
 (setq inhibit-splash-screen t)
 (setq inhibit-startup-message t)
 ;; (switch-to-buffer (get-buffer-create "empty"))
 ;; (delete-other-windows)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; MISC MODES
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; no menu
+(menu-bar-mode -1)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; PLUGINS
@@ -67,6 +72,8 @@
 (global-set-key (kbd "M-[ 1 ; 6 x") 'er/expand-region)
 (global-set-key (kbd "M-[ 1 ; 6 w") 'er/contract-region)
 
+(require 'auto-mark)
+(auto-mark-mode)
 
 ;;----------------------------------------
 ;; minibuffer
@@ -181,6 +188,7 @@
 ;; map completion to C-<space>
 (global-set-key (kbd "C-@") 'indent-for-tab-command)
 (global-set-key (kbd "M-`") 'hippie-expand)
+(global-set-key (kbd "M-?") 'hippie-expand) ;; M-S-/
 (global-set-key (kbd "TAB") 'self-insert-command) ;; should be smarter
 ;; move mark begin to be like C-k b in Joe
 (global-set-key (kbd "C-c b") 'set-mark-command)
@@ -204,14 +212,21 @@
 (add-hook 'emacs-lisp-mode-hook
           (lambda ()
             (set-tab-style nil 2)
-            (global-set-key (kbd "C-^") 'eval-region)))
+            (visual-line-mode)
+            (global-set-key (kbd "M-RET") 'eval-region) ;; rxvt
+            (global-set-key (kbd "C-^") 'eval-region))) ;; mintty
 
 ;; Go
 (require 'go-mode-load)
+(add-hook 'go-mode-hook
+          (lambda ()
+            (visual-line-mode)
+            (set-tab-style t 4)))
 
 ;; shell script
 (add-hook 'sh-mode-hook
           (lambda ()
+            (visual-line-mode)
             (set-tab-style nil 4)))
 
 ;; C
@@ -226,8 +241,15 @@
 
 ;; C & C++
 (add-hook 'c-mode-common-hook
-          (lambda()
+          (lambda ()
+            (visual-line-mode)
             (local-set-key (kbd "C-c o") 'ff-find-other-file)))
+
+;; Ruby
+(add-hook 'ruby-mode-hook
+          (lambda ()
+            (visual-line-mode)))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; END MODE CONFIG
@@ -281,12 +303,17 @@ buffer instead of replacing the text in region."
 (global-set-key (kbd "C-c v") 'yank)
 (global-set-key (kbd "C-c x") 'kill-region)
 (global-set-key (kbd "M-S-<insert>") 'kill-ring-save)
-(global-set-key (kbd "M-<insert>") 'yank)
-;;(global-set-key (kbd "S-<delete>") 'kill-region) ;; default
+(global-set-key (kbd "M-<insert>") 'yank) ;; mintty
+(global-set-key (kbd "ESC <insertchar>") 'yank) ;; rxvt
+
+;;(Global-set-key (kbd "S-<delete>") 'kill-region) ;; default
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MISC KEY REBINDINGS
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; my custom macros bound to keys past C-j, by convention
+(global-unset-key (kbd "C-j"))
 
 (global-set-key (kbd "RET") 'newline-and-indent)
 (global-set-key (kbd "C-x /") 'generalized-shell-command)
@@ -300,6 +327,12 @@ buffer instead of replacing the text in region."
 (global-set-key (kbd "C-<prior>") 'previous-buffer)
 ;; this is C-/; I'm using C-z for undo
 (global-set-key (kbd "C-_") 'comment-or-uncomment-region)
+(global-set-key (kbd "C-j C-j") 'reposition-window)
+(global-set-key (kbd "ESC <deletechar>") 'kill-word) ;; alt delete
+
+;; navigation start
+(global-set-key (kbd "ESC <S-left>") 'pop-global-mark) ;; alt shift left
+(global-set-key (kbd "ESC <left>") 'pop-to-mark-command) ;; alt left
 
 (defun duplicate-line ()
   "Duplicate current line"
@@ -341,9 +374,6 @@ With prefix ARG, silently save all file-visiting buffers, then kill."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; CUSTOM MACRO FUNCTIONS
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; my custom macros bound to keys past C-j, by convention
-(global-unset-key (kbd "C-j"))
 
 ;; I don't think it's possible to implement the "keep region" wrap logic as a function
 ;; that calls defadvice, because defadvice is a macro, and the arguments will be evaluated
