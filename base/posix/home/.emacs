@@ -71,8 +71,10 @@
 ;; expand region
 (require 'expand-region)
 ;; C-* (C-S-6) in rxvt
-(global-set-key (kbd "M-[ 1 ; 6 x") 'er/expand-region)
-(global-set-key (kbd "M-[ 1 ; 6 w") 'er/contract-region)
+;;(global-set-key (kbd "M-[ 1 ; 6 x") 'er/expand-region)
+;;(global-set-key (kbd "M-[ 1 ; 6 w") 'er/contract-region)
+(global-set-key (kbd "C-_") 'er/expand-region)
+(global-set-key (kbd "M--") 'er/contract-region)
 
 (require 'auto-mark)
 (auto-mark-mode)
@@ -327,8 +329,8 @@ buffer instead of replacing the text in region."
 (global-set-key (kbd "C-<next>") 'next-buffer)
 (global-set-key (kbd "M-[ 1 ; 6 n") 'next-buffer) ;; C-> in mintty
 (global-set-key (kbd "C-<prior>") 'previous-buffer)
-;; this is C-/; I'm using C-z for undo
-(global-set-key (kbd "C-_") 'comment-or-uncomment-region)
+(global-set-key (kbd "C-j /") 'comment-or-uncomment-region)
+(global-set-key (kbd "C-j C-_") 'comment-or-uncomment-region)
 (global-set-key (kbd "C-j C-j") 'reposition-window)
 (global-set-key (kbd "ESC <deletechar>") 'kill-word) ;; alt delete
 
