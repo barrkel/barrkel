@@ -89,5 +89,3 @@ stty-sane
 [ -x "$(which fortune 2>/dev/null)" ] && fortune -a
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
-
-

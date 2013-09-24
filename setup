@@ -16,7 +16,7 @@ function ensure_mkdir # directory...
     done
 }
 
-barrkel=$(cd $(dirname $0); pwd)
+barrkel=$(cd "$(dirname $0)"; pwd)
 
 if [ "$1" != "y" ]; then
     echo "This will set up the barrkel home directory system using '$barrkel' as the barrkel home directory."
@@ -28,24 +28,24 @@ cd "$barrkel" || die "could not chdir to '$barrkel'"
 hostname=$(hostname)
 test -n "$hostname" || die "could not discover hostname"
 
-test -f "$home/config/$hostname" || die "Please create host config file '$home/config/$hostname'"
-ensure_mkdir "$home/host/$hostname/"{bin,home,home.d}
+test -f "$barrkel/config/$hostname" || die "Please create host config file '$barrkel/config/$hostname'"
+ensure_mkdir "$barrkel/host/$hostname/"{bin,home,home.d}
 
-rm -rf staging || die "Couldn't remove '$home/staging'"
-ensure_mkdir "$home/staging"
+rm -rf staging || die "Couldn't remove '$barrkel/staging'"
+ensure_mkdir "$barrkel/staging"
 
 # Verify that nothing has changed
-test -d "$home/cache" && {
-    cd "$home/cache" || die "Couldn't chdir to '$home/cache'"
+test -d "$barrkel/cache" && {
+    cd "$barrkel/cache" || die "Couldn't chdir to '$barrkel/cache'"
     ls -a | while read -r line; do
         
     done
 }
 
+
 # Build bits in home directory
 
 # Link bits into home directory
-
 
 
 

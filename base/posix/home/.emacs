@@ -58,6 +58,9 @@
 (global-linum-mode 1)
 (setq linum-format "%4d ")
 
+;; columns
+(column-number-mode)
+
 ;; expand region
 (require 'expand-region)
 ;; C-* (C-S-6) in rxvt
@@ -82,6 +85,7 @@
 
 ;; completion for M-x: seriously, why isn't this the default?
 (icomplete-mode)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; COLORS ETC
@@ -104,7 +108,7 @@
 
 
 ;; set selection highlight to something readable
-(set-face 'region "black" "white")
+(set-face 'region "white" "magenta")
 
 ;; search, active and inactive
 (set-face 'isearch "black" "yellow")
@@ -230,7 +234,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-;; pipe selection through shell command if any, otherwise output 
+;; pipe selection through shell command if any, otherwise output
 (defun generalized-shell-command (command arg)
   "Unifies `shell-command' and `shell-command-on-region'. If no region is
 selected, run a shell command just like M-x shell-command (M-!).  If
@@ -418,4 +422,3 @@ The CHAR is replaced and the point is put before CHAR."
 (put 'narrow-to-region 'disabled nil)
 ;; C-x n p
 (put 'narrow-to-page 'disabled nil)
-
