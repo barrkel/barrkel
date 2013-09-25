@@ -1,0 +1,26 @@
+
+set bell-style none
+set completion-ignore-case on
+set show-all-if-ambiguous off
+set mark-directories on
+set visible-stats on
+
+M-m: magic-space
+
+"\e[3~": delete-char
+"\e\e[3~": kill-word
+"\e[1~": beginning-of-line
+"\e[4~": end-of-line
+
+# rxvt
+"\eOd": backward-word
+"\eOc": forward-word
+
+C-v: yank
+M-v: yank-pop
+C-y: kill-whole-line
+C-w: kill-region
+M-w: copy-region-as-kill
+
+
+
