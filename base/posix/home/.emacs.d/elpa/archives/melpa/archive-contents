@@ -89,7 +89,7 @@
 		  [(20130401 229)
 		   nil "show whole days of world-time diffs [github]" single])
  (workgroups2 .
-	      [(20130915 1509)
+	      [(20130924 1212)
 	       nil "New workspaces for Emacs [github]" tar])
  (workgroups .
 	     [(20110724 1825)
@@ -296,7 +296,7 @@
        [(20120910 951)
 	nil "UUID's for EmacsLisp [github]" single])
  (use-package .
-	      [(20130916 1359)
+	      [(20130924 1223)
 	       ((bind-key
 		 (1 0))
 		(diminish
@@ -771,7 +771,7 @@
 		     [(20130917 1850)
 		      nil "Emacs24 theme with a light background. [github]" single])
  (soft-charcoal-theme .
-		      [(20130923 1935)
+		      [(20130924 2006)
 		       nil "Dark charcoal theme with soft colors [github]" single])
  (snippet .
 	  [(20130210 1815)
@@ -795,7 +795,7 @@
 	   [(20130312 1839)
 	    nil "Support sequential operation which omitted prefix keys. [github]" single])
  (smartparens .
-	      [(20130923 2050)
+	      [(20130925 1240)
 	       ((cl-lib
 		 (0 1))
 		(dash
@@ -842,7 +842,7 @@
 	       (0)))
 	     "Rip Clojure namespaces apart and rebuild them. [github]" single])
  (skewer-mode .
-	      [(20130917 1520)
+	      [(20130924 2029)
 	       ((simple-httpd
 		 (1 4 0))
 		(js2-mode
@@ -1029,7 +1029,7 @@
 	     [(20121008 1851)
 	      nil "Collection of handy functions for ruby-mode. [github]" tar])
  (ruby-test-mode .
-		 [(20130923 852)
+		 [(20130924 1018)
 		  ((ruby-mode
 		    (1 0)))
 		  "Minor mode for Behaviour and Test Driven [github]" single])
@@ -1242,7 +1242,7 @@
 		[(20130614 1235)
 		 nil "Project oriented automatic builder and error highlighter, flymake for projects [github]" tar])
  (projectile .
-	     [(20130914 2135)
+	     [(20130924 1519)
 	      ((s
 		(1 6 0))
 	       (dash
@@ -1561,7 +1561,7 @@
 	     [(20121202 1703)
 	      nil "Major mode for source files of the Otter automated theorem prover [github]" single])
  (osx-pseudo-daemon .
-		    [(20130923 1152)
+		    [(20130924 2336)
 		     nil "Daemon mode that plays nice with OSX. [github]" single])
  (osx-plist .
 	    [(20101130 1348)
@@ -1826,7 +1826,7 @@
 	    [(20130723 1548)
 	     nil "NSIS-mode [github]" tar])
  (nrepl-tracing .
-		[(20130920 1148)
+		[(20130925 1037)
 		 ((nrepl
 		   (0 1 7))
 		  (clojure-mode
@@ -1850,7 +1850,7 @@
 		     (9)))
 		   "decompilation extension for nrepl.el [github]" single])
  (nrepl .
-	[(20130923 2230)
+	[(20130924 1016)
 	 ((clojure-mode
 	   (2 0 0))
 	  (cl-lib
@@ -2020,7 +2020,7 @@
 	       [(20130728 1717)
 		nil "An interactive, iterative 'git blame' mode for Emacs [github]" single])
  (mmm-mode .
-	   [(20130606 7)
+	   [(20130924 1914)
 	    nil "Allow Multiple Major Modes in a buffer [github]" tar])
  (mmm-mako .
 	   [(20121019 2351)
@@ -2170,7 +2170,7 @@
 		  (1 3 0)))
 		"topgit plug-in for Magit [github]" single])
  (magit-svn .
-	    [(20130923 1703)
+	    [(20130924 711)
 	     ((cl-lib
 	       (0 3))
 	      (magit
@@ -2207,7 +2207,7 @@
 			       [(20130730 1032)
 				nil "Advice for magit-log-edit-commit [github]" single])
  (magit .
-	[(20130923 1703)
+	[(20130924 545)
 	 ((cl-lib
 	   (0 3))
 	  (git-commit-mode
@@ -2652,7 +2652,7 @@
 		    [(20130422 1226)
 		     nil "Makes ido-mode display vertically. [github]" single])
  (ido-ubiquitous .
-		 [(20130921 1022)
+		 [(20130924 1230)
 		  ((emacs
 		    (24 1)))
 		  "Use ido (nearly) everywhere. [github]" single])
@@ -2700,7 +2700,7 @@
 	  [(20130922 2306)
 	   nil "Minibuffer input completion and cycling. [wiki]" tar])
  (ibuffer-vc .
-	     [(20130728 926)
+	     [(20130924 1408)
 	      ((cl-lib
 		(0 2)))
 	      "Group ibuffer's list by VC project, or show VC status [github]" single])
@@ -2890,7 +2890,7 @@
 			(1 5 4)))
 		      "List all helm commands with helm [github]" single])
  (helm-gtags .
-	     [(20130822 755)
+	     [(20130925 1308)
 	      ((helm
 		(1 0)))
 	      "GNU GLOBAL helm interface [github]" single])
@@ -3049,7 +3049,7 @@
 		    [(20120821 1835)
 		     nil "Mode for the dot-language used by graphviz (att). [github]" single])
  (graphene .
-	   [(20130923 2036)
+	   [(20130924 1403)
 	    ((auto-complete
 	      (20130330))
 	     (smartparens
@@ -3257,7 +3257,7 @@
 	    (0 1)))
 	  "generate RELAX NG Compact Schema from RELAX NG Schema, XML Schema and DTD. [github]" tar])
  (geiser .
-	 [(20130919 1824)
+	 [(20130925 510)
 	  nil "GNU Emacs and Scheme talk to each other [github]" tar])
  (gedit-mode .
 	     [(20130513 1719)
@@ -3532,7 +3532,7 @@
 	 (0 3)))
        "fuzzy matching with good sorting [github]" single])
  (floobits .
-	   [(20130918 1651)
+	   [(20130923 2249)
 	    ((json
 	      (1 2))
 	     (highlight
@@ -3769,7 +3769,7 @@
 	 [(20130827 1016)
 	  nil "Erlang major mode [github]" tar])
  (ergoemacs-mode .
-		 [(20130922 1710)
+		 [(20130924 1421)
 		  nil "Emacs mode based on common modern software interface and ergonomics. [github]" tar])
  (erefactor .
 	    [(20130521 1838)
@@ -4071,7 +4071,7 @@
       [(20130826 1941)
        nil "a code browser for Emacs [github]" tar])
  (ebib .
-       [(20130922 1709)
+       [(20130924 1743)
 	nil "a BibTeX database manager [github]" tar])
  (easy-after-load .
 		  [(20121224 2049)
@@ -4224,7 +4224,7 @@
 	       [(20130919 2114)
 		nil "dim complete autoload cookie lines [github]" single])
  (diff-hl .
-	  [(20130910 547)
+	  [(20130925 515)
 	   ((cl-lib
 	     (0 2)))
 	   "Highlight uncommitted changes [github]" tar])
@@ -4383,7 +4383,7 @@
 		[(20121128 843)
 		 nil "Highlight certain character columns [wiki]" single])
  (colorsarenice-theme .
-		      [(20130914 1605)
+		      [(20130924 1824)
 		       ((emacs
 			 (24)))
 		       "A color theme. [hg]" tar])
@@ -4863,7 +4863,7 @@
       [(20130919 924)
        nil "Alberto's Emacs interface for Mercurial (Hg) [hg]" single])
  (ag .
-     [(20130917 1430)
+     [(20130924 1453)
       nil "A front-end for ag ('the silver searcher'), the C ack replacement. [github]" single])
  (aes .
       [(20130121 413)

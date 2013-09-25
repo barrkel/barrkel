@@ -205,11 +205,28 @@
 (autoload 'csharp-mode "csharp-mode-0.8.5" nil t)
 (add-to-list 'auto-mode-alist '("\\.cs\\'" . csharp-mode))
 
-;; markdown
-(autoload 'markdown-mode "markdown-mode" "Major mode for editing Markdown files" t)
-;;(add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
-(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
-(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+;; C
+(add-hook 'c-mode-hook
+          (lambda ()
+            (set-tab-style t 4)))
+
+auto-mode-alist
+(+ 10 20)
+
+
+;; C++
+(add-hook 'c++-mode-hook
+          (lambda ()
+            (set-tab-style t 4)))
+
+;; C & C++
+(add-hook 'c-mode-common-hook
+          (lambda ()
+            (visual-line-mode)
+            (local-set-key (kbd "C-c o") 'ff-find-other-file)))
+
+;; conf
+(add-to-list 'auto-mode-alist '("\\.cnf\\'" . conf-mode))
 
 ;; elisp mode
 (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
@@ -227,27 +244,17 @@
             (visual-line-mode)
             (set-tab-style t 4)))
 
-;; shell script
-(add-hook 'sh-mode-hook
-          (lambda ()
-            (visual-line-mode)
-            (set-tab-style nil 4)))
+;; Java
+(add-hook 'java-mode-hook
+          (lambda()
+            (set-tab-style t 4)
+            (visual-line-mode)))
 
-;; C
-(add-hook 'c-mode-hook
-          (lambda ()
-            (set-tab-style t 4)))
-
-;; C++
-(add-hook 'c++-mode-hook
-          (lambda ()
-            (set-tab-style t 4)))
-
-;; C & C++
-(add-hook 'c-mode-common-hook
-          (lambda ()
-            (visual-line-mode)
-            (local-set-key (kbd "C-c o") 'ff-find-other-file)))
+;; markdown
+(autoload 'markdown-mode "markdown-mode" "Major mode for editing Markdown files" t)
+;;(add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 
 ;; Puppet
 (require 'puppet-mode-autoloads)
@@ -256,6 +263,12 @@
 (add-hook 'ruby-mode-hook
           (lambda ()
             (visual-line-mode)))
+
+;; shell script
+(add-hook 'sh-mode-hook
+          (lambda ()
+            (visual-line-mode)
+            (set-tab-style nil 4)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -316,8 +329,29 @@ buffer instead of replacing the text in region."
 ;;(Global-set-key (kbd "S-<delete>") 'kill-region) ;; default
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; MISC KEY REBINDINGS
+;; TERMINAL FIXES
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(when (string= (getenv "TERM") "screen.rxvt")
+  (define-key input-decode-map "\e[a" (kbd "S-<up>"))
+  (define-key input-decode-map "\e[b" (kbd "S-<down>"))
+  (define-key input-decode-map "\e[7$" (kbd "S-<home>"))
+  (define-key input-decode-map "\e[8$" (kbd "S-<end>"))
+  (define-key input-decode-map "\e[5^" (kbd "C-<prior>"))
+  (define-key input-decode-map "\e[6^" (kbd "C-<next>"))
+  (define-key input-decode-map "\eOa" (kbd "C-<up>"))
+  (define-key input-decode-map "\eOb" (kbd "C-<down>"))
+  (define-key input-decode-map "\eOd" (kbd "C-<left>"))
+  (define-key input-decode-map "\eOc" (kbd "C-<right>"))
+  )
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; MISC KEY REBINDINGS / SHORTCUTS
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; note existence of this for rxvt:
+;; http://www.emacswiki.org/emacs/rxvt.el
 
 ;; my custom macros bound to keys past C-j, by convention
 (global-unset-key (kbd "C-j"))
