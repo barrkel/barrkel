@@ -85,7 +85,10 @@
 ;;(icy-mode 1)
 
 ;; incremental search buffer switch with C-x b - lightweight
-(iswitchb-mode 1)
+;;(iswitchb-mode)
+
+;; ido-mode; does iswitchb and more
+(ido-mode)
 
 ;; don't let the cursor go into minibuffer prompt
 (setq minibuffer-prompt-properties
@@ -390,6 +393,9 @@ buffer instead of replacing the text in region."
 
 (global-set-key (kbd "M-a") 'backward-sexp)
 (global-set-key (kbd "M-e") 'forward-sexp)
+
+;; semantic navigation with completion
+(global-set-key (kbd "M-i") 'imenu)
 
 
 (defun duplicate-line ()
