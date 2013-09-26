@@ -60,7 +60,7 @@
 
 ;; note: packages that come via package management need to be loaded after package management
 
-;; line numbers
+;; line numbers; consider replacing with nlinum or something faster, linum is horribly slow.
 (require 'linum)
 (global-linum-mode 1)
 (setq linum-format "%4d ")
@@ -70,11 +70,8 @@
 
 ;; expand region
 (require 'expand-region)
-;; C-* (C-S-6) in rxvt
-;;(global-set-key (kbd "M-[ 1 ; 6 x") 'er/expand-region)
-;;(global-set-key (kbd "M-[ 1 ; 6 w") 'er/contract-region)
-(global-set-key (kbd "C-_") 'er/expand-region)
-(global-set-key (kbd "M--") 'er/contract-region)
+(global-set-key (kbd "M-h") 'er/expand-region)
+(global-set-key (kbd "M-H") 'er/contract-region)
 
 (require 'auto-mark)
 (auto-mark-mode)
@@ -336,19 +333,29 @@ buffer instead of replacing the text in region."
   (define-key input-decode-map "\e[a" (kbd "S-<up>"))
   (define-key input-decode-map "\e[b" (kbd "S-<down>"))
   (define-key input-decode-map "\e[7$" (kbd "S-<home>"))
+  (define-key input-decode-map "\e[7^" (kbd "C-<home>"))
+  (define-key input-decode-map "\e[7@" (kbd "C-S-<home>"))
   (define-key input-decode-map "\e[8$" (kbd "S-<end>"))
+  (define-key input-decode-map "\e[8^" (kbd "C-<end>"))
+  (define-key input-decode-map "\e[8@" (kbd "C-S-<end>"))
   (define-key input-decode-map "\e[5^" (kbd "C-<prior>"))
   (define-key input-decode-map "\e[6^" (kbd "C-<next>"))
+  (define-key input-decode-map "\e[3^" (kbd "C-<delete>"))
   (define-key input-decode-map "\eOa" (kbd "C-<up>"))
   (define-key input-decode-map "\eOb" (kbd "C-<down>"))
   (define-key input-decode-map "\eOd" (kbd "C-<left>"))
-  (define-key input-decode-map "\eOc" (kbd "C-<right>"))
-  )
+  (define-key input-decode-map "\eOc" (kbd "C-<right>")))
+
+;; actually, mintty
+(when (string= (getenv "TERM") "xterm")
+  (define-key input-decode-map "\e[1;5m" (kbd "C--")))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MISC KEY REBINDINGS / SHORTCUTS
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; TODO: put these in minor modes
 
 ;; note existence of this for rxvt:
 ;; http://www.emacswiki.org/emacs/rxvt.el
@@ -374,6 +381,16 @@ buffer instead of replacing the text in region."
 ;; navigation start
 (global-set-key (kbd "ESC <S-left>") 'pop-global-mark) ;; alt shift left
 (global-set-key (kbd "ESC <left>") 'pop-to-mark-command) ;; alt left
+(global-set-key (kbd "M-S-<left>") 'pop-global-mark) ;; alt shift left
+(global-set-key (kbd "M-<left>") 'pop-to-mark-command) ;; alt left
+
+;; scrolling
+(global-set-key (kbd "C-<up>") 'scroll-down-line)
+(global-set-key (kbd "C-<down>") 'scroll-up-line)
+
+(global-set-key (kbd "M-a") 'backward-sexp)
+(global-set-key (kbd "M-e") 'forward-sexp)
+
 
 (defun duplicate-line ()
   "Duplicate current line"
