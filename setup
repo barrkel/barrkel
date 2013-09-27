@@ -1,9 +1,54 @@
 #!/bin/bash
 
+# we will be dealing with lots of .files, reduce risk of missing some
+shopt -s dotglob
+
 function die # message
 {
     echo "$@"
     exit 1
+}
+
+function usage
+{
+    echo "usage: $(basename $0) [<flags>]"
+    echo "Sets up barrkel in home"
+    echo "flags:"
+    echo "  -q  Don't prompt on startup"
+    echo "  -c  Continue even if cached config is different"
+    echo "  -f  Overwrite existing files when applying staged home directory"
+    exit 1
+}
+
+function gather_vars # args
+{
+    barrkel=$(cd "$(dirname $0)"; pwd)
+    
+    cd "$barrkel" || die "could not chdir to '$barrkel'"
+    hostname=$(hostname)
+    test -n "$hostname" || die "could not discover hostname"
+
+    while [ -n "$1" ]; do
+        case "$1" in
+            -q)
+                no_prompt=1
+                ;;
+           	-f)
+                force_ovewrite=1
+                ;;
+            -c)
+                ignore_diff=1
+                ;;
+
+            *)
+                usage
+                ;;
+        esac
+        shift
+    done
+
+    cache="$barrkel/cache"
+    staging="$barrkel/staging"
 }
 
 function ensure_mkdir # directory...
@@ -16,36 +61,118 @@ function ensure_mkdir # directory...
     done
 }
 
-barrkel=$(cd "$(dirname $0)"; pwd)
+function ensure_sanity
+{
+    test -f "$barrkel/config/$hostname" || die "Please create host config file '$barrkel/config/$hostname'"
+    ensure_mkdir "$barrkel/host/$hostname/"{bin,home,home.d}
 
-if [ "$1" != "y" ]; then
-    echo "This will set up the barrkel home directory system using '$barrkel' as the barrkel home directory."
-    echo "Press Enter to continue, or run this script as '$(basename $0) y' to avoid this prompt"
-    read
-fi
+    rm -rf "$staging" || die "Couldn't remove '$staging'"
+    ensure_mkdir "$staging"
+}
 
-cd "$barrkel" || die "could not chdir to '$barrkel'"
-hostname=$(hostname)
-test -n "$hostname" || die "could not discover hostname"
-
-test -f "$barrkel/config/$hostname" || die "Please create host config file '$barrkel/config/$hostname'"
-ensure_mkdir "$barrkel/host/$hostname/"{bin,home,home.d}
-
-rm -rf staging || die "Couldn't remove '$barrkel/staging'"
-ensure_mkdir "$barrkel/staging"
-
-# Verify that nothing has changed
-test -d "$barrkel/cache" && {
-    cd "$barrkel/cache" || die "Couldn't chdir to '$barrkel/cache'"
-    ls -a | while read -r line; do
-        
+function verify_no_change
+{
+    # Verify that nothing has changed
+    test -d "$cache" || return
+    
+    cd "$cache" || die "Couldn't chdir to '$cache'"
+    find -type f | while read -r line; do
+        # don't mind if file is missing
+        test -f "~/$line" || continue
+        diff "$line" "~/$line" || (( ignore_diff)) || die "Exiting due to differences from cached config"
     done
 }
 
+function maybe_echo_dir # dir...
+{
+    local dir
+    for dir; do
+        test -d "$dir" && echo "$dir"
+    done
+}
 
-# Build bits in home directory
+function get_atom_dirs
+{
+    maybe_echo_dir "$barrkel/host/$hostname"
+    test -f "$barrkel/config/$hostname" || return
+    cat "$barrkel/config/$hostname" |
+        while read -r line; do
+            maybe_echo_dir "$barrkel/base/$line"
+        done
+}
 
-# Link bits into home directory
+function find_in_atom_dirs # relative-path
+{
+    get_atom_dirs | (
+        while read -r line; do
+            test -e "$line/$1" && {
+                echo "$line/$1"
+                exit
+            }
+        done
+        exit 1
+    ) && return
+    die "couldn't find path '$1' in any atom directory"
+}
 
+function build_initial_profile
+{
+    local _path=$(find_in_atom_dirs bin/_path)
+    printf "source '%s'\n" "$_path" > "$staging/.bash_profile"
+    touch "$staging/.bashrc"
+}
+
+function force_copy_files # from-dir to-dir
+{
+    local from_dir="$1"
+    local to_dir="$2"
+    local f
+
+    # copy all files and directories to target
+    # merge directories, but overwrite existing files
+    # depends on dotglob
+    for f in "$from_dir"/*; do
+        # -R: preserve pipes, don't read from them
+        cp -f -R "$from_dir/$f" "$to_dir/"
+    done
+}
+
+function build_staging
+{
+    build_initial_profile
+	get_atom_dirs |
+        while read -r line; do
+            # path
+            test -d "$line/bin" && echo "append_if_missing $line/bin" >> "$staging/.bash_profile"
+
+            # simple profile additions
+            test -f "$line/profile" && cat "$line/profile" >> "$staging/.bash_profile"
+            
+            # files
+            test -d "$line/home" && force_copy_files "$line/home" "$staging"
+            
+            # parts
+        done
+}
+
+function apply_staging
+{
+}
+
+gather_vars "$@"
+
+(( no_prompt )) || {
+    echo "This will set up the barrkel home directory system using '$barrkel' as the barrkel home directory."
+    echo "Press Enter to continue, or run this script as '$(basename $0) y' to avoid this prompt"
+    read
+}
+
+ensure_sanity
+
+verify_no_change
+
+build_staging
+
+apply_staging
 
 

@@ -319,11 +319,9 @@ buffer instead of replacing the text in region."
 (global-set-key (kbd "C-y") 'delete-line-command)
 (global-set-key (kbd "C-v") 'yank)
 (global-set-key (kbd "M-v") 'yank-pop)
-(global-set-key (kbd "C-c c") 'kill-ring-save)
-(global-set-key (kbd "C-c v") 'yank)
-(global-set-key (kbd "C-c x") 'kill-region)
 (global-set-key (kbd "M-S-<insert>") 'kill-ring-save)
 (global-set-key (kbd "M-<insert>") 'yank) ;; mintty
+(global-set-key (kbd "M-<delete>") 'kill-word) ;; for parallel with M-d
 (global-set-key (kbd "ESC <insertchar>") 'yank) ;; rxvt
 
 ;;(Global-set-key (kbd "S-<delete>") 'kill-region) ;; default
@@ -352,6 +350,30 @@ buffer instead of replacing the text in region."
 ;; actually, mintty
 (when (string= (getenv "TERM") "xterm")
   (define-key input-decode-map "\e[1;5m" (kbd "C--")))
+
+;; actually, screen in mintty
+(when (string= (getenv "TERM") "screen")
+  (define-key input-decode-map "\e[1;5F" (kbd "C-<end>"))
+  (define-key input-decode-map "\e[1;2F" (kbd "S-<end>"))
+  (define-key input-decode-map "\e[1;6F" (kbd "C-S-<end>"))
+  (define-key input-decode-map "\e[1;5H" (kbd "C-<home>"))
+  (define-key input-decode-map "\e[1;2H" (kbd "S-<home>"))
+  (define-key input-decode-map "\e[1;6H" (kbd "C-S-<home>"))
+  (define-key input-decode-map "\e[3;3~" (kbd "M-<delete>"))
+  (define-key input-decode-map "\e[3;5~" (kbd "C-<delete>"))
+  (define-key input-decode-map "\e[1;2A" (kbd "S-<up>"))
+  (define-key input-decode-map "\e[1;2B" (kbd "S-<down>"))
+  (define-key input-decode-map "\e[1;2C" (kbd "S-<right>"))
+  (define-key input-decode-map "\e[1;2D" (kbd "S-<left>"))
+  (define-key input-decode-map "\e[1;5A" (kbd "C-<up>"))
+  (define-key input-decode-map "\e[1;5B" (kbd "C-<down>"))
+  (define-key input-decode-map "\e[1;5C" (kbd "C-<right>"))
+  (define-key input-decode-map "\e[1;5D" (kbd "C-<left>"))
+  (define-key input-decode-map "\e[1;6A" (kbd "C-S-<up>"))
+  (define-key input-decode-map "\e[1;6B" (kbd "C-S-<down>"))
+  (define-key input-decode-map "\e[1;6C" (kbd "C-S-<right>"))
+  (define-key input-decode-map "\e[1;6D" (kbd "C-S-<left>")))
+  
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
