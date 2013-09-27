@@ -422,6 +422,8 @@ buffer instead of replacing the text in region."
 (global-set-key (kbd "M-a") 'backward-sexp)
 (global-set-key (kbd "M-e") 'forward-sexp)
 
+(global-set-key (kbd "M-r") 'replace-regexp)
+
 ;; semantic navigation with completion
 (global-set-key (kbd "M-i") 'imenu)
 
@@ -435,6 +437,7 @@ buffer instead of replacing the text in region."
       (forward-line)
       (copy-region-as-kill start (point))
       (yank))))
+(global-set-key (kbd "M-c") 'duplicate-line)
 
 
 ;; don't ask multiple times about exiting with unsaved buffers
@@ -467,27 +470,21 @@ With prefix ARG, silently save all file-visiting buffers, then kill."
 ;; CUSTOM MACRO FUNCTIONS
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; I don't think it's possible to implement the "keep region" wrap logic as a function
-;; that calls defadvice, because defadvice is a macro, and the arguments will be evaluated
-;; too soon. TODO for another day: implement the call to defadvice as a macro that can be
-;; applied to any command, to ensure it keeps its region.
-(defadvice replace-string (around replace-string-keep-region)
-  "Replace string in region and restore region after replacement has been made."
-  (let (deactivate-mark)
-    (save-excursion
-      ad-do-it))
-  (exchange-point-and-mark)
-  (exchange-point-and-mark))
-(ad-activate 'replace-string)
-(global-set-key (kbd "C-j r") 'replace-string)
+(defmacro keep-region (command)
+  "Wrap command in code that saves and restores the region"
+  (letrec ((command-name (symbol-name command))
+           (advice-name (concat command-name "-keep-region")))
+    `(progn
+       (defadvice ,command (around ,(intern advice-name))
+         (let (deactivate-mark)
+           (save-excursion
+             ad-do-it)
+           (exchange-point-and-mark)
+           (exchange-point-and-mark)))
+       (ad-activate (quote ,command)))))
 
-;; (defadvice  (around replace-string-keep-region)
-;;   "Replace string in region and restore region after replacement has been made."
-;;   (let (deactivate-mark)
-;;     (save-excursion
-;;       ad-do-it))
-;;   (exchange-point-and-mark)
-;;   (exchange-point-and-mark))
+(keep-region replace-string)
+(keep-region replace-regexp)
 
 ;; make zap-to-char act like zap-up-to-char
 (defadvice zap-to-char (after my-zap-to-char-advice (arg char) activate)
