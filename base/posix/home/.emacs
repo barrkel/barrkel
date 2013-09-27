@@ -226,7 +226,7 @@ auto-mode-alist
             (local-set-key (kbd "C-c o") 'ff-find-other-file)))
 
 ;; conf
-(add-to-list 'auto-mode-alist '("\\.cnf\\'" . conf-mode))
+(add-to-list 'auto-mode-alist '("my.cnf" . conf-mode))
 
 ;; elisp mode
 (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
@@ -263,6 +263,7 @@ auto-mode-alist
 (add-hook 'ruby-mode-hook
           (lambda ()
             (visual-line-mode)))
+(add-to-list 'auto-mode-alist '("Gemfile" . ruby-mode))
 
 ;; shell script
 (add-hook 'sh-mode-hook
@@ -347,7 +348,7 @@ buffer instead of replacing the text in region."
   (define-key input-decode-map "\eOd" (kbd "C-<left>"))
   (define-key input-decode-map "\eOc" (kbd "C-<right>")))
 
-;; actually, mintty
+;; actually, mintty on windows
 (when (string= (getenv "TERM") "xterm")
   (define-key input-decode-map "\e[1;5m" (kbd "C--")))
 
@@ -375,6 +376,9 @@ buffer instead of replacing the text in region."
   (define-key input-decode-map "\e[1;6D" (kbd "C-S-<left>")))
   
 
+(when (string= (getenv "TERM") "rxvt")
+  (define-key input-decode-map "\e[7@" (kbd "C-S-<home>"))
+  (define-key input-decode-map "\e[8@" (kbd "C-S-<end>")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MISC KEY REBINDINGS / SHORTCUTS
