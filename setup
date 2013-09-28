@@ -12,12 +12,30 @@ function die # message
 function usage
 {
     echo "usage: $(basename $0) [<flags>]"
-    echo "Sets up barrkel in home"
+    echo "Sets up barrkel in home ($(cd ~; pwd))"
     echo "flags:"
     echo "  -q  Don't prompt on startup"
     echo "  -c  Continue even if cached config is different"
     echo "  -f  Overwrite existing files when applying staged home directory"
     exit 1
+}
+
+function maybe_echo_dir # dir...
+{
+    local dir
+    for dir; do
+        test -d "$dir" && echo "$dir"
+    done
+}
+
+function get_atom_dirs
+{
+    maybe_echo_dir "$barrkel/host/$hostname"
+    test -f "$barrkel/config/$hostname" || return
+    cat "$barrkel/config/$hostname" |
+        while read -r line; do
+            maybe_echo_dir "$barrkel/base/$line"
+        done
 }
 
 function gather_vars # args
@@ -28,6 +46,8 @@ function gather_vars # args
     hostname=$(hostname)
     test -n "$hostname" || die "could not discover hostname"
 
+    atoms=($(get_atom_dirs))
+    
     while [ -n "$1" ]; do
         case "$1" in
             -q)
@@ -83,24 +103,6 @@ function verify_no_change
     done
 }
 
-function maybe_echo_dir # dir...
-{
-    local dir
-    for dir; do
-        test -d "$dir" && echo "$dir"
-    done
-}
-
-function get_atom_dirs
-{
-    maybe_echo_dir "$barrkel/host/$hostname"
-    test -f "$barrkel/config/$hostname" || return
-    cat "$barrkel/config/$hostname" |
-        while read -r line; do
-            maybe_echo_dir "$barrkel/base/$line"
-        done
-}
-
 function find_in_atom_dirs # relative-path
 {
     get_atom_dirs | (
@@ -132,31 +134,125 @@ function force_copy_files # from-dir to-dir
     # merge directories, but overwrite existing files
     # depends on dotglob
     for f in "$from_dir"/*; do
+        test -e "$f" || continue
+        
+        case "$f" in
+            *~)
+                continue
+                ;;
+            \#*#)
+                continue
+                ;;
+        esac
         # -R: preserve pipes, don't read from them
-        cp -f -R "$from_dir/$f" "$to_dir/"
+        cp -f -R "$f" "$to_dir/"
     done
+}
+
+function copy_parts # from-dir to-dir
+{
+    local from_dir="$1"
+    local to_dir="$2"
+    local f
+    local name
+    
+    for f in "$from_dir"/*; do
+        name="${f##*/}"
+        test -f "$f" && {
+            # ultra-simple case: a single file, concatenate
+            # be sure we have line endings though
+            printf '\n' >> "to_dir/$name"
+            cat "$f" >> "$to-dir/$name"
+        }
+    done
+}
+
+function echo_if_file_exists # filename...
+{
+    local arg
+    for arg; do
+        test -f "$arg" && echo "$arg"
+        shift
+    done
+}
+
+function list_all_part_files_for # dir
+{
+    local curr="$1"
+    
+    test -d "$curr/home.d" || return
+    
+    cd "$curr/home.d"
+    for f in *; do
+        if [ -f "$f" ]; then
+            printf '%s\t%s\t%s\n' "50_$f" "$f" "$curr/home.d/$f"
+        elif [ -d "$f" ]; then
+            part_dir="$curr/home.d/$f"
+            (
+                cd "$f"
+                
+                for ff in *; do
+                    test -f "$ff" || die "non-file found in part dir: $part_dir/$ff"
+                    printf '%s\t%s\t%s\n' "$ff" "$f" "$part_dir/$ff"
+                done
+            ) || exit
+        fi
+    done
+    
+    test -f "$curr/profile" &&
+        printf '%s\t%s\t%s\n' '++bash_profile' '.bash_profile' "$curr/.bash_profile"
+        
+    test -f "$curr/rc" &&
+        printf '%s\t%s\n'     '++bashrc'       '.bashrc'       "$curr/.bashrc"
+}
+
+# output table of all parts for a given filename
+# <part-filename> \t <target-filename> \t <path>
+function list_all_part_files
+{
+    local atom
+
+    list_all_part_files_for "$barrkel/host/$hostname"
+    for atom in "${atoms[@]}"; do
+        list_all_part_files_for "$barrkel/base/$atom"
+    done
+}
+
+function add_chunk # source-file target-file
+{
+    echo "appending $1 to $2"
+    case "$2" in
+        */.bashrc | */.bash_profile)
+            echo "# from $1" >> "$2"
+            ;;
+    esac
+    cat "$1" >> "$2"
 }
 
 function build_staging
 {
     build_initial_profile
-	get_atom_dirs |
-        while read -r line; do
-            # path
-            test -d "$line/bin" && echo "append_if_missing $line/bin" >> "$staging/.bash_profile"
+    local atom
+    
+    for atom in "${atoms[@]}"; do
+        # path
+        test -d "$atom/bin" && echo "append_if_missing PATH $atom/bin" >> "$staging/.bash_profile"
 
-            # simple profile additions
-            test -f "$line/profile" && cat "$line/profile" >> "$staging/.bash_profile"
-            
-            # files
-            test -d "$line/home" && force_copy_files "$line/home" "$staging"
-            
-            # parts
-        done
+        # files
+        test -d "$atom/home" && force_copy_files "$atom/home" "$staging"
+    done
+
+    # parts
+    (
+        type add_chunk | tail -n +2
+        list_all_part_files | sort | sed -r 's|(.*)\t(.*)\t(.*)|add_chunk "\3" "$staging/\2"|'
+    ) | bash
+    # list_all_part_files | sort | sed -r 's|(.*)\t(.*)\t(.*)|cat "\3" >> "$staging/\2"|' | bash
 }
 
 function apply_staging
 {
+    return
 }
 
 gather_vars "$@"
