@@ -35,6 +35,28 @@
 ;; no menu
 (menu-bar-mode -1)
 
+;; overwrite selection
+(delete-selection-mode 1)
+
+
+(recentf-mode 1)
+(setq recentf-max-saved-items 300)
+
+(defun ido-choose-recentf ()
+  "Choose recently opened file using ido"
+  (interactive)
+  (find-file (ido-completing-read "Recent file: " recentf-list nil t)))
+(global-set-key (kbd "<f11>") 'ido-choose-recentf)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; IDO MODE CONFIG
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(setq ido-enable-flex-matching t)
+(setq ido-enable-last-directory-history t)
+;;(ido-indicator ((t (:background "yellow" :foreground "black" :width condensed)))))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; PLUGINS
@@ -47,10 +69,11 @@
 ;; melpa package repository
 (when (> emacs-major-version 23)
   (require 'package)
-  (package-initialize)
   (add-to-list 'package-archives
-               '("melpa" . "http://melpa.milkbox.net/packages/")
-               'APPEND))
+               '("marmalade" . "http://marmalade-repo.org/packages/"))
+  (add-to-list 'package-archives
+               '("melpa" . "http://melpa.milkbox.net/packages/"))
+  (package-initialize))
 
 ;; plugins; everything in plugins, and subdirectories
 (add-to-list 'load-path "~/.emacs.d/plugins/")
@@ -122,7 +145,7 @@
 (set-face 'region "white" "magenta")
 
 ;; search, active and inactive
-(set-face 'isearch "black" "yellow")
+(set-face 'isearch "black" "cyan")
 (set-face 'lazy-highlight "black" "green")
 (set-face 'highlight "black" "yellow")
 (set-face 'query-replace "black" "yellow")
@@ -211,10 +234,6 @@
 (add-hook 'c-mode-hook
           (lambda ()
             (set-tab-style t 4)))
-
-auto-mode-alist
-(+ 10 20)
-
 
 ;; C++
 (add-hook 'c++-mode-hook
@@ -422,7 +441,10 @@ buffer instead of replacing the text in region."
 (global-set-key (kbd "M-a") 'backward-sexp)
 (global-set-key (kbd "M-e") 'forward-sexp)
 
+;; search and replace
 (global-set-key (kbd "M-r") 'replace-regexp)
+(global-set-key (kbd "C-s") 'isearch-forward-regexp)
+(global-set-key (kbd "C-r") 'isearch-backward-regexp)
 
 ;; semantic navigation with completion
 (global-set-key (kbd "M-i") 'imenu)
