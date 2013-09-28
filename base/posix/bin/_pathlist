@@ -1,0 +1,108 @@
+#!/bin/bash # not really
+
+# - executed before profile, so be careful
+
+. "$BARRKEL_HOME"/base/all/bin/_array
+. "$BARRKEL_HOME"/base/all/bin/_debug
+
+function append_if_missing
+{
+    test -z "$1" && {
+        echo "usage: append_if_missing [-w] <varname> <item>..."
+        echo "Appends <item> into <varname> environment variable if it isn't already there."
+        echo "<varname> must be the name of a path list variable, such as PATH."
+        echo "  -w  Uses Windows path separator ';' instead"
+        return 1
+    }
+    local var="$1"
+    shift
+    local sep=":"
+    
+    while [ -n "$1" ]; do
+        case "$1" in
+            
+            -w)
+                sep=";"
+                shift
+                continue
+                ;;
+            
+            *)
+                local item="$1"
+                shift
+                local eItem="${item//\\/\\\\}" # prevent egrep seeing escapes
+                echo "${!var}" | "$egrep" -io "$sep$eItem$sep|^$eItem$sep|$sep$eItem\$" >/dev/null && continue
+                if [ -z "${!var}" ]; then
+                    # First item in $var, so no $sep.
+                    eval ${var}=\""$item"\"
+                else
+                    eval ${var}=\""${!var}$sep$item"\"
+                fi
+                ;;
+        esac
+    done
+    
+    export ${var}
+}
+
+function prepend_if_missing
+{
+    test -z "$1" && {
+        echo "usage: prepend_if_missing <varname> <item>..."
+        echo "Prepends <item> into <varname> environment variable if it isn't already there."
+        echo "<varname> must be the name of a path list variable, such as PATH."
+        return 1
+    }
+    local var="$1"
+    shift
+    
+    while [ -n "$1" ]; do
+        # echo On "$1"
+        item="$1"
+        shift
+        echo "${!var}" | $grep -Eio ":$item:|^$item:|:$item\$" >/dev/null && continue
+        if [ -z "${!var}" ]; then
+            # First item in $var, so no ':'.
+            eval ${var}=\""$item"\"
+        else
+            eval ${var}=\""$item:${!var}"\"
+        fi
+    done
+    
+    export ${var}
+}
+
+function ensure_prepending
+{
+    test -z "$1" && {
+        echo "usage: ensure_prepending <varname> <item>..."
+        echo "Remove each <item> from <varname> environment variable, then prepend them."
+        return 1
+    }
+    
+    local var="$1"
+    shift
+    local args
+    declare -a args
+    
+    while [ -n "$1" ]; do
+        array_add args "$1"
+        shift
+    done
+    
+    local i
+    local item
+    local text
+    
+    for ((i=0; i<${#args[@]};++i)); do
+        item="${args[$i]}"
+        text="$(echo "${!var}" | $sed 's|:'"$item"'||g;s|'"$item"':||g')"
+        eval ${var}=\""$text"\"
+    done
+    
+    for ((i=${#args[@]}-1; i >= 0; --i)); do
+        item="${args[$i]}"
+        eval ${var}=\""$item:${!var}"\"
+    done
+}
+

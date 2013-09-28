@@ -5,7 +5,7 @@ shopt -s dotglob
 
 function die # message
 {
-    echo "$@"
+    echo "$@" >/dev/stderr
     exit 1
 }
 
@@ -86,6 +86,7 @@ function ensure_sanity
     test -f "$barrkel/config/$hostname" || die "Please create host config file '$barrkel/config/$hostname'"
     ensure_mkdir "$barrkel/host/$hostname/"{bin,home,home.d}
 
+    echo "Removing $staging"
     rm -rf "$staging" || die "Couldn't remove '$staging'"
     ensure_mkdir "$staging"
 }
@@ -114,25 +115,24 @@ function find_in_atom_dirs # relative-path
         done
         exit 1
     ) && return
-    die "couldn't find path '$1' in any atom directory"
+
+    tried_dirs=($(get_atom_dirs))
+    die "couldn't find path '$1' in any profile directory, tried: ${tried_dirs[@]}"
 }
 
 function build_initial_profile
 {
-    local _path=$(find_in_atom_dirs bin/_path)
+    local _path=$(find_in_atom_dirs bin/_pathlist) || exit
     printf "source '%s'\n" "$_path" > "$staging/.bash_profile"
     touch "$staging/.bashrc"
 }
 
-function force_copy_files # from-dir to-dir
+function symlink_files # from-dir to-dir
 {
     local from_dir="$1"
     local to_dir="$2"
     local f
 
-    # copy all files and directories to target
-    # merge directories, but overwrite existing files
-    # depends on dotglob
     for f in "$from_dir"/*; do
         test -e "$f" || continue
         
@@ -144,8 +144,12 @@ function force_copy_files # from-dir to-dir
                 continue
                 ;;
         esac
-        # -R: preserve pipes, don't read from them
-        cp -f -R "$f" "$to_dir/"
+
+        test -f "$to_dir/${f##*/}" && {
+            echo "note: skipping less specific: $f"
+            continue
+        }
+        ln -s "$f" "$to_dir"
     done
 }
 
@@ -238,8 +242,8 @@ function build_staging
         # path
         test -d "$atom/bin" && echo "append_if_missing PATH $atom/bin" >> "$staging/.bash_profile"
 
-        # files
-        test -d "$atom/home" && force_copy_files "$atom/home" "$staging"
+        # symlinks
+        test -d "$atom/home" && symlink_files "$atom/home" "$staging"
     done
 
     # parts
@@ -247,7 +251,6 @@ function build_staging
         type add_chunk | tail -n +2
         list_all_part_files | sort | sed -r 's|(.*)\t(.*)\t(.*)|add_chunk "\3" "$staging/\2"|'
     ) | bash
-    # list_all_part_files | sort | sed -r 's|(.*)\t(.*)\t(.*)|cat "\3" >> "$staging/\2"|' | bash
 }
 
 function apply_staging
@@ -259,7 +262,7 @@ gather_vars "$@"
 
 (( no_prompt )) || {
     echo "This will set up the barrkel home directory system using '$barrkel' as the barrkel home directory."
-    echo "Press Enter to continue, or run this script as '$(basename $0) y' to avoid this prompt"
+    echo "Press Enter to continue, or run this script as '$(basename $0) -q' to avoid this prompt"
     read
 }
 

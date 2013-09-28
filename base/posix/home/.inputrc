@@ -16,6 +16,12 @@ M-m: magic-space
 "\eOd": backward-word
 "\eOc": forward-word
 
+# mintty
+"\e[1;5D": backward-word
+"\e[1;5C": forward-word
+# M-<delete>
+"\e[3;3~": kill-word
+
 C-v: yank
 M-v: yank-pop
 C-y: kill-whole-line
