@@ -1,0 +1,67 @@
+# -*- mode: sh; -*-
+
+#--------------------------------------------------------------------------------
+# variables
+#--------------------------------------------------------------------------------
+export LESS=-iR
+export EDITOR=emacs
+export VISUAL=emacs
+
+pathlist_ensure_prepending MANPATH /usr/local/man /opt/man /usr/share/man /usr/man
+export MANPATH
+pathlist_ensure_prepending INFOPATH /usr/local/info /opt/info /usr/share/info /usr/info
+export INFOPATH
+pathlist_append PATH /usr/games
+export PATH
+
+#--------------------------------------------------------------------------------
+# prompt
+#--------------------------------------------------------------------------------
+
+# Only print hostname in prompt if SSH connection
+if [ -n "$SSH_CONNECTION" ]; then
+    export PS1='[\h] \w\$ '
+else
+    export PS1='\w\$ '
+fi
+
+# autojump
+(( $RANDOM < 1600 )) && autojump -a "$PWD"
+
+#--------------------------------------------------------------------------------
+# aliases
+#--------------------------------------------------------------------------------
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
+alias ......='cd ../../../../..'
+alias .......='cd ../../../../../..'
+alias ........='cd ../../../../../../..'
+
+alias cp='cp -ip'
+alias mv='mv -i'
+
+alias d='ls --color=auto'
+alias ls='ls --color=auto'
+alias la='ls -a'
+alias ll='ls -lh'
+alias lla='ls -lah'
+alias lal='ls -lah'
+
+alias df='df -h'
+alias du='du -h'
+alias jumpstat='autojump --stat'
+
+alias locate='locate -i'
+
+alias md='mkdir'
+alias rd='rmdir'
+
+#--------------------------------------------------------------------------------
+# initialization
+#--------------------------------------------------------------------------------
+stty-sane
+
+[ -x "$(which fortune 2>/dev/null)" ] && fortune -a
+

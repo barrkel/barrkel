@@ -1,0 +1,3 @@
+#!/bin/sh
+
+stty sane -ixon start undef stop undef erase '^?' susp '^Z' swtch undef

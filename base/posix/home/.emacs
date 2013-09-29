@@ -13,8 +13,8 @@
 ;(add-to-list 'desktop-path default-directory)
 (if (file-exists-p ".emacs.desktop")
     (progn
-     (setq desktop-path (list default-directory))
-     (desktop-save-mode 1)))
+      (setq desktop-path (list default-directory))
+      (desktop-save-mode 1)))
 
 ;; reduce wordy prompts
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -38,15 +38,24 @@
 ;; overwrite selection
 (delete-selection-mode 1)
 
+;; remember recent files; not good enough, also has issues with cleanup, network
 ;;(recentf-mode 1)
 ;;(setq recentf-max-saved-items 300)
+;; (defun ido-choose-recentf ()
+;;   "Choose recently opened file using ido"
+;;   (interactive)
+;;   (find-file (ido-completing-read "Recent file: " recentf-list nil t)))
+;; (global-set-key (kbd "<f11>") 'ido-choose-recentf)
 
-(defun ido-choose-recentf ()
-  "Choose recently opened file using ido"
-  (interactive)
-  (find-file (ido-completing-read "Recent file: " recentf-list nil t)))
-(global-set-key (kbd "<f11>") 'ido-choose-recentf)
+;; remember where we were last time
+(require 'saveplace)
+(setq-default save-place t)
+(setq save-place-file "~/.local/saved-places")
+(defun recenter-plain ()
+  (recenter))
+(add-hook 'find-file-hooks 'recenter-plain t)
 
+;; reload files that have been changed on disk
 (global-auto-revert-mode 1)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -354,7 +354,7 @@ function test_array_remove
 
 function test_pathlist_append
 {
-    x=foo:bar:baz
+    local x=foo:bar:baz
 
     pathlist_append x blah
     eq "$x" foo:bar:baz:blah
@@ -366,7 +366,7 @@ function test_pathlist_append
 
 function test_pathlist_prepend
 {
-    x=foo:bar:baz
+    local x=foo:bar:baz
 
     pathlist_prepend x bar
     eq "$x" foo:bar:baz
@@ -382,7 +382,7 @@ function test_pathlist_prepend
 
 function test_pathlist_ensure_prepending
 {
-    x=a:b:c:d
+    local x=a:b:c:d
 
     pathlist_ensure_prepending x d
     eq "$x" d:a:b:c
