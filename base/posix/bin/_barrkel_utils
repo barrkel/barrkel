@@ -14,6 +14,11 @@ function die # message
 # requiring eval. The primary function of this file is to avoid proliferation
 # of cryptic eval invocations, permitting them to be tested and reused.
 
+# Ugly identifiers are used to reduce conflict with the caller. It is unlikely,
+# but possible, that the caller will have used the same name variable as something
+# we declare locally, and in trying to write to the caller's variable, we write
+# instead to a local.
+
 # an exception to the 'output in last place'
 function setq # location-expr value
 {
@@ -23,9 +28,9 @@ function setq # location-expr value
         return 1
     }
 
-    local __internal__cmd
-    printf -v __internal__cmd '%s=%q' "$1" "$2"
-    eval "$__internal__cmd"
+    local __X__cmd
+    printf -v __X__cmd '%s=%q' "$1" "$2"
+    eval "$__X__cmd"
     return 0
 }
 
@@ -39,10 +44,10 @@ function array_add # array value...
         return 1
     }
     
-    local __internal__array="$1"
+    local __X__array="$1"
     shift
 
-    eval "$__internal__array+=(\"\$@\")"
+    eval "$__X__array+=(\"\$@\")"
 }
 
 function array_contains # array value
@@ -65,17 +70,17 @@ function array_index_of # array value result-var
         return 2
     }
 
-    local __internal__values
-    array_copy "$1" __internal__values
+    local __X__values
+    array_copy "$1" __X__values
 
-    local __internal__index=0
-    local __internal__element
-    for __internal__element in "${__internal__values[@]}"; do
-        [[ "$__internal__element" == "$2" ]] && {
-            test -n "$3" && setq "$3" $__internal__index
+    local __X__index=0
+    local __X__element
+    for __X__element in "${__X__values[@]}"; do
+        [[ "$__X__element" == "$2" ]] && {
+            test -n "$3" && setq "$3" $__X__index
             return 0
         }
-        let ++__internal__index
+        let ++__X__index
     done
     return 1
 }
@@ -147,9 +152,9 @@ function array_swap_elements # array idx1 idx2
         return 1
     }
 
-    eval "local __internal__tmp=\"\${$1[$2]}\""
+    eval "local __X__tmp=\"\${$1[$2]}\""
     eval "$1[$2]=\"\${$1[$3]}\""
-    eval "$1[$3]=\"\$__internal__tmp\""
+    eval "$1[$3]=\"\$__X__tmp\""
 }
 
 function array_dump # array
@@ -165,14 +170,14 @@ function array_delete # array index
         return 1
     }
 
-    eval "local __internal__count=\${#$1[@]}"
+    eval "local __X__count=\${#$1[@]}"
 
-    (( "$2" >= 0 && "$2" < "$__internal__count" )) || {
-        echo "array_delete: index '$2' out of bounds (0..$__internal__count-1)"
+    (( "$2" >= 0 && "$2" < "$__X__count" )) || {
+        echo "array_delete: index '$2' out of bounds (0..$__X__count-1)"
         return 2
     }
 
-    eval "$1=(\"\${$1[@]:0:$2}\" \"\${$1[@]:$2+1:__internal__count-$2-1}\")"
+    eval "$1=(\"\${$1[@]:0:$2}\" \"\${$1[@]:$2+1:__X__count-$2-1}\")"
 }
 
 function array_insert # array index item...
@@ -183,24 +188,24 @@ function array_insert # array index item...
         return 1
     }
 
-    eval "local __internal__count=\${#$1[@]}"
+    eval "local __X__count=\${#$1[@]}"
 
-    (( "$2" >= 0 && "$2" <= "$__internal__count" )) || {
-        echo "array_insert: index '$2' out of bounds (0..$__internal__count)"
+    (( "$2" >= 0 && "$2" <= "$__X__count" )) || {
+        echo "array_insert: index '$2' out of bounds (0..$__X__count)"
         return 2
     }
 
-    local __internal__var="$1"
+    local __X__var="$1"
     shift
-    local __internal__index="$1"
+    local __X__index="$1"
     shift
 
-    local __internal__item
-    local __internal__count
-    for __internal__item; do
-        eval "$__internal__var=(\"\${$__internal__var[@]:0:__internal__index}\" \"\$__internal__item\" \"\${$__internal__var[@]:__internal__index:__internal__count-__internal__index}\")"
-        eval "__internal__count=\${#$__internal__var[@]}"
-        let ++__internal__index
+    local __X__item
+    local __X__count
+    for __X__item; do
+        eval "$__X__var=(\"\${$__X__var[@]:0:__X__index}\" \"\$__X__item\" \"\${$__X__var[@]:__X__index:__X__count-__X__index}\")"
+        eval "__X__count=\${#$__X__var[@]}"
+        let ++__X__index
     done
 }
 
@@ -212,14 +217,14 @@ function array_remove # array element...
         return 1
     }
 
-    local _4_internal_4_idx
-    local _4_internal_4_array="$1"
+    local _4_X_4_idx
+    local _4_X_4_array="$1"
     shift
 
-    local _4_internal_4_element
-    for _4_internal_4_element; do
-        array_index_of "$_4_internal_4_array" "$_4_internal_4_element" _4_internal_4_idx || continue
-        array_delete "$_4_internal_4_array" $_4_internal_4_idx
+    local _4_X_4_element
+    for _4_X_4_element; do
+        array_index_of "$_4_X_4_array" "$_4_X_4_element" _4_X_4_idx || continue
+        array_delete "$_4_X_4_array" $_4_X_4_idx
     done
 }
 
@@ -232,23 +237,23 @@ function pathlist_append # pathvar path...
         return 1
     }
 
-    local __internal__var="$1"
+    local __X__var="$1"
     shift
 
-    local __internal__sep=":"
+    local __X__sep=":"
     [[ "$1" == "-w" ]] && {
         sep=";"
         shift
     }
 
-    local __internal__values
-    local __internal__arg
+    local __X__values
+    local __X__arg
     
-    string_split "${!__internal__var}" "$__internal__sep" __internal__values
-    for __internal__arg; do
-        array_contains __internal__values "$__internal__arg" || array_add __internal__values "$__internal__arg"
+    string_split "${!__X__var}" "$__X__sep" __X__values
+    for __X__arg; do
+        array_contains __X__values "$__X__arg" || array_add __X__values "$__X__arg"
     done
-    array_join __internal__values "$__internal__sep" "$__internal__var"
+    array_join __X__values "$__X__sep" "$__X__var"
 }
 
 function pathlist_prepend # pathvar path...
@@ -260,27 +265,27 @@ function pathlist_prepend # pathvar path...
         return 1
     }
 
-    local _2_internal_2_var="$1"
+    local _2_X_2_var="$1"
     shift
 
-    local _2_internal_2_sep=":"
+    local _2_X_2_sep=":"
     [[ "$1" == "-w" ]] && {
-        _2_internal_2_sep=";"
+        _2_X_2_sep=";"
         shift
     }
 
-    local _2_internal_2_values
-    local _2_internal_2_arg
-    local _2_internal_2_index=0
+    local _2_X_2_values
+    local _2_X_2_arg
+    local _2_X_2_index=0
 
-    string_split "${!_2_internal_2_var}" "$_2_internal_2_sep" _2_internal_2_values
-    for _2_internal_2_arg; do
-        array_contains _2_internal_2_values "$_2_internal_2_arg" || {
-            array_insert _2_internal_2_values $_2_internal_2_index "$_2_internal_2_arg"
-            let ++_2_internal_2_index
+    string_split "${!_2_X_2_var}" "$_2_X_2_sep" _2_X_2_values
+    for _2_X_2_arg; do
+        array_contains _2_X_2_values "$_2_X_2_arg" || {
+            array_insert _2_X_2_values $_2_X_2_index "$_2_X_2_arg"
+            let ++_2_X_2_index
         }
     done
-    array_join _2_internal_2_values "$_2_internal_2_sep" "$_2_internal_2_var"
+    array_join _2_X_2_values "$_2_X_2_sep" "$_2_X_2_var"
 }
 
 function pathlist_ensure_prepending # pathvar path...
@@ -292,21 +297,22 @@ function pathlist_ensure_prepending # pathvar path...
         return 1
     }
 
-    local __internal_1_var="$1"
+    local __X_1_var="$1"
     shift
 
-    local __internal_1_sep=":"
+    local __X_1_sep=":"
     [[ "$1" == "-w" ]] && {
-        __internal_1_sep=";"
+        __X_1_sep=";"
         shift
     }
 
-    local __internal_1_values
-    local __internal_1_arg
+    local __X_1_values
+    local __X_1_arg
 
-    string_split "${!__internal_1_var}" "$__internal_1_sep" __internal_1_values
-    array_remove __internal_1_values "$@"
-    array_insert __internal_1_values 0 "$@"
-    array_join __internal_1_values "$__internal_1_sep" "$__internal_1_var"
+    string_split "${!__X_1_var}" "$__X_1_sep" __X_1_values
+    array_remove __X_1_values "$@"
+    array_insert __X_1_values 0 "$@"
+    array_join __X_1_values "$__X_1_sep" "$__X_1_var"
 }
+
 
