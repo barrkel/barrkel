@@ -1,0 +1,11 @@
+# fix silly backspace not working in less
+# also, end wasn't working
+
+\e[8~	goto-end
+\ke		goto-end
+
+#line-edit
+^H 		backspace
+^?		backspace
+\ke		end
+\e[8~	end
