@@ -38,9 +38,8 @@
 ;; overwrite selection
 (delete-selection-mode 1)
 
-
-(recentf-mode 1)
-(setq recentf-max-saved-items 300)
+;;(recentf-mode 1)
+;;(setq recentf-max-saved-items 300)
 
 (defun ido-choose-recentf ()
   "Choose recently opened file using ido"
@@ -48,6 +47,7 @@
   (find-file (ido-completing-read "Recent file: " recentf-list nil t)))
 (global-set-key (kbd "<f11>") 'ido-choose-recentf)
 
+(global-auto-revert-mode 1)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; IDO MODE CONFIG
@@ -394,8 +394,20 @@ buffer instead of replacing the text in region."
   (define-key input-decode-map "\e[1;6A" (kbd "C-S-<up>"))
   (define-key input-decode-map "\e[1;6B" (kbd "C-S-<down>"))
   (define-key input-decode-map "\e[1;6C" (kbd "C-S-<right>"))
-  (define-key input-decode-map "\e[1;6D" (kbd "C-S-<left>")))
-  
+  (define-key input-decode-map "\e[1;6D" (kbd "C-S-<left>"))
+  (define-key input-decode-map "\e[1;3A" (kbd "M-<up>"))
+  (define-key input-decode-map "\e[1;3B" (kbd "M-<down>"))
+  (define-key input-decode-map "\e[1;3C" (kbd "M-<right>"))
+  (define-key input-decode-map "\e[1;3D" (kbd "M-<left>"))
+  (define-key input-decode-map "\e[1;4A" (kbd "M-S-<up>"))
+  (define-key input-decode-map "\e[1;4B" (kbd "M-S-<down>"))
+  (define-key input-decode-map "\e[1;4C" (kbd "M-S-<right>"))
+  (define-key input-decode-map "\e[1;4D" (kbd "M-S-<left>"))
+  (define-key input-decode-map "\e[5;3~" (kbd "M-<prior>"))
+  (define-key input-decode-map "\e[6;3~" (kbd "M-<next>"))
+  (define-key input-decode-map "\e[5;5~" (kbd "C-<prior>"))
+  (define-key input-decode-map "\e[6;5~" (kbd "C-<next>")))
+
 
 (when (string= (getenv "TERM") "rxvt")
   (define-key input-decode-map "\e[7@" (kbd "C-S-<home>"))
@@ -435,8 +447,19 @@ buffer instead of replacing the text in region."
 (global-set-key (kbd "M-<left>") 'pop-to-mark-command) ;; alt left
 
 ;; scrolling
+(defun scroll-up-line-other-window ()
+  "Scroll other window up one line"
+  (interactive)
+  (scroll-other-window 1))
+(defun scroll-down-line-other-window ()
+  "Scroll other window down one line"
+  (interactive)
+  (scroll-other-window-down 1))
+
 (global-set-key (kbd "C-<up>") 'scroll-down-line)
 (global-set-key (kbd "C-<down>") 'scroll-up-line)
+(global-set-key (kbd "M-S-<up>") 'scroll-down-line-other-window)
+(global-set-key (kbd "M-S-<down>") 'scroll-up-line-other-window)
 
 (global-set-key (kbd "M-a") 'backward-sexp)
 (global-set-key (kbd "M-e") 'forward-sexp)
@@ -450,16 +473,23 @@ buffer instead of replacing the text in region."
 (global-set-key (kbd "M-i") 'imenu)
 
 
-(defun duplicate-line ()
-  "Duplicate current line"
+(defun duplicate-line-or-region ()
+  "Duplicate region, or line if no region selected"
   (interactive)
-  (save-excursion
-    (beginning-of-line)
-    (let ((start (point)))
-      (forward-line)
-      (copy-region-as-kill start (point))
-      (yank))))
-(global-set-key (kbd "M-c") 'duplicate-line)
+  (if (region-active-p)
+      (let (deactivate-mark) ;; keep region after duplication
+        (save-excursion
+          (copy-region-as-kill (region-beginning) (region-end))
+          (yank))
+        (exchange-point-and-mark)
+        (exchange-point-and-mark))
+    (save-excursion
+      (beginning-of-line)
+      (let ((start (point)))
+        (forward-line)
+        (copy-region-as-kill start (point))
+        (yank)))))
+(global-set-key (kbd "M-c") 'duplicate-line-or-region)
 
 
 ;; don't ask multiple times about exiting with unsaved buffers

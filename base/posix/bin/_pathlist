@@ -1,108 +1,312 @@
 #!/bin/bash # not really
 
-# - executed before profile, so be careful
-
-. "$BARRKEL_HOME"/base/all/bin/_array
-. "$BARRKEL_HOME"/base/all/bin/_debug
-
-function append_if_missing
+function die # message
 {
-    test -z "$1" && {
-        echo "usage: append_if_missing [-w] <varname> <item>..."
-        echo "Appends <item> into <varname> environment variable if it isn't already there."
-        echo "<varname> must be the name of a path list variable, such as PATH."
-        echo "  -w  Uses Windows path separator ';' instead"
-        return 1
-    }
-    local var="$1"
-    shift
-    local sep=":"
-    
-    while [ -n "$1" ]; do
-        case "$1" in
-            
-            -w)
-                sep=";"
-                shift
-                continue
-                ;;
-            
-            *)
-                local item="$1"
-                shift
-                local eItem="${item//\\/\\\\}" # prevent egrep seeing escapes
-                echo "${!var}" | "$egrep" -io "$sep$eItem$sep|^$eItem$sep|$sep$eItem\$" >/dev/null && continue
-                if [ -z "${!var}" ]; then
-                    # First item in $var, so no $sep.
-                    eval ${var}=\""$item"\"
-                else
-                    eval ${var}=\""${!var}$sep$item"\"
-                fi
-                ;;
-        esac
-    done
-    
-    export ${var}
+    echo "$(basename $0): fatal: $@"
+    exit 255
 }
 
-function prepend_if_missing
+# None of these bash functions should fork. If they require output, they use result
+# variables, which normally come in the last position. If they mutate an argument,
+# the argument is usually in first place, and the function is like a pseudo-method.
+
+# All of them deal with variables by reference, which in bash means by name and
+# requiring eval. The primary function of this file is to avoid proliferation
+# of cryptic eval invocations, permitting them to be tested and reused.
+
+# an exception to the 'output in last place'
+function setq # location-expr value
 {
-    test -z "$1" && {
-        echo "usage: prepend_if_missing <varname> <item>..."
-        echo "Prepends <item> into <varname> environment variable if it isn't already there."
-        echo "<varname> must be the name of a path list variable, such as PATH."
+    [[ -n "$1" && -n "$2" ]] || {
+        echo "usage: setq <location-expr> <value>"
+        echo "Quotes <value> appropriately so it can be eval'd into an assignment to <location-expr>"
         return 1
     }
-    local var="$1"
-    shift
-    
-    while [ -n "$1" ]; do
-        # echo On "$1"
-        item="$1"
-        shift
-        echo "${!var}" | $grep -Eio ":$item:|^$item:|:$item\$" >/dev/null && continue
-        if [ -z "${!var}" ]; then
-            # First item in $var, so no ':'.
-            eval ${var}=\""$item"\"
-        else
-            eval ${var}=\""$item:${!var}"\"
-        fi
-    done
-    
-    export ${var}
+
+    local __internal__cmd
+    printf -v __internal__cmd '%s=%q' "$1" "$2"
+    eval "$__internal__cmd"
+    return 0
 }
 
-function ensure_prepending
+# array_add: indirect assignment of variable
+# If you're working directly with a variable, you can just do var+=(value)
+function array_add # array value...
 {
-    test -z "$1" && {
-        echo "usage: ensure_prepending <varname> <item>..."
-        echo "Remove each <item> from <varname> environment variable, then prepend them."
+    [[ -n "$1" ]] || {
+        echo "usage: array_add <array> <value>..."
+        echo "Adds values to the array shell variable varName."
         return 1
     }
     
-    local var="$1"
+    local __internal__array="$1"
     shift
-    local args
-    declare -a args
-    
-    while [ -n "$1" ]; do
-        array_add args "$1"
+
+    eval "$__internal__array+=(\"\$@\")"
+}
+
+function array_contains # array value
+{
+    [[ -n "$1" && -n "$2" ]] || {
+        echo "usage: array_contains <array> <value>"
+        echo "Exit code 0 if array contains value, 1 otherwise."
+        return 2
+    }
+
+    array_index_of "$1" "$2"
+}
+
+function array_index_of # array value result-var
+{
+    [[ -n "$1" ]] || {
+        echo "usage: array_index_of <array> <value> [<result-var>]"
+        echo "Assign index of <value> to <result-var> or -1 if not found."
+        echo "Success return code only if found."
+        return 2
+    }
+
+    local __internal__values
+    array_copy "$1" __internal__values
+
+    local __internal__index=0
+    local __internal__element
+    for __internal__element in "${__internal__values[@]}"; do
+        [[ "$__internal__element" == "$2" ]] && {
+            test -n "$3" && setq "$3" $__internal__index
+            return 0
+        }
+        let ++__internal__index
+    done
+    return 1
+}
+
+function array_pop # array [<result-var>]
+{
+    test -n "$1" || {
+        echo "usage: array_pop <array> [<result-var>]"
+        echo "Removes the last element in array and optionally assign to result-var."
+        return 1
+    }
+
+    test -n "$2" && array_last "$1" "$2"
+    eval "unset $1[\${#$1[@]}-1]"
+}
+
+function array_last # array result-var
+{
+    [[ -n "$1" && -n "$2" ]] || {
+        echo "usage: array_last <array> <result-var>"
+        echo "Copies last value in array to result-var"
+        return 1
+    }
+
+    eval "$2=\${$1[\${#$1[@]}-1]}"
+}
+
+function array_copy # from to
+{
+    [[ -n "$1" && -n "$2" ]] || {
+        echo "usage: array_copy <from> <to>"
+        echo "Make a copy of the array <to> in <from>"
+        return 1
+    }
+
+    eval "$2=(\"\${$1[@]}\")"
+}
+
+# split string based on separator
+function string_split # string separator result-var
+{
+    [[ -n "$1" && -n "$2" && -n "$3" ]] || {
+        echo "usage: string_split <string> <separator> <result-var>"
+        echo "Assign result of splitting string with separator to result-var as an array"
+        return 1
+    }
+
+    local IFS="$2"
+    eval "read -ra $3 <<< \"\$1\""
+}
+
+function array_join # array separator result-var
+{
+    [[ -n "$1" && -n "$2" && -n "$3" ]] || {
+        echo "usage: array_join <array> <separator> <result-var>"
+        echo "Assign result of joining array with separator to result-var as an array"
+        return 1
+    }
+
+    local IFS="$2"
+    eval "$3=\"\${$1[*]}\""
+}
+
+function array_swap_elements # array idx1 idx2
+{
+    [[ -n "$1" && -n "$2" && -n "$3" ]] || {
+        echo "usage: array_swap_elements <array> <idx1> <idx2>"
+        echo "Swap array[idx1] with array[idx2]"
+        return 1
+    }
+
+    eval "local __internal__tmp=\"\${$1[$2]}\""
+    eval "$1[$2]=\"\${$1[$3]}\""
+    eval "$1[$3]=\"\$__internal__tmp\""
+}
+
+function array_dump # array
+{
+    eval "echo \"debug: $1 == (\${$1[@]}) (\${#$1[@]} items)\""
+}
+
+function array_delete # array index
+{
+    [[ -n "$1" && -n "$2" ]] || {
+        echo "usage: array_delete <array> <index>"
+        echo "Remove item at <index> from <array>"
+        return 1
+    }
+
+    eval "local __internal__count=\${#$1[@]}"
+
+    (( "$2" >= 0 && "$2" < "$__internal__count" )) || {
+        echo "array_delete: index '$2' out of bounds (0..$__internal__count-1)"
+        return 2
+    }
+
+    eval "$1=(\"\${$1[@]:0:$2}\" \"\${$1[@]:$2+1:__internal__count-$2-1}\")"
+}
+
+function array_insert # array index item...
+{
+    [[ -n "$1" && -n "$2" ]] || {
+        echo "usage: array_insert <array> <index> <item>..."
+        echo "Insert item at index in array"
+        return 1
+    }
+
+    eval "local __internal__count=\${#$1[@]}"
+
+    (( "$2" >= 0 && "$2" <= "$__internal__count" )) || {
+        echo "array_insert: index '$2' out of bounds (0..$__internal__count)"
+        return 2
+    }
+
+    local __internal__var="$1"
+    shift
+    local __internal__index="$1"
+    shift
+
+    local __internal__item
+    local __internal__count
+    for __internal__item; do
+        eval "$__internal__var=(\"\${$__internal__var[@]:0:__internal__index}\" \"\$__internal__item\" \"\${$__internal__var[@]:__internal__index:__internal__count-__internal__index}\")"
+        eval "__internal__count=\${#$__internal__var[@]}"
+        let ++__internal__index
+    done
+}
+
+function array_remove # array element...
+{
+    [[ -n "$1" ]] || {
+        echo "usage: array_remove <array> <element>..."
+        echo "Remove elements from array; does not support sparse arrays"
+        return 1
+    }
+
+    local _4_internal_4_idx
+    local _4_internal_4_array="$1"
+    shift
+
+    local _4_internal_4_element
+    for _4_internal_4_element; do
+        array_index_of "$_4_internal_4_array" "$_4_internal_4_element" _4_internal_4_idx || continue
+        array_delete "$_4_internal_4_array" $_4_internal_4_idx
+    done
+}
+
+function pathlist_append # pathvar path...
+{
+    [[ -n "$1" ]] || {
+        echo "usage: pathlist_append [-w] <varname> <item>..."
+        echo "Appends item to varname if it is not already in the list"
+        echo "  -w  Use ';' as the separator instead of ':'"
+        return 1
+    }
+
+    local __internal__var="$1"
+    shift
+
+    local __internal__sep=":"
+    [[ "$1" == "-w" ]] && {
+        sep=";"
         shift
-    done
+    }
+
+    local __internal__values
+    local __internal__arg
     
-    local i
-    local item
-    local text
-    
-    for ((i=0; i<${#args[@]};++i)); do
-        item="${args[$i]}"
-        text="$(echo "${!var}" | $sed 's|:'"$item"'||g;s|'"$item"':||g')"
-        eval ${var}=\""$text"\"
+    string_split "${!__internal__var}" "$__internal__sep" __internal__values
+    for __internal__arg; do
+        array_contains __internal__values "$__internal__arg" || array_add __internal__values "$__internal__arg"
     done
-    
-    for ((i=${#args[@]}-1; i >= 0; --i)); do
-        item="${args[$i]}"
-        eval ${var}=\""$item:${!var}"\"
+    array_join __internal__values "$__internal__sep" "$__internal__var"
+}
+
+function pathlist_prepend # pathvar path...
+{
+    [[ -n "$1" ]] || {
+        echo "usage: pathlist_prepend [-w] <varname> <item>..."
+        echo "Prepends item to varname if it is not already in the list"
+        echo "  -w  Use ';' as the separator instead of ':'"
+        return 1
+    }
+
+    local _2_internal_2_var="$1"
+    shift
+
+    local _2_internal_2_sep=":"
+    [[ "$1" == "-w" ]] && {
+        _2_internal_2_sep=";"
+        shift
+    }
+
+    local _2_internal_2_values
+    local _2_internal_2_arg
+    local _2_internal_2_index=0
+
+    string_split "${!_2_internal_2_var}" "$_2_internal_2_sep" _2_internal_2_values
+    for _2_internal_2_arg; do
+        array_contains _2_internal_2_values "$_2_internal_2_arg" || {
+            array_insert _2_internal_2_values $_2_internal_2_index "$_2_internal_2_arg"
+            let ++_2_internal_2_index
+        }
     done
+    array_join _2_internal_2_values "$_2_internal_2_sep" "$_2_internal_2_var"
+}
+
+function pathlist_ensure_prepending # pathvar path...
+{
+    [[ -n "$1" ]] || {
+        echo "usage: pathlist_ensure_prepending [-w] <varname> <item>..."
+        echo "Prepends or moves item to start of varname"
+        echo "  -w  Use ';' as the separator instead of ':'"
+        return 1
+    }
+
+    local __internal_1_var="$1"
+    shift
+
+    local __internal_1_sep=":"
+    [[ "$1" == "-w" ]] && {
+        __internal_1_sep=";"
+        shift
+    }
+
+    local __internal_1_values
+    local __internal_1_arg
+
+    string_split "${!__internal_1_var}" "$__internal_1_sep" __internal_1_values
+    array_remove __internal_1_values "$@"
+    array_insert __internal_1_values 0 "$@"
+    array_join __internal_1_values "$__internal_1_sep" "$__internal_1_var"
 }
 
