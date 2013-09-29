@@ -1,0 +1,26 @@
+#!/bin/bash
+
+if [ -e "$1" ]; then
+    case "$1" in
+        /*)
+            arg="$(cygpath -w "$1")"
+            ;;
+        .)
+            arg=.
+#            arg="$(cygpath -w "$PWD")"
+            ;;
+        *)
+            arg="$(cygpath -w "$PWD/$1")"
+            ;;
+    esac
+    shift
+    exec cygstart -- "$arg" "$@"
+else
+    targ="$(which "$1" 2>/dev/null)"
+    test -e "$targ" || {
+        echo "target '$1' not found"
+        exit 1
+    }
+    shift
+    exec cygstart -- "$targ" "$@" 
+fi
