@@ -1,0 +1,154 @@
+#!/bin/bash
+
+function usage
+{
+    echo "$(basename $0) [<option>...] [<directory>...]"
+    echo 'Prints recursive directory listing of given directory, or current directory if none given.'
+    echo 'options:'
+    echo ' -r     Relative to current directory (default).'
+    echo ' -R     Absolute path'
+    echo ' -d     Only directories, no files.'
+    echo ' -f     Only files, no directories (default).'
+    echo ' -a     Both directories and files.'
+    echo " -1     Don't recurse, only show directory contents."
+    echo ' -l     Ignored.'
+    exit 2
+}
+
+function double_slashes
+{
+    echo "$1" | sed 's:\\:\\\\:g'
+}
+
+function ensure_trailing_slash
+{
+    echo "$1" | sed 's:$:/:;s://$:/:'
+}
+
+attr_args=/a
+recurse_args=/s
+relative=1
+show_dirs=0
+show_files=1
+
+orig_pwd="$PWD"
+
+# cygpath is going to convert UNC paths based on physical path.
+# We need to replace physical path with nothing to get relative
+# path in that case.
+physical_wd="$(pwd -P)"
+
+# Changing to root directory because if we invoke cmd.exe
+# when PWD is a UNC path, it will moan.
+cd /
+
+function do_prefix # dir
+{
+    local dir="$1"
+    case "$dir" in
+        */)
+    	    ;;
+    	*)
+    	    dir="$dir"/
+    	    ;;
+    esac
+    
+    if [ -z "$recurse_args" ]; then
+        sed "s|^|$dir|"
+    else
+        cat -
+    fi
+}
+
+function do_rdir # dir
+{
+    if ((relative == 0)); then
+        cmd /c dir "$(cygpath -w "$1")" $recurse_args /b $attr_args | 
+            cygpath -f - -u |
+            do_prefix "$1"
+    else
+        cmd /c dir "$(cygpath -w "$1")" $recurse_args /b $attr_args | 
+            cygpath -f - -u | 
+            sed "s|^$physical_wd/||i"
+    fi
+}
+
+got_arg=0
+
+for d in "$@"; do
+    case "$d" in
+        --help | '-?')
+            usage
+            ;;
+            
+        -1)
+            recurse_args=
+            ;;
+            
+        -d)
+            show_dirs=1
+            show_files=0
+            ;;
+            
+        -f)
+            show_files=1
+            show_dirs=0
+            ;;
+        
+        -a)
+            show_files=1
+            show_dirs=1
+            ;;
+            
+        -R)
+            relative=0
+            ;;
+            
+        -r)
+            relative=1
+            ;;
+            
+        -l)
+            # ignore
+            ;;
+            
+        /*)
+            got_arg=1
+            (
+                if (( show_files && show_dirs )); then
+                    attr_args=/a
+                elif (( show_files )); then
+                    attr_args=/a-d
+                elif (( show_dirs )); then
+                    attr_args=/ad
+                fi
+                do_rdir "$d"
+            )
+            ;;
+            
+        *)
+            got_arg=1
+            (
+                if (( show_files && show_dirs )); then
+                    attr_args=/a
+                elif (( show_files )); then
+                    attr_args=/a-d
+                elif (( show_dirs )); then
+                    attr_args=/ad
+                fi
+                do_rdir "$orig_pwd/$d"
+            )
+            ;;
+    esac
+done
+
+if ((got_arg == 0)); then
+    if (( show_files && show_dirs )); then
+        attr_args=/a
+    elif (( show_files )); then
+        attr_args=/a-d
+    elif (( show_dirs )); then
+        attr_args=/ad
+    fi
+    do_rdir "$orig_pwd"
+fi

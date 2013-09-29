@@ -34,7 +34,11 @@ function get_atom_dirs
     test -f "$barrkel/config/$hostname" || return
     cat "$barrkel/config/$hostname" |
         while read -r line; do
-            maybe_echo_dir "$barrkel/base/$line"
+            if [ -d "$barrkel/base/$line" ]; then
+                echo "$barrkel/base/$line"
+            else
+                echo "warning: $barrkel/base/$line doesn't exist" >/dev/stderr
+            fi
         done
 }
 
@@ -76,8 +80,8 @@ function ensure_mkdir # directory...
     local dir
     for dir; do
         test -d "$dir" && continue
+        echo "Creating $dir"
         mkdir -p "$dir" || die "Could not create '$dir'"
-        echo "Created '$dir'"
     done
 }
 
@@ -122,8 +126,9 @@ function find_in_atom_dirs # relative-path
 
 function build_initial_profile
 {
-    local _path=$(find_in_atom_dirs bin/_pathlist) || exit
-    printf "source '%s'\n" "$_path" > "$staging/.bash_profile"
+    local _utils=$(find_in_atom_dirs bin/_barrkel_utils) || exit
+    printf "export BARRKEL_HOME='%s'\\n" "$barrkel" > "$staging/.bash_profile"
+    printf "source '%s'\n" "$_utils" >> "$staging/.bash_profile"
     touch "$staging/.bashrc"
 }
 
@@ -180,34 +185,38 @@ function echo_if_file_exists # filename...
     done
 }
 
+# <part-filename> \t <target-filename> \t <path>
 function list_all_part_files_for # dir
 {
     local curr="$1"
     
-    test -d "$curr/home.d" || return
+    test -d "$curr/home.d" && {
+        cd "$curr/home.d"
+        for f in *; do
+            if [ -f "$f" ]; then
+                printf '%s\t%s\t%s\n' "50_$f" "$f" "$curr/home.d/$f"
+            elif [ -d "$f" ]; then
+                part_dir="$curr/home.d/$f"
+                (
+                    cd "$f"
+                    
+                    for ff in *; do
+                        test -f "$ff" || die "non-file found in part dir: $part_dir/$ff"
+                        printf '%s\t%s\t%s\n' "$ff" "$f" "$part_dir/$ff"
+                    done
+                ) || exit
+            fi
+        done
+    }
+
     
-    cd "$curr/home.d"
-    for f in *; do
-        if [ -f "$f" ]; then
-            printf '%s\t%s\t%s\n' "50_$f" "$f" "$curr/home.d/$f"
-        elif [ -d "$f" ]; then
-            part_dir="$curr/home.d/$f"
-            (
-                cd "$f"
-                
-                for ff in *; do
-                    test -f "$ff" || die "non-file found in part dir: $part_dir/$ff"
-                    printf '%s\t%s\t%s\n' "$ff" "$f" "$part_dir/$ff"
-                done
-            ) || exit
-        fi
-    done
+    test -f "$curr/profile" && {
+        printf '%s\t%s\t%s\n' '++bash_profile' '.bash_profile' "$curr/profile"
+    }
     
-    test -f "$curr/profile" &&
-        printf '%s\t%s\t%s\n' '++bash_profile' '.bash_profile' "$curr/.bash_profile"
-        
-    test -f "$curr/rc" &&
-        printf '%s\t%s\n'     '++bashrc'       '.bashrc'       "$curr/.bashrc"
+    test -f "$curr/rc" && {
+        printf '%s\t%s\n'     '++bashrc'       '.bashrc'       "$curr/rc"
+    }
 }
 
 # output table of all parts for a given filename
@@ -218,13 +227,13 @@ function list_all_part_files
 
     list_all_part_files_for "$barrkel/host/$hostname"
     for atom in "${atoms[@]}"; do
-        list_all_part_files_for "$barrkel/base/$atom"
+        list_all_part_files_for "$atom"
     done
 }
 
 function add_chunk # source-file target-file
 {
-    echo "appending $1 to $2"
+    echo "Appending $1 to $2"
     case "$2" in
         */.bashrc | */.bash_profile)
             echo "# from $1" >> "$2"
@@ -236,11 +245,16 @@ function add_chunk # source-file target-file
 function build_staging
 {
     build_initial_profile
-    local atom
-    
-    for atom in "${atoms[@]}"; do
+    local atom i
+
+    # atoms go from more specific to less specific
+    # but when building path, prepend in order from less specific to more specific
+    for ((i=${#atoms[@]} - 1; i >= 0; --i)) {
+        atom="${atoms[i]}"
         # path
-        test -d "$atom/bin" && echo "append_if_missing PATH $atom/bin" >> "$staging/.bash_profile"
+        test -d "$atom/bin" && echo "pathlist_prepend PATH $atom/bin" >> "$staging/.bash_profile"
+    }
+    for atom in "${atoms[@]}"; do
 
         # symlinks
         test -d "$atom/home" && symlink_files "$atom/home" "$staging"
@@ -250,7 +264,7 @@ function build_staging
     (
         type add_chunk | tail -n +2
         list_all_part_files | sort | sed -r 's|(.*)\t(.*)\t(.*)|add_chunk "\3" "$staging/\2"|'
-    ) | bash
+    ) | ( export staging; bash )
 }
 
 function apply_staging
@@ -261,7 +275,7 @@ function apply_staging
 gather_vars "$@"
 
 (( no_prompt )) || {
-    echo "This will set up the barrkel home directory system using '$barrkel' as the barrkel home directory."
+    echo "This will set up the barrkel home directory system using '$barrkel' as the barrkel home directory"
     echo "Press Enter to continue, or run this script as '$(basename $0) -q' to avoid this prompt"
     read
 }

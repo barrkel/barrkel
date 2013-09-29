@@ -1,0 +1,8 @@
+#!/bin/bash
+
+test -d "$BARRKEL_HOME" || {
+    echo "BARRKEL_HOME not set"
+    exit
+}
+
+rdir "$BARRKEL_HOME" | grep '~$' | print0 | xargs -0 rm
