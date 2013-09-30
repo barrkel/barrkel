@@ -16,6 +16,7 @@ function usage
     echo "flags:"
     echo "  -q  Don't prompt on startup"
     echo "  -c  Continue even if cached config is different"
+    echo "  -a  Apply after staging"
     echo "  -f  Overwrite existing files when applying staged home directory"
     exit 1
 }
@@ -51,9 +52,17 @@ function gather_vars # args
     test -n "$hostname" || die "could not discover hostname"
 
     atoms=($(get_atom_dirs))
+
+    do_apply=0
+    no_prompt=0
+    force_overwrite=0
+    ignore_diff=0
     
     while [ -n "$1" ]; do
         case "$1" in
+            -a)
+                do_apply=1
+                ;;
             -q)
                 no_prompt=1
                 ;;
@@ -98,14 +107,22 @@ function ensure_sanity
 function verify_no_change
 {
     # Verify that nothing has changed
-    test -d "$cache" || return
+    echo "Checking cache"
+    test -d "$cache" || {
+        echo "No cache dir"
+        return
+    }
     
     cd "$cache" || die "Couldn't chdir to '$cache'"
     find -type f | while read -r line; do
         # don't mind if file is missing
-        test -f "~/$line" || continue
-        diff "$line" "~/$line" || (( ignore_diff)) || die "Exiting due to differences from cached config"
-    done
+        echo "Cache: checking $line"
+        test -f "$HOME/$line" || {
+            echo "Cache: $HOME/$line does not exist, skipping"
+            continue
+        }
+        diff -u -- "$line" "$HOME/$line" || (( ignore_diff)) || die "Exiting due to differences from cached config"
+    done || exit 1
 }
 
 function find_in_atom_dirs # relative-path
@@ -127,9 +144,10 @@ function find_in_atom_dirs # relative-path
 function build_initial_profile
 {
     local _utils=$(find_in_atom_dirs bin/_barrkel_utils) || exit
-    printf "export BARRKEL_HOME='%s'\\n" "$barrkel" > "$staging/.bash_profile"
-    printf "source '%s'\n" "$_utils" >> "$staging/.bash_profile"
-    touch "$staging/.bashrc"
+    printf "source ~/.bashrc\\n" > "$staging/.bash_profile"
+
+    printf "export BARRKEL_HOME='%s'\\n" "$barrkel" > "$staging/.bashrc"
+    printf "source '%s'\n" "$_utils" >> "$staging/.bashrc"
 }
 
 function symlink_files # from-dir to-dir
@@ -154,6 +172,7 @@ function symlink_files # from-dir to-dir
             echo "note: skipping less specific: $f"
             continue
         }
+        echo "Symlinking $f into $to_dir"
         ln -s "$f" "$to_dir"
     done
 }
@@ -215,7 +234,7 @@ function list_all_part_files_for # dir
     }
     
     test -f "$curr/rc" && {
-        printf '%s\t%s\n'     '++bashrc'       '.bashrc'       "$curr/rc"
+        printf '%s\t%s\t%s\n'     '++bashrc'       '.bashrc'       "$curr/rc"
     }
 }
 
@@ -267,9 +286,33 @@ function build_staging
     ) | ( export staging; bash )
 }
 
+function apply_file # from to
+{
+    if [ -e "$2" ]; then
+        if (( force_ovewrite )); then
+            echo "Obliterating $2"
+            echo rm -rf "$2"
+            rm -rf "$2"
+        else
+            echo rm -i -rf "$2"
+            rm -i -rf "$2"
+        fi
+    fi || exit 1
+    echo cp -r "$1" "$2"
+    cp -r "$1" "$2"
+}
+
 function apply_staging
 {
-    return
+    (
+        cd "$staging"
+        for f in *; do
+            apply_file "$f" "$HOME/$f" || exit 1
+        done
+    ) || die "failed while applying"
+    test -d "$barrkel/cache.old" && rm -rf "$barrkel/cache.old"
+    test -d "$barrkel/cache" && mv "$barrkel/cache" "$barrkel/cache.old"
+    cp -rP "$staging" "$barrkel/cache"
 }
 
 gather_vars "$@"
@@ -282,10 +325,11 @@ gather_vars "$@"
 
 ensure_sanity
 
-verify_no_change
-
 build_staging
 
-apply_staging
+(( do_apply )) && {
+    verify_no_change || die "Failure during verification"
+    apply_staging
+}
 
 

@@ -1,0 +1,23 @@
+#!/bin/bash
+
+test -e "$1" || {
+    cygpath -u "$(cygpath -w "$PWD")"
+    exit
+}
+
+case "$1" in
+    # Absolute Unix path
+    /*)
+        cygpath -u "$(cygpath -w "$1")"
+        ;;
+    
+    # Absolute Windows path
+    ?:\\*)
+        cygpath -u "$(cygpath -w "$1")"
+        ;;
+    
+    # Relative path
+    *)
+        cygpath -u "$(cygpath -w "$PWD"/"$1")"
+        ;;
+esac

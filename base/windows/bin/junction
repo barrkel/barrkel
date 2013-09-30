@@ -1,0 +1,58 @@
+#!/bin/bash
+
+. _barrkel_utils
+
+function usage
+{
+    echo "usage: $(basename $0) [-r] <junction>"
+    echo "       $(basename $0) <source> <target>"
+    echo "       $(basename $0) -d <junction>"
+    echo "First syntax displays junction information."
+    echo "Second syntax creates a junction. <target> mustn't exist."
+    echo "Third syntax deletes a junction."
+    echo "options:"
+    echo "  -r  Show junction information recursively."
+    exit 1
+}
+
+test -n "$1" || usage
+
+source=
+target=
+
+declare -a args
+
+while [ -n "$1" ]; do
+    
+    case "$1" in
+        -r)
+            array_add args -s
+            ;;
+        
+        -d)
+            array_add args -d
+            ;;
+        
+        # Collect <source> <target>
+        *)
+            if [ -z "$source" ]; then
+                test -d "$1" || die "'$1' is not a directory"
+                source="$(cygpath -w "$1")"
+            elif [ -z "$target" ]; then
+                test -e "$1" && die "'$1' already exists"
+                target="$(cygpath -w "$1")"
+            else
+                die "too many arguments"
+            fi
+            ;;
+    esac
+    
+    shift
+done
+
+if [ -n "$target" ]; then
+    winexec _junction "$target" "$source" > /dev/null
+else
+    winexec _junction "${args[@]}" "$source"
+fi
+

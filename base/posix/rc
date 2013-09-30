@@ -1,0 +1,119 @@
+# -*- mode: sh; -*-
+
+# note: generally, only functions and aliases should go in this file
+
+#--------------------------------------------------------------------------------
+# prompt
+#--------------------------------------------------------------------------------
+
+# Only print hostname in prompt if SSH connection
+if [ -n "$SSH_CONNECTION" ]; then
+    export PS1='[\h] \w\$ '
+else
+    export PS1='\w\$ '
+fi
+
+#--------------------------------------------------------------------------------
+# aliases
+#--------------------------------------------------------------------------------
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
+alias ......='cd ../../../../..'
+alias .......='cd ../../../../../..'
+alias ........='cd ../../../../../../..'
+
+alias cp='cp -ip'
+alias mv='mv -i'
+
+alias d='ls --color=auto'
+alias ls='ls --color=auto'
+alias la='ls -a'
+alias ll='ls -lh'
+alias lla='ls -lah'
+alias lal='ls -lah'
+
+alias df='df -h'
+alias du='du -h'
+alias jumpstat='autojump --stat'
+
+alias locate='locate -i'
+
+alias md='mkdir'
+alias rd='rmdir'
+
+#--------------------------------------------------------------------------------
+# options
+#--------------------------------------------------------------------------------
+
+shopt -s nocaseglob
+shopt -s cdspell
+
+if (( BASH_VERSINFO >= 4 )); then
+    shopt -s globstar
+fi
+
+# Disable history expansion (! events)
+set +H
+
+#--------------------------------------------------------------------------------
+# functions
+#--------------------------------------------------------------------------------
+
+function enter
+{
+    test -d "$1" || mkdir -p "$1"
+    cd "$1"
+}
+
+# Checks if sudo should be used to execute the command.
+# If the arguments contains a file or dir and it's not writeable by the current
+# user, then true. Otherwise if the current directory is not writeable, then true.
+# All other cases, false.
+function sudo_check # command <args...>
+{
+    local cmd="$1"
+    shift
+    local args
+    declare -a args
+    
+    while [ -n "$1" ]; do
+        array_add args "$1"
+        shift
+    done
+    
+    local need_sudo=0
+    if (( "${#args[@]}" > 0 )); then
+        # Check args
+        local arg
+        for arg in "${args[@]}"; do
+            test -e "$arg" -a ! -w "$arg" && {
+                need_sudo=1
+            }
+        done
+    else
+        # Check directory
+        test -w . && {
+            need_sudo=1
+        }
+    fi
+    
+    if (( need_sudo )); then
+        sudo "$cmd" "${args[@]}"
+    else
+        "$cmd" "${args[@]}"
+    fi
+}
+
+function sjoe
+{
+    sudo_check joe "$@"
+}
+
+function semacs
+{
+    sudo_check emacs "$@"
+}
+
+

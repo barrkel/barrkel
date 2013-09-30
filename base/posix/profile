@@ -1,67 +1,51 @@
 # -*- mode: sh; -*-
 
+# note: no functions or aliases should go in this file
+
 #--------------------------------------------------------------------------------
 # variables
 #--------------------------------------------------------------------------------
+export LANG=C
 export LESS=-iR
 export EDITOR=emacs
 export VISUAL=emacs
 
+export PAGER=/usr/bin/less
+export MANPAGER='/usr/bin/less -isrR'
+
 pathlist_ensure_prepending MANPATH /usr/local/man /opt/man /usr/share/man /usr/man
 export MANPATH
+
 pathlist_ensure_prepending INFOPATH /usr/local/info /opt/info /usr/share/info /usr/info
 export INFOPATH
+
 pathlist_append PATH /usr/games
+pathlist_ensure_prepending PATH ~/bin
+pathlist_append PATH /opt/bin
 export PATH
 
+#append_if_missing PKG_CONFIG_PATH /usr/lib/pkgconfig
+
+
 #--------------------------------------------------------------------------------
-# prompt
+# ssh agent
 #--------------------------------------------------------------------------------
 
-# Only print hostname in prompt if SSH connection
-if [ -n "$SSH_CONNECTION" ]; then
-    export PS1='[\h] \w\$ '
-else
-    export PS1='\w\$ '
+
+export SSHAGENTARGS="-s"
+if [ -z "$SSH_AUTH_SOCK" -a -x "$SSHAGENT" ]; then
+    eval $($SSHAGENT $SSHAGENTARGS) > /dev/null
+    trap "kill $SSH_AGENT_PID" 0
 fi
 
-# autojump
-(( $RANDOM < 1600 )) && autojump -a "$PWD"
-
-#--------------------------------------------------------------------------------
-# aliases
-#--------------------------------------------------------------------------------
-alias ..='cd ..'
-alias ...='cd ../..'
-alias ....='cd ../../..'
-alias .....='cd ../../../..'
-alias ......='cd ../../../../..'
-alias .......='cd ../../../../../..'
-alias ........='cd ../../../../../../..'
-
-alias cp='cp -ip'
-alias mv='mv -i'
-
-alias d='ls --color=auto'
-alias ls='ls --color=auto'
-alias la='ls -a'
-alias ll='ls -lh'
-alias lla='ls -lah'
-alias lal='ls -lah'
-
-alias df='df -h'
-alias du='du -h'
-alias jumpstat='autojump --stat'
-
-alias locate='locate -i'
-
-alias md='mkdir'
-alias rd='rmdir'
 
 #--------------------------------------------------------------------------------
 # initialization
 #--------------------------------------------------------------------------------
+eval "$(dircolors -b ~/.dircolors)"
 stty-sane
 
 [ -x "$(which fortune 2>/dev/null)" ] && fortune -a
+
+
 

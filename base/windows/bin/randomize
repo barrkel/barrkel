@@ -1,0 +1,20 @@
+#!/usr/bin/perl -W
+
+$count=0;
+
+while (<>)
+{
+	chomp();
+	$list[$count++] = $_;
+}
+
+for ($i = 0; $i < $#list; ++$i)
+{
+	$r = int(rand(scalar(@list)));
+	$tmp = $list[$r];
+	$list[$r] = $list[$i];
+	$list[$i] = $tmp;
+}
+
+print "$_\n" foreach @list;
+

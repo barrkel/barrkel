@@ -1,0 +1,61 @@
+#!/bin/bash
+
+. _array
+
+let fore=0
+
+if [ -z "$1" ]; then
+    echo "usage: $(basename $0) [-f] <file>..."
+    echo "Starts notepad on the file(s)."
+    echo "If <file> is -, then standard input is redirected to a temp file and opened."
+    echo "  -f  Run notepad in foreground."
+    exit 1
+fi
+
+notepad="$(which notepad2)"
+test -x "$notepad" || {
+    notepad="$(which notepad)"
+}
+
+declare -a args
+
+while [ -n "$1" ]; do
+    case "$1" in
+        -f)
+            fore=1
+            ;;
+            
+        *)
+            array_add args "$1"
+            ;;
+    esac
+    
+    shift
+done
+
+for file in "${args[@]}"; do
+    if [ "$file" = "-" ]; then
+        file=$(mktemp)
+        if (( fore )); then
+            cat '-' | unix2dos > $file
+            (
+                "$notepad" "$(cygpath -w "$file")"
+                rm $file
+            )
+        else
+            cat '-' | unix2dos > $file
+            (
+                "$notepad" "$(cygpath -w "$file")"
+                rm $file
+            ) &
+        fi
+    else
+        if (( fore )); then
+            "$notepad" "$(cygpath -w "$file")"
+        else
+            cygstart -- "$notepad" "$(cygpath -w "$file")"
+            
+        fi
+    fi
+done
+

@@ -1,0 +1,84 @@
+#!/bin/bash
+
+. _array
+
+function usage
+{
+    echo "$(basename $0) [-r] [-d] [<directory>...]"
+    echo 'Prints recursive directory listing of given directory, or current directory if none given.'
+    echo 'options:'
+    echo ' -r     Relative to current directory.'
+    echo ' -d     Only directories, no files.'
+    echo ' -f     Only files, no directories.'
+    exit 2
+}
+
+declare -a args
+need_snip=1
+
+function do_rdir
+{
+    local cwd="$(pwd)"
+    
+    # -H : dereference command-line args
+    
+    if (( need_snip )); then
+        if ((relative == 0)); then
+            find -L "$1" "${args[@]}" | tail -n +2
+        else
+            find -L "$1" "${args[@]}" |
+                sed "s|^$cwd/||" | tail -n +2
+        fi
+    else
+        if ((relative == 0)); then
+            find -L "$1" "${args[@]}"
+        else
+            find -L "$1" "${args[@]}" |
+                sed "s|^$cwd/||"
+        fi
+    fi
+    
+#    echo "find \"$1\" \"${args[@]}\""
+}
+
+got_arg=0
+
+for d in "$@"; do
+    case "$d" in
+        --help | '-?')
+            usage
+            ;;
+            
+        -d)
+            array_add args -type d
+            need_snip=1
+            ;;
+            
+        -f)
+            array_add args -type f
+            need_snip=0
+            ;;
+            
+        -1)
+            array_add args -maxdepth 1
+            ;;
+            
+        -r)
+            relative=1
+            ;;
+            
+        /*)
+            got_arg=1
+            do_rdir "$d"
+            ;;
+            
+        *)
+            got_arg=1
+            do_rdir "$(pwd)/$d"
+            ;;
+    esac
+done
+
+if ((got_arg == 0)); then
+    do_rdir "$PWD"
+fi
