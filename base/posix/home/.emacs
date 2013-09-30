@@ -219,6 +219,7 @@
   (setq c-basic-offset a-tab-width) ;; c / c++ etc
   (setq js-indent-level a-tab-width) ;; js
   (setq default-tab-width a-tab-width) ;; java
+  (setq css-indent-offset a-tab-width) ;; css, scss etc.
   (if a-style
       (setq c-default-style a-style)
     (setq c-default-style "bsd")))
@@ -294,6 +295,12 @@
           (lambda ()
             (visual-line-mode)))
 (add-to-list 'auto-mode-alist '("Gemfile" . ruby-mode))
+
+;; scss
+(add-hook 'scss-mode-hook
+          (lambda ()
+            (visual-line-mode)
+            (set-tab-style nil 2)))
 
 ;; shell script
 (add-hook 'sh-mode-hook
