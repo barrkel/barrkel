@@ -1,0 +1,25 @@
+#!/bin/bash
+
+. _barrkel_utils
+
+test -n "$1" || {
+    rename-slow
+    exit
+}
+
+batch=$(mktemp)
+mv $batch $batch.bat
+batch=$batch.bat
+chmod 0755 $batch || {
+    die "couldn't make batch file '$batch' executable"
+}
+
+make-rename "$@" >> $batch || {
+    die "couldn't create batch file '$batch'"
+    rm $batch
+    exit 1
+}
+
+cmd /c "$(cygpath -w $batch)"
+
+rm $batch

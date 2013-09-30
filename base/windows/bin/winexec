@@ -1,0 +1,110 @@
+#!/bin/bash
+
+. _barrkel_utils
+
+function usage
+{
+    echo "usage: $(basename $0) [options] <executable> [<arguments>...]"
+    echo "Executes an executable with arguments, converting non-options into Win32 paths."
+    echo "Options:"
+    echo "  -f    Only convert paths to files or directories which actually exist."
+    echo "  -s    Use cygstart to execute detached from console."
+    echo "  -k    Skip converting paths until '**' found in arguments (and remove the '**')."
+    echo "  --    Terminate $(basename $0) options processing."
+    exit 1
+}
+
+# Process options to winexec itself.
+
+while [ "$1" ]; do
+    case "$1" in
+        -f)
+            ONLY_FILES=1
+            ;;
+        
+        -s)
+            USE_CYGSTART=1
+            ;;
+        
+        -k)
+            SKIP_TO_STAR=1
+            ;;
+        
+        --)
+            shift
+            break
+            ;;
+        
+        -*)
+            # Give an error on unknown switches for future compat.
+            usage
+            ;;
+        
+        *)
+            break
+            ;;
+    esac
+    shift
+done
+
+EXECUTABLE="$1"
+shift
+
+test -z "$EXECUTABLE" && usage
+
+# Options conversion and caching.
+
+declare -a args
+
+function add_file_opt
+{
+    if [ -n "$SKIP_TO_STAR" ]; then
+        if [ "$1" = "**" ]; then
+            SKIP_TO_STAR=
+            # Eat '**' but don't add.
+        else
+            # Haven't seen star yet, so add unconverted.
+            array_add args "$1"
+        fi
+    else
+        if [ -n "$ONLY_FILES" ]; then
+            if [ -f "$1" -o -d "$1" ]; then
+                array_add args "$(cygpath -w "$1")"
+            else
+                array_add args "$1"
+            fi
+        else
+            array_add args "$(cygpath -w "$1")"
+        fi
+    fi
+}
+
+# Process arguments to executable.
+
+while [ "$1" ]; do
+    case "$1" in
+        -*)
+            array_add args "$1"
+            ;;
+        
+        *)
+            add_file_opt "$1"
+            ;;
+    esac
+    shift
+done
+
+# Actually start the executable.
+
+# for arg in "${args[@]}"; do
+#     echo arg: "'$arg'"
+# done
+
+exe="$(which "$EXECUTABLE")"
+test -x "$exe" || die "can't find $EXECUTABLE"
+
+if [ "$USE_CYGSTART" ]; then
+    cygstart -- "$exe" "${args[@]}"
+else
+    "$exe" "${args[@]}"
+fi

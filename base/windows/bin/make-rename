@@ -1,0 +1,38 @@
+#!/bin/bash
+
+. _die
+
+function usage
+{
+    echo "usage: $(basename $0) <sed-expr> <files...>"
+    echo "Writes a Windows batch file which performs a rename operation,"
+    echo "based on changing the filenames using the sed expression."
+    exit 1
+}
+
+test -n "$1" || usage
+test -e "$2" || usage
+
+new_names=$(mktemp)
+old_names=$(mktemp)
+
+sed_expr="$1"
+shift
+
+# create new names
+for f in "$@"; do
+    echo "$f"
+done | sed -e "$sed_expr" | cygpath2 -w > $new_names
+
+# create old names
+for f in "$@"; do
+    echo "$f"
+done | cygpath2 -w > $old_names
+
+(
+    echo '@echo off'
+    paste $old_names $new_names | sed 's|^|ren "|;s|	|" "|;s|$|"|'
+)
+
+rm $new_names
+rm $old_names

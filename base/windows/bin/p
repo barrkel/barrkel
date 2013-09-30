@@ -1,0 +1,3 @@
+#!/bin/sh
+
+getclip | dos2unix
