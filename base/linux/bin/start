@@ -1,0 +1,17 @@
+#!/bin/bash
+
+arg="$1"
+test -e "$arg" || {
+    arg="$(which "$1" 2>/dev/null)"
+}
+
+if [ -f "$arg" -a -x "$arg" ]; then
+    shift
+    (
+        # consider running arg directly
+        rxvt -e "$arg" "$@"
+        "$arg" "$@"
+    ) 2>&1 >/dev/null &
+else
+    xdg-open "$@"
+fi

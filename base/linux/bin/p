@@ -1,0 +1,15 @@
+#!/bin/bash
+
+case "$1" in
+    s*)
+        xclip -o -sel primary
+        ;;
+    
+    c*)
+        xclip -o -sel clipboard
+        ;;
+        
+    *)
+        xclip -o -sel clipboard
+        ;;
+esac
