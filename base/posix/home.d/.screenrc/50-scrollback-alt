@@ -1,2 +1,2 @@
 altscreen on
-defscrollback 20000
+defscrollback 65535

@@ -232,6 +232,7 @@
 ;; move mark begin to be like C-k b in Joe
 (global-set-key (kbd "C-c b") 'set-mark-command)
 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; LANGUAGE MODE CONFIG
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -476,6 +477,8 @@ buffer instead of replacing the text in region."
 (global-set-key (kbd "C-<down>") 'scroll-up-line)
 (global-set-key (kbd "M-S-<up>") 'scroll-down-line-other-window)
 (global-set-key (kbd "M-S-<down>") 'scroll-up-line-other-window)
+(global-set-key (kbd "ESC S-<up>") 'scroll-down-line-other-window)
+(global-set-key (kbd "ESC S-<down>") 'scroll-up-line-other-window)
 
 (global-set-key (kbd "M-a") 'backward-sexp)
 (global-set-key (kbd "M-e") 'forward-sexp)
