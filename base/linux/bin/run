@@ -1,0 +1,15 @@
+#!/bin/bash
+
+function usage
+{
+    echo "usage: $(basename $0) <program> [<args>...]"
+    echo "Start <program> with output redirected to /dev/null"
+    exit 1
+}
+
+test -n "$1" || usage
+
+program="$1"
+shift
+
+"$program" "$@" >/dev/null 2>/dev/null &
