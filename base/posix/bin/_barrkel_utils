@@ -316,3 +316,35 @@ function pathlist_ensure_prepending # pathvar path...
 }
 
 
+#--------------------------------------------------------------------------------
+# A few misc bits and pieces
+#--------------------------------------------------------------------------------
+
+function exists # <file>...
+{
+    test -e "$1" && return 0
+    return 1
+}
+
+function exists_file # <file>...
+{
+    local f
+    for f; do
+        test -f "$f" && return 0
+    done
+    return 1
+}
+
+function exists_dir # <dir>...
+{
+    local f
+    for f; do
+        test -d "$f" && return 0
+    done
+    return 1
+}
+
+
+
+
+
