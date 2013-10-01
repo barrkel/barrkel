@@ -1,0 +1,3 @@
+hardstatus alwayslastline "Barry's Bash: %t"
+hardstatus ignore
+
