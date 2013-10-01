@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. _array
+. _barrkel_utils
 
 function usage
 {
