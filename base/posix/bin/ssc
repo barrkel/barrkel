@@ -1,0 +1,19 @@
+#!/bin/bash
+
+. _barrkel_utils
+
+screen_name=main
+
+function usage
+{
+    echo "usage: $(basename $0) <machine>"
+    echo "Tries to connect to screen session named '$screen_name' on <machine> and creates if not present."
+    exit 1
+}
+
+test -n "$1" || usage
+target="$1"
+shift
+
+ssh "$@" -t "$target" "screen -S $screen_name -dr || screen -S $screen_name"
+
