@@ -1,0 +1,61 @@
+#!/bin/bash
+
+. _barrkel_utils
+
+
+function usage
+{
+    echo "usage: $(basename $0) <name> <path> [permissions...]"
+    echo "Create share for given path on current machine with given name and permissions."
+    echo "permissions:"
+    echo "  -f <user>  Full permission for <user>"
+    echo "  -c <user>  Change permission for <user>"
+    echo "  -r <user>  Read-only permission for <user>"
+    exit 1
+}
+
+declare -a perms
+
+name=
+path=
+
+while [ -n "$1" ]; do
+    case "$1" in
+        -f)
+            shift
+            test -n "$1" || usage
+            array_add perms "/grant" "$1:full"
+            ;;
+            
+        -c)
+            shift
+            test -n "$1" || usage
+            array_add perms "/grant" "$1:change"
+            ;;
+            
+        -r)
+            shift
+            test -n "$1" || usage
+            array_add perms "/grant" "$1:read"
+            ;;
+        
+        *)
+            if [ ! -n "$name" ]; then
+                name="$1"
+            elif [ ! -n "$path" ]; then
+                path="$1"
+            else
+                usage
+            fi
+    esac
+    
+    shift
+done
+
+array_add perms "/remark:"
+
+test -n "$name" || usage
+test -d "$path" || usage
+
+# echo rmtshare '\\.\'"$name"="$(cygpath -w "$path")" "${perms[@]}" || die 'share failed'
+rmtshare '\\.\'"$name"="$(cygpath -w "$path")" "${perms[@]}" > /dev/null || die 'share failed'

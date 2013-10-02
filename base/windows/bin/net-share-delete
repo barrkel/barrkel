@@ -1,0 +1,14 @@
+#!/bin/bash
+
+[ -n "$1" ] || {
+    echo "usage: $(basename $0) <name>..."
+    echo "Deletes the given network shares."
+    exit 1
+}
+
+# Echoing 'y' in case we need to force
+
+while [ -n "$1" ]; do
+    echo y | net share "$1" /delete 2> /dev/null || echo "failed to delete '$1'"
+    shift
+done

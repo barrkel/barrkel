@@ -1,0 +1,10 @@
+#!/bin/bash
+
+[ -d "$1" -a -n "$2" ] || {
+    echo "usage: $(basename $0) <path> <name>"
+    echo "Makes the given resource available on the network under the"
+    echo "given name, with full permission for $USER."
+    exit 1
+}
+
+net share "$2"="$(cygpath -w "$1")" /grant:$USER,full > /dev/null
