@@ -217,6 +217,7 @@
   (setq tab-width a-tab-width)
   (setq tab-stop-list (number-sequence a-tab-width 200 a-tab-width))
   (setq c-basic-offset a-tab-width) ;; c / c++ etc
+  (setq coffee-tab-width a-tab-width)  ;; coffeescript
   (setq js-indent-level a-tab-width) ;; js
   (setq default-tab-width a-tab-width) ;; java
   (setq css-indent-offset a-tab-width) ;; css, scss etc.
@@ -256,6 +257,12 @@
           (lambda ()
             (visual-line-mode)
             (local-set-key (kbd "C-c o") 'ff-find-other-file)))
+
+;; coffeescript
+(add-hook 'coffee-mode-hook
+          (lambda ()
+            (visual-line-mode)
+            (set-tab-style nil 2)))
 
 ;; conf
 (add-to-list 'auto-mode-alist '("my.cnf" . conf-mode))
