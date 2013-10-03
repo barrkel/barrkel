@@ -1,0 +1,81 @@
+#!/bin/bash
+
+. _die
+
+temp_dir=
+filter=bunzip2
+
+this="$(basename $0)"
+
+function out
+{
+    echo "$this: $*"
+}
+
+function process_file # filename
+{
+    local source_dir="$(dirname "$1")"
+    local source_file="$(basename "$1")"
+    # Remove all extensions
+    local base_name="${source_file/.*/}"
+    
+    (
+        # Isolate directory change in subshell.
+        test -n "$source_dir" && {
+            cd "$source_dir" || die "couldn't chdir to '$source_dir'."
+        }
+        
+        # Create output directory and encrypt it.
+        test -d "$base_name" && die "directory '$base_name' already exists."
+        mkdir -p "$base_name" || die "couldn't mkdir '$base_name'."
+        
+        if [ -n "$temp_dir" ]; then
+            
+            # Use temp dir
+            cp "$source_file" "$temp_dir/$source_file" || die "couldn't copy '$source_file' to '$temp_dir/$source_file'."
+            $filter < "$temp_dir/$source_file" 2> /dev/null |
+                tar xf - -C "$base_name" || die "couldn't extract '$temp_dir/$source_file'."
+            rm "$temp_dir/$source_file" || die "couldn't delete '$temp_dir/$source_file'."
+        else
+            $filter < "$source_file" 2> /dev/null | 
+                tar xf - -C "$base_name" || die "couldn't extract '$source_file'."
+        fi
+    )
+}
+
+function usage
+{
+    echo "usage: $(basename $0) [-t <dir>] [-f <filter>] <file>..."
+    echo "Extract .tar.<ext> files to directory constructed from file name."
+    echo "<filter> defaults to bunzip2."
+    echo "If -t is specified, the given directory is used as a temp directory."
+    echo "It should be on a different drive, to minimize seek delays."
+    echo "If -t is not specified, no temp directory is used."
+}
+
+test -n "$1" || {
+    usage
+    exit 1
+}
+
+while [ -n "$1" ]; do
+    case "$1" in
+        -t)
+            shift
+            test -d "$1" || usage
+            temp_dir="$1"
+            ;;
+            
+        -f)
+            shift
+            test -n "$1" || die "missing filter name"
+            filter="$1"
+            ;;
+            
+        *)
+            process_file "$1"
+            ;;
+    esac
+    
+    shift
+done

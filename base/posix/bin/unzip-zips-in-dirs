@@ -1,0 +1,55 @@
+#!/bin/bash
+
+function die
+{
+    echo "$(basename $0): $*"
+    exit 1
+}
+
+test -z "$1" && {
+	echo "usage: $(basename $0) [-d <basePath>] [-v] <zip-files>"
+	echo "Unzips each zip file on the command line in its directory, optionally rooted at basePath."
+	echo "If the directory already exists, the zip will be skipped."
+	echo "  -v    Verbose mode"
+	exit 1
+}
+
+base_path=
+verbose=0
+
+while [ -n "$1" ]; do
+    
+    case "$1" in
+        -d)
+            shift
+            test -d "$1" || die "Expected directory argument after '-d'"
+            base_path="$1"
+            ;;
+        
+        -v)
+            shift
+            verbose=1
+            ;;
+        
+        *)
+            (( verbose )) &&
+                echo "Processing '$1'..."
+            base_name="$(basename "$1" | sed 's|\.zip$||i')"
+            if [ -n "$base_path" ]; then
+                dir="$base_path/$base_name"
+            else
+                dir="$(dirname "$1")/$base_name"
+            fi
+            
+            if [ ! -d "$dir" ]; then 
+                unzip -b -qq -d "$dir" "$1" || {
+                    rm -rf "$dir"
+                }
+            fi
+            ;;
+    esac
+    
+    shift
+done
+
+

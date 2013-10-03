@@ -1,0 +1,25 @@
+#!/bin/bash
+
+. _barrkel_utils
+
+function usage
+{
+    echo "usage: $(basename $0) <file-name>"
+    echo "Monitor clipboard for text and paste into file-name when it changes."
+    exit 1
+}
+
+test -n "$1" || usage
+
+cb=
+
+while true; do
+    new_cb="$(p)"
+    if [ "$cb" != "$new_cb" ]; then
+        echo "$new_cb" >> "$1" || die "couldn't paste to '$1'"
+        echo "$new_cb"
+        cb="$new_cb"
+    fi
+    sleep 0.1
+done
+

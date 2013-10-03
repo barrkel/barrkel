@@ -1,0 +1,47 @@
+#!/bin/bash
+
+function usage
+{
+    echo "usage: $(basename $0) <sed-expr> <directory/link>..."
+    echo "Find links in <directory>... and transform targets with <sed-expr>."
+    exit 1
+}
+
+self="$(basename $0)"
+
+test -n "$1" || usage
+script="$1"
+shift
+
+test -n "$1" || usage
+
+function find_stuff
+{
+    local f
+    for f in "$@"; do
+        test -h "$f" && {
+            echo "$f"
+            continue
+        }
+        test -d "$f" && {
+            find "$f" -type l
+            continue
+        }
+    done
+}
+
+find_stuff "$@" |
+    while read -r link; do
+        orig="$(readlink "$link")"
+        targ="$(echo "$orig" | sed -r "$script")"
+        
+        test "$orig" = "$targ" && continue
+        
+        test -e "$(dirname "$link")/$targ" || test -e "$targ" || {
+            echo "$self: '$link' new target '$targ' doesn't exist"
+            continue
+        }
+        
+        rm -- "$link"
+        ln -s -- "$targ" "$link"
+    done
