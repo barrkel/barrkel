@@ -241,6 +241,9 @@
 ;; csharp-mode
 (autoload 'csharp-mode "csharp-mode-0.8.5" nil t)
 (add-to-list 'auto-mode-alist '("\\.cs\\'" . csharp-mode))
+(add-hook 'csharp-mode-hook
+          (lambda ()
+            (set-tab-style t 4)))
 
 ;; C
 (add-hook 'c-mode-hook
@@ -612,6 +615,62 @@ The CHAR is replaced and the point is put before CHAR."
     (insert prior-indent)))
 
 (global-set-key (kbd "C-j RET") 'dumb-indent-return)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Load using completions from .listing file found in a parent directory
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun find-file-in-parents (file directory)
+  "Look for a file in directory and parent directories"
+
+  (defun get-path-elems (path)
+    "Get vector of path elements"
+    (vconcat (split-string (expand-file-name path) "/" t)))
+
+  (defun for-each-path-to-root (path fn)
+    "Call fn for each directory in path (inclusive) to root while fn returns nil"
+    (let (elems i p ret)
+      (setq elems (get-path-elems path))
+      (setq i (length elems))
+      (catch 'ret
+        (while (> i 0)
+          (setq p (concat "/" (reduce (lambda (x y) (concat x "/" y))
+                                      (subseq elems 0 i))))
+          (setq ret (funcall fn (concat p "/")))
+          (when ret (throw 'ret ret))
+          (decf i))
+        (funcall fn "/"))))
+  
+  (for-each-path-to-root
+   directory
+   (lambda (path)
+     (let ((ret (concat path file)))
+       (when (file-attributes ret)
+         ret)))))
+
+
+(defun try-read-file-lines (file)
+  (if (file-attributes file)
+      (with-temp-buffer
+        (insert-file-contents file)
+        (split-string (buffer-string) "\n" t))
+    nil))
+
+;; almost, but not quite: doesn't take into account differences in path
+(defun ido-load-listing ()
+  "Use ido-completing-read to find a file name from .listing file"
+  (interactive)
+  (let (listing-file lines found-file)
+    (when (setq listing-file (find-file-in-parents ".listing" default-directory))
+      (when (setq lines (try-read-file-lines listing-file))
+        (when (setq found-file (ido-completing-read "Load from listing: " lines))
+          (find-file
+           (concat
+            (file-name-directory listing-file)
+            found-file)))))))
+
+(global-set-key (kbd "C-j C-j") 'ido-load-listing)
+
 
 ;; narrowing / widening act on selected region
 ;; C-x n n to narrow

@@ -37,8 +37,6 @@ function do_rdir
                 sed "s|^$cwd/||"
         fi
     fi
-    
-#    echo "find \"$1\" \"${args[@]}\""
 }
 
 got_arg=0

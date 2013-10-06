@@ -1,1 +1,34 @@
+# -*- mode: sh; -*-
+
 alias msbuild='MSBuild.exe'
+
+function __find_dotnet_sdk
+{
+    # in function to reduce scope of vars
+    local ver sdk_path sdk
+    
+    for ver in v1.0.3705 v1.1.4322 v2.0.50727 v3.0 v3.5 v4.0.30319; do
+        test -d "/c/windows/microsoft.net/framework/$ver" &&
+        	dotnet_path="/c/windows/microsoft.net/framework/$ver"
+    done
+
+    # My usual sdk install location
+    for sdk in v5.0 v6.0A v7.0A; do
+        test -d "/c/other/sdk/$sdk/bin" || continue
+        sdk_path="/c/other/sdk/$sdk/bin"
+    done
+
+    # .NET 4 gets precedence over 3.5
+    test -d "$sdk_path/NETFX 4.0 Tools" &&
+    	pathlist_append PATH "$sdk_path/NETFX 4.0 Tools"
+
+    test -d "$sdk_path" &&
+    	pathlist_append PATH "$sdk_path"
+
+    test -d "$dotnet_path" &&
+    	pathlist_append PATH "$dotnet_path"
+}
+
+__find_dotnet_sdk
+unset __find_dotnet_sdk
+
