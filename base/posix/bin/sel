@@ -1,0 +1,18 @@
+#!/bin/bash
+
+function usage
+{
+    echo "usage: $(basename $0) <field-index>..."
+    echo "Selects whitespace-delimited fields by ordinal index, starting from 1, using awk."
+    exit 1
+}
+
+test -n "$1" || usage
+
+awk_expr='{ print'
+for x; do
+    awk_expr="$awk_expr	\$$x, "
+done
+awk_expr="$awk_expr "'""}'
+
+awk "$awk_expr"
