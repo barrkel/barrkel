@@ -1,0 +1,39 @@
+#!/bin/bash
+
+config="$(dirname $0)/../etc/only"
+
+test -z "$1" && {
+	echo "usage: only <filter-name>..."
+	echo "Filters input to those regular expressions listed in $config/filters/<filter-name>"
+	echo "Filters:"
+	ls $config/filters/
+	exit 1
+}
+
+declare -a grep_params
+
+function add_param
+{
+    for param in "$@"; do
+        grep_params[${#grep_params[*]}]="$param"
+    done
+}
+
+function add_filter
+{
+    add_param -f "$1"
+}
+
+add_param grep -i
+
+while test -n "$1"; do
+    file="$config/filters/$1"
+    test -f "$file" || {
+        echo "Filter not found: $file"
+        exit 2
+    }
+    add_filter "$file"
+    shift
+done
+
+"${grep_params[@]}"

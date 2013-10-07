@@ -1,0 +1,14 @@
+[user]
+	name = Barry Kelly
+	email = barry.j.kelly@gmail.com
+[color]
+	ui = true
+[core]
+	excludesfile = ~/.gitignore
+	autocrlf = false
+	fileMode = false
+[push]
+	default = tracking
+[alias]
+  graph = log --graph --pretty=format:\"%Cgreen%h %Cblue%an %Cgreen%ar %Creset%s\"
+	

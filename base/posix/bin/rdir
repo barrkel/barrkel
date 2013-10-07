@@ -1,0 +1,116 @@
+#!/bin/bash
+
+. _barrkel_utils
+
+function usage
+{
+    echo "$(basename $0) [<option>...] [<directory>...]"
+    echo 'Prints recursive directory listing of given directory, or current directory if none given.'
+    echo 'options:'
+    echo ' -r     Print relative to directory argument(s), or current if none given (default).'
+    echo ' -R     Print absolute paths.'
+    echo ' -d     Only directories, no files.'
+    echo ' -f     Only files, no directories (default).'
+    echo ' -a     Both files and directories.'
+    echo " -1     Don't recurse, only show directory contents."
+    echo " -l     Don't follow symlinks."
+    echo 
+    exit 2
+}
+
+declare -a args
+# need to snip off the first line in the output?; true for including directories
+need_snip=0
+follow_links=1
+
+function do_rdir
+{
+    local cwd="$(pwd)"
+    declare -a pre_args
+    
+    (( follow_links )) && array_add pre_args -L
+    
+    if (( need_snip )); then
+        if ((relative == 0)); then
+            find "${pre_args[@]}" "$1" "${args[@]}" | tail -n +2
+        else
+            find "${pre_args[@]}" "$1" "${args[@]}" |
+                sed "s|^$cwd/||" | tail -n +2
+        fi
+    else
+        if ((relative == 0)); then
+            find "${pre_args[@]}" "$1" "${args[@]}"
+        else
+            find "${pre_args[@]}" "$1" "${args[@]}" |
+                sed "s|^$cwd/||"
+        fi
+    fi
+}
+
+got_arg=0
+
+want_files=1
+want_dirs=0
+relative=1
+
+for d in "$@"; do
+    case "$d" in
+        --help | '-?')
+            usage
+            ;;
+            
+        -d)
+            want_files=0
+            want_dirs=1
+            need_snip=1
+            ;;
+            
+        -f)
+            want_files=1
+            want_dirs=0
+            need_snip=0
+            ;;
+            
+        -a)
+            want_files=1
+            want_dirs=1
+            need_snip=1
+            ;;
+            
+        -l)
+            follow_links=0
+            ;;
+            
+        -1)
+            array_add args -maxdepth 1
+            ;;
+            
+        -R)
+            relative=0
+            ;;
+            
+        -r)
+            relative=1
+            ;;
+            
+        /*)
+            got_arg=1
+            do_rdir "$d"
+            ;;
+            
+        *)
+            got_arg=1
+            (
+                ((want_dirs)) && array_add args -type d
+                ((want_files)) && array_add args -type f
+                do_rdir "$(pwd)/$d"
+            )
+            ;;
+    esac
+done
+
+if ((got_arg == 0)); then
+    ((want_dirs)) && array_add args -type d
+    ((want_files)) && array_add args -type f
+    do_rdir "$PWD"
+fi

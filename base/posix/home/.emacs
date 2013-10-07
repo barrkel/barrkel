@@ -678,6 +678,7 @@ The CHAR is replaced and the point is put before CHAR."
             found-file)))))))
 
 (global-set-key (kbd "C-j C-j") 'ido-load-listing)
+(global-set-key (kbd "C-c j") 'ido-load-listing)
 
 
 ;; narrowing / widening act on selected region

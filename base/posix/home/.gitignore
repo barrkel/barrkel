@@ -1,5 +1,9 @@
 *.suo
 *~
+\#*\#
+.emacs.desktop
+.listing
+.listing.sh
 
 # Compiled source #
 ###################
