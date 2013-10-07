@@ -93,9 +93,12 @@
 ;; note: packages that come via package management need to be loaded after package management
 
 ;; line numbers; consider replacing with nlinum or something faster, linum is horribly slow.
+;(require 'nlinum)
+
 (require 'linum)
 (global-linum-mode 1)
 (setq linum-format "%4d ")
+(setq linum-eager nil)
 
 ;; columns
 (column-number-mode)
@@ -238,13 +241,6 @@
 ;; LANGUAGE MODE CONFIG
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; csharp-mode
-(autoload 'csharp-mode "csharp-mode-0.8.5" nil t)
-(add-to-list 'auto-mode-alist '("\\.cs\\'" . csharp-mode))
-(add-hook 'csharp-mode-hook
-          (lambda ()
-            (set-tab-style t 4)))
-
 ;; C
 (add-hook 'c-mode-hook
           (lambda ()
@@ -261,7 +257,7 @@
             (visual-line-mode)
             (local-set-key (kbd "C-c o") 'ff-find-other-file)))
 
-;; coffeescript
+;; CoffeeScript
 (add-hook 'coffee-mode-hook
           (lambda ()
             (visual-line-mode)
@@ -269,6 +265,13 @@
 
 ;; conf
 (add-to-list 'auto-mode-alist '("my.cnf" . conf-mode))
+
+;; CSharp-Mode
+(autoload 'csharp-mode "csharp-mode-0.8.5" nil t)
+(add-to-list 'auto-mode-alist '("\\.cs\\'" . csharp-mode))
+(add-hook 'csharp-mode-hook
+          (lambda ()
+            (set-tab-style t 4)))
 
 ;; elisp mode
 (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
@@ -292,9 +295,14 @@
             (set-tab-style t 4)
             (visual-line-mode)))
 
+;; Javascript
+(add-hook 'js-mode-hook
+          (lambda ()
+            (set-tab-style nil 2)
+            (visual-line-mode)))
+
 ;; markdown
 (autoload 'markdown-mode "markdown-mode" "Major mode for editing Markdown files" t)
-;;(add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 
