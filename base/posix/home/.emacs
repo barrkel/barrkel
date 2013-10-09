@@ -48,12 +48,12 @@
 ;; (global-set-key (kbd "<f11>") 'ido-choose-recentf)
 
 ;; remember where we were last time
-(require 'saveplace)
-(setq-default save-place t)
-(setq save-place-file "~/.local/saved-places")
 (defun recenter-plain ()
   (recenter))
 (add-hook 'find-file-hooks 'recenter-plain t)
+(require 'saveplace)
+(setq-default save-place t)
+(setq save-place-file "~/.local/saved-places")
 
 ;; reload files that have been changed on disk
 (global-auto-revert-mode 1)
@@ -110,6 +110,10 @@
 
 (require 'auto-mark)
 (auto-mark-mode)
+
+;; wrap selection in paired elements - consider doing something to preserve selection
+(wrap-region-global-mode)
+(setq wrap-region-keep-mark t)
 
 ;;----------------------------------------
 ;; minibuffer
@@ -263,7 +267,7 @@
             (visual-line-mode)
             (set-tab-style nil 2)))
 
-;; conf
+;; Conf
 (add-to-list 'auto-mode-alist '("my.cnf" . conf-mode))
 
 ;; CSharp-Mode
@@ -289,6 +293,10 @@
             (visual-line-mode)
             (set-tab-style t 4)))
 
+;; Haml
+(require 'haml-mode-autoloads)
+(add-to-list 'auto-mode-alist '("\\.hamlc\\'" . haml-mode)) ;; CoffeeScript haml
+
 ;; Java
 (add-hook 'java-mode-hook
           (lambda()
@@ -301,7 +309,7 @@
             (set-tab-style nil 2)
             (visual-line-mode)))
 
-;; markdown
+;; Markdown
 (autoload 'markdown-mode "markdown-mode" "Major mode for editing Markdown files" t)
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
@@ -315,13 +323,13 @@
             (visual-line-mode)))
 (add-to-list 'auto-mode-alist '("Gemfile" . ruby-mode))
 
-;; scss
+;; SCSS
 (add-hook 'scss-mode-hook
           (lambda ()
             (visual-line-mode)
             (set-tab-style nil 2)))
 
-;; shell script
+;; Shell script
 (add-hook 'sh-mode-hook
           (lambda ()
             (visual-line-mode)
@@ -398,6 +406,13 @@ buffer instead of replacing the text in region."
   (define-key input-decode-map "\e[8@" (kbd "C-S-<end>"))
   (define-key input-decode-map "\e[5^" (kbd "C-<prior>"))
   (define-key input-decode-map "\e[6^" (kbd "C-<next>"))
+  (define-key input-decode-map "\e\e[5^" (kbd "C-M-<prior>"))
+  (define-key input-decode-map "\e\e[6^" (kbd "C-M-<next>"))
+  (define-key input-decode-map "\e\e[5$" (kbd "M-S-<prior>"))
+  (define-key input-decode-map "\e\e[6$" (kbd "M-S-<next>"))
+  (define-key input-decode-map "\e\e[5~" (kbd "M-<prior>"))
+  (define-key input-decode-map "\e\e[6~" (kbd "M-<next>"))
+  
   (define-key input-decode-map "\e[3^" (kbd "C-<delete>"))
   (define-key input-decode-map "\eOa" (kbd "C-<up>"))
   (define-key input-decode-map "\eOb" (kbd "C-<down>"))
@@ -628,6 +643,8 @@ The CHAR is replaced and the point is put before CHAR."
 ;; Load using completions from .listing file found in a parent directory
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(setq startup-directory default-directory)
+
 (defun find-file-in-parents (file directory)
   "Look for a file in directory and parent directories"
 
@@ -669,7 +686,7 @@ The CHAR is replaced and the point is put before CHAR."
   "Use ido-completing-read to find a file name from .listing file"
   (interactive)
   (let (listing-file lines found-file)
-    (when (setq listing-file (find-file-in-parents ".listing" default-directory))
+    (when (setq listing-file (find-file-in-parents ".listing" startup-directory))
       (when (setq lines (try-read-file-lines listing-file))
         (when (setq found-file (ido-completing-read "Load from listing: " lines))
           (find-file
