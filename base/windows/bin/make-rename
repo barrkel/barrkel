@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. _die
+. _barrkel_utils
 
 function usage
 {
@@ -22,12 +22,12 @@ shift
 # create new names
 for f in "$@"; do
     echo "$f"
-done | sed -e "$sed_expr" | cygpath2 -w > $new_names
+done | sed -e "$sed_expr" | cygpath -w -f - > $new_names
 
 # create old names
 for f in "$@"; do
     echo "$f"
-done | cygpath2 -w > $old_names
+done | cygpath -w -f - > $old_names
 
 (
     echo '@echo off'
