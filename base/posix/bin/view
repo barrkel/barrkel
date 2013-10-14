@@ -1,0 +1,43 @@
+#!/bin/bash
+
+tabWidth=4
+test -n "$PAGER" || PAGER=less
+
+function add_file
+{
+    files[${#files[*]}]="$1"
+}
+
+function die
+{
+    echo "error: $(basename $0): $*"
+    exit 2
+}
+
+function usage
+{
+    echo "usage: $(basename $0) [-t <tab-width>] <files...>"
+    echo "View files in \$PAGER (default less) with tabs expanded, lines numbered and long lines wrapped."
+    exit 1
+}
+
+while [ -n "$1" ]; do
+    case "$1" in
+        -t)
+            shift
+            tabWidth="$1"
+            ;;
+            
+        -h | --help)
+            usage
+            ;;
+        
+        *)
+            add_file "$1"
+            ;;
+    esac
+    
+    shift
+done
+
+expand -t "$tabWidth" "${files[@]}" | nl -b a | fold -s -w 108 | $PAGER

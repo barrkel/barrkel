@@ -1,0 +1,47 @@
+#!/bin/bash
+
+function usage
+{
+	echo "usage: $(basename $0) [flags] <files...>"
+	echo "Converts tabs to spaces in the given file(s). Only converts initial tabs."
+	echo "  -t <n>    Set the tab width (default 4)."
+	exit 1
+}
+
+function die
+{
+	echo "$(basename $0): $*"
+	exit 2
+}
+
+width=4
+
+function process_file
+{
+	local temp=$(mktemp)
+	
+	expand -i -t $width <"$1" >$temp || die "Couldn't expand '$1'."
+	mv -f -- $temp "$1"
+}
+
+test -n "$1" || usage
+
+while [ -n "$1" ]; do
+	case "$1" in
+		-h | -H | --help)
+			syntax
+			;;
+		
+		-t)
+			shift
+			width="$1"
+			shift
+			;;
+			
+		*)
+			process_file "$1"
+			shift
+			;;
+	esac
+done
+
