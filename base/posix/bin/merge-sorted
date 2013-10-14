@@ -1,0 +1,47 @@
+#!/bin/bash
+
+. _barrkel_utils
+
+function usage
+{
+    echo "$(basename $0) <files...> <target-file>"
+    echo "$(basename $0) -t <target-file> <files...>"
+    echo "Merges contents of files with target-file in sorted order with duplicates removed."
+    exit 1
+}
+
+target=
+
+test -n "$1" || usage
+
+declare -a args
+while [ -n "$1" ]; do
+    case "$1" in
+        -t)
+            shift
+            target="$1"
+            ;;
+        
+        *)
+            array_add args "$1"
+            ;;
+    esac
+    shift
+done
+
+if [ -z "$target" ]; then
+    cnt=${#args[@]}
+    (( cnt < 2 )) && usage
+    let --cnt
+    target="${args[$cnt]}"
+    unset args[$cnt]
+fi
+
+if [ -e "$target" ]; then
+    test -e "$target"~ && rm "$target"~
+    mv "$target" "$target"~
+    sort -u "${args[@]}" "$target"~ > "$target"
+else
+    sort -u "${args[@]}" > "$target"
+fi
+
