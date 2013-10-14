@@ -1,0 +1,3 @@
+#!/bin/bash
+
+winexec -f -- _sanitize-names.exe "$@"
