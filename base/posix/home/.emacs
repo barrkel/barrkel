@@ -477,6 +477,7 @@ buffer instead of replacing the text in region."
 
 (global-set-key (kbd "RET") 'newline-and-indent)
 (global-set-key (kbd "C-x /") 'generalized-shell-command)
+(global-set-key (kbd "C-x C-_") 'generalized-shell-command) ;; C-x C-/
 (global-set-key (kbd "C-c /") 'generalized-shell-command)
 ;; C-x z and C-x C-z still background emacs
 (global-set-key (kbd "C-z") 'undo)
