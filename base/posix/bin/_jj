@@ -1,0 +1,111 @@
+#!/bin/bash 
+
+. _realtime_read
+
+function jj_create_lines # no-of-lines
+{
+    local i
+    local count=$1
+    for ((i=0;i<count;++i)); do
+        echo
+    done
+}
+
+function jj_output_into_space # no-of-lines
+{
+    local count=$1
+    tput sc
+    tput cr
+    for ((i=0;i<count;++i)); do
+        tput cuu1
+        tput el
+    done
+    head -n $count
+    # "$2"
+    tput rc
+}
+
+function jj_get_params
+{
+    (
+        while true; do
+            test -f .jj && cat .jj
+            prev_pwd="$PWD"
+            cd ..
+            test "$prev_pwd" == "$PWD" && break
+        done
+    )
+}
+
+function jj_do_filter # regex...
+{
+    local arg="$1"
+    shift
+    
+    local cmd
+    case "$arg" in
+        '!'*)
+            cmd="egrep -i -v"
+            arg="${arg#?}"
+            ;;
+        *)
+            cmd="egrep -i"
+            ;;
+    esac
+    
+    if [ -n "$1" ]; then
+        $cmd "$arg" | jj_do_filter "$@"
+    else
+        $cmd "$arg"
+    fi
+}
+
+function jj # count
+{
+    local listing=$(mktemp)
+    ( rdir -l | jj_do_filter $(jj_get_params) >$listing & )
+    local out=$(mktemp)
+
+    if [ -n "$1" ]; then
+        local jj_space_lines="$1"
+    else
+        local jj_space_lines=3
+    fi
+    jj_create_lines $jj_space_lines
+
+    jj_arg=
+    while realtime_read jj_arg "Search: "; do
+        cat "$listing" | jj_do_filter $jj_arg | jj_output_into_space $jj_space_lines
+    done
+
+    local files=($(cat "$listing" | jj_do_filter $jj_arg | head -n $jj_space_lines))
+    history -s $EDITOR "${files[@]}"
+    $EDITOR "${files[@]}"
+
+    rm $listing $out
+}
+
+function jd # count
+{
+    local listing=$(mktemp)
+    ( rdir -l -d | jj_do_filter $(jj_get_params) >$listing & )
+    local out=$(mktemp)
+
+    if [ -n "$1" ]; then
+        local jj_space_lines="$1"
+    else
+        local jj_space_lines=3
+    fi
+    jj_create_lines $jj_space_lines
+
+    jj_arg=
+    while realtime_read jj_arg "Search: "; do
+        cat "$listing" | jj_do_filter $jj_arg | jj_output_into_space $jj_space_lines
+    done
+
+    local files=($(cat "$listing" | jj_do_filter $jj_arg | head -n $jj_space_lines))
+    history -s cd "${files[@]}"
+    cd "${files[@]}"
+
+    rm $listing $out
+}
