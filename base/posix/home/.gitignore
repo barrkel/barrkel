@@ -1,4 +1,3 @@
-*.suo
 *~
 \#*\#
 .emacs.desktop
@@ -43,3 +42,11 @@
 Icon?
 ehthumbs.db
 Thumbs.db
+
+# Visual Studio #
+#################
+*.suo
+*.ncb
+*.user
+
+
