@@ -27,6 +27,6 @@ M-v: yank-pop
 C-y: kill-whole-line
 C-w: kill-region
 M-w: copy-region-as-kill
-
+C-q: quoted-insert
 
 
