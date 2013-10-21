@@ -9,6 +9,11 @@ function die # message
     exit 1
 }
 
+function log # message
+{
+    echo "$@" >/dev/stderr
+}
+
 function usage
 {
     echo "usage: $(basename $0) [<flags>]"
@@ -38,7 +43,7 @@ function get_atom_dirs
             if [ -d "$barrkel/base/$line" ]; then
                 echo "$barrkel/base/$line"
             else
-                echo "warning: $barrkel/base/$line doesn't exist" >/dev/stderr
+                log "warning: $barrkel/base/$line doesn't exist"
             fi
         done
 }
@@ -228,7 +233,6 @@ function list_all_part_files_for # dir
         done
     }
 
-    
     test -f "$curr/profile" && {
         printf '%s\t%s\t%s\n' '++bash_profile' '.bash_profile' "$curr/profile"
     }
@@ -244,7 +248,6 @@ function list_all_part_files
 {
     local atom
 
-    list_all_part_files_for "$barrkel/host/$hostname"
     for atom in "${atoms[@]}"; do
         list_all_part_files_for "$atom"
     done
@@ -281,7 +284,9 @@ function build_staging
 
     # parts
     (
+        # include definition of add_chunk function in piped bash
         type add_chunk | tail -n +2
+        
         list_all_part_files | sort | sed -r 's|(.*)\t(.*)\t(.*)|add_chunk "\3" "$staging/\2"|'
     ) | ( export staging; bash )
 }
