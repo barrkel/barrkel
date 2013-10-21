@@ -11,8 +11,8 @@ test -n "$1" || usage
 
 awk_expr='{ print'
 for x; do
-    awk_expr="$awk_expr	\$$x, "
+    awk_expr="$awk_expr	\$$x \"\\t\" "
 done
-awk_expr="$awk_expr "'""}'
+awk_expr="$awk_expr }"
 
 awk "$awk_expr"
