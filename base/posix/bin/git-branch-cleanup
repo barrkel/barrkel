@@ -1,0 +1,4 @@
+#!/bin/bash
+
+git branch | cut -b 3- | xargs git branch -d
+
