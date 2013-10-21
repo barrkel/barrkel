@@ -1,0 +1,19 @@
+#!/bin/bash
+
+function usage
+{
+    echo "usage: $(basename $0) <from> <to> [<args>]"
+    echo "Show commits in <to> not in <from>."
+    echo "Any further args are passed to git log."
+    exit 1
+}
+
+test -n "$1" || usage
+from="$1"
+shift
+test -n "$1" || usage
+to="$1"
+shift
+
+git log --left-right --graph --cherry-pick --oneline "$@" "$from".."$to"
+#git log --graph --cherry-pick --oneline "$@" "$from".."$to"
