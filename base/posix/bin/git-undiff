@@ -1,0 +1,3 @@
+#!/bin/bash
+
+sed -r 's|^[+-]| |;s|^ ([^ ])|\1|' | unexpand -t 8 | expand -t 4
