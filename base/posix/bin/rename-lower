@@ -1,0 +1,59 @@
+#!/bin/bash
+#
+# Written by Barry Kelly, 19 January 2004
+#
+
+. _barrkel_utils
+
+function usage
+{
+	echo "usage: $(basename $0) <file>..."
+	echo "Files are renamed to new lowercase names."
+    exit 1
+}
+
+test -n "$1" || usage
+
+function safe_move
+{
+    (
+        source="$1"
+        dest="$2"
+        temp="$3"
+        
+        function undo
+        {
+            test -f "$source" && return
+            test -f "$dest" && return
+            test -f "$temp" && {
+                echo "Recovering..."
+                mv -i -- "$temp" "$source"
+            }
+            exit 1
+        }
+        
+        trap undo INT TERM HUP
+        
+        mv -i -- "$source" "$temp"
+        mv -i -- "$temp" "$dest"
+    )
+}
+
+function process
+{
+	local old_name="$1"
+	local temp_name="$1.tmp-$$"
+	local new_name="$(echo "$1" | tr A-Z a-z)"
+	
+	test "$old_name" = "$new_name" && return
+	test -e "$temp_name" && {
+		echo "Temporary name $temp_name exists!"
+		return 1
+	}
+	safe_move "$old_name" "$new_name" "$temp_name" || die "couldn't move '$old_name' -> '$new_name'"
+}
+
+for arg; do
+    process "$arg"
+done
+
