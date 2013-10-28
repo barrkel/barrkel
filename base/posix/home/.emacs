@@ -136,6 +136,16 @@
 ;; completion for M-x: seriously, why isn't this the default?
 (icomplete-mode)
 
+
+;;----------------------------------------
+;; helm
+;;----------------------------------------
+
+(require 'helm)
+
+
+
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; COLORS ETC
@@ -196,6 +206,16 @@
 (set-face 'fringe "white" "black")
 
 (set-face 'show-paren-mismatch "white" "red" 'extra-bold)
+
+;; helm
+(set-face 'helm-source-header "cyan" "magenta" 'extra-bold)
+;;(set-face 'helm-list-show-completion "magenta" "blue")
+(set-face 'helm-header "white" "magenta")
+;;(set-face 'helm-helper "cyan" "magenta")
+(set-face 'helm-selection "black" "yellow" 'extra-bold)
+;;(set-face 'helm-selection-line "black" "cyan")
+
+;; red green blue yellow cyan magenta white black
 
 ;; note: list faces with list-faces-display
 
@@ -335,6 +355,14 @@
             (visual-line-mode)
             (set-tab-style nil 4)))
 
+;; YAML
+(autoload 'yaml-mode "yaml-mode" nil t)
+(add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
+(add-to-list 'auto-mode-alist '("\\.yaml$" . yaml-mode))
+(add-hook 'yaml-mode-hook
+          (lambda ()
+            (visual-line-mode)
+            (set-tab-style nil 2)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; END MODE CONFIG
@@ -645,6 +673,8 @@ The CHAR is replaced and the point is put before CHAR."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (setq startup-directory default-directory)
+
+;; use locate-dominating-file instead!
 
 (defun find-file-in-parents (file directory)
   "Look for a file in directory and parent directories"
