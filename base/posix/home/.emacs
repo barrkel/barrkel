@@ -341,7 +341,12 @@
 (add-hook 'ruby-mode-hook
           (lambda ()
             (visual-line-mode)))
-(add-to-list 'auto-mode-alist '("Gemfile" . ruby-mode))
+(add-hook 'enh-ruby-mode-hook
+          (lambda ()
+            (visual-line-mode)
+            (global-set-key (kbd "RET") 'newline-and-indent)))
+(add-to-list 'auto-mode-alist '("Gemfile" . enh-ruby-mode))
+
 
 ;; SCSS
 (add-hook 'scss-mode-hook

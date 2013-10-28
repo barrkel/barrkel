@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source ../bin/_pathlist
+source ../bin/_barrkel_utils
 
 assert_count=0
 fail_count=0

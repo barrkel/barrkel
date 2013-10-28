@@ -1,0 +1,6 @@
+Emacs:
+* Projectile
+* Robe mode
+* Rinari - rails
+* WebMode
+
