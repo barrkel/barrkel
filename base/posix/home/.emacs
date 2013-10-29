@@ -62,8 +62,9 @@
 ;; IDO MODE CONFIG
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(setq ido-enable-flex-matching t)
-(setq ido-enable-last-directory-history t)
+;; prefer grizzl
+;;(setq ido-enable-flex-matching t)
+;;(setq ido-enable-last-directory-history t)
 ;;(ido-indicator ((t (:background "yellow" :foreground "black" :width condensed)))))
 
 
@@ -136,6 +137,14 @@
 ;; completion for M-x: seriously, why isn't this the default?
 (icomplete-mode)
 
+
+;;----------------------------------------
+;; projectile
+;;----------------------------------------
+
+(projectile-global-mode)
+(setq projectile-completion-system 'grizzl)
+;; alt: (add-hook 'some-mode-hook 'projectile-on)
 
 ;;----------------------------------------
 ;; helm
