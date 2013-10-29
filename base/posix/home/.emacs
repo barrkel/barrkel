@@ -62,8 +62,9 @@
 ;; IDO MODE CONFIG
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(setq ido-enable-flex-matching t)
-(setq ido-enable-last-directory-history t)
+;; prefer grizzl
+;;(setq ido-enable-flex-matching t)
+;;(setq ido-enable-last-directory-history t)
 ;;(ido-indicator ((t (:background "yellow" :foreground "black" :width condensed)))))
 
 
@@ -128,13 +129,36 @@
 
 ;; ido-mode; does iswitchb and more
 (ido-mode)
+;; prefer helm-buffers-list
 
 ;; don't let the cursor go into minibuffer prompt
 (setq minibuffer-prompt-properties
       (quote (read-only t point-entered minibuffer-avoid-prompt face minibuffer-prompt)))
 
 ;; completion for M-x: seriously, why isn't this the default?
-(icomplete-mode)
+;;(icomplete-mode) ;; prefer helm
+
+
+;;----------------------------------------
+;; projectile
+;;----------------------------------------
+
+(projectile-global-mode)
+;;(setq projectile-completion-system 'grizzl)
+(setq projectile-completion-system 'helm-completing-read-default)
+;; alt: (add-hook 'some-mode-hook 'projectile-on)
+
+;;----------------------------------------
+;; helm
+;;----------------------------------------
+
+(require 'helm)
+(define-key helm-map (kbd "M-[") nil)
+;;(helm-mode) ;; this is too extreme
+
+(global-set-key (kbd "C-x b") 'helm-buffers-list)
+(global-set-key (kbd "M-x") 'helm-M-x)
+(global-set-key (kbd "M-G") 'helm-git-grep)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -196,6 +220,16 @@
 (set-face 'fringe "white" "black")
 
 (set-face 'show-paren-mismatch "white" "red" 'extra-bold)
+
+;; helm
+(set-face 'helm-source-header "cyan" "magenta" 'extra-bold)
+;;(set-face 'helm-list-show-completion "magenta" "blue")
+(set-face 'helm-header "white" "magenta")
+;;(set-face 'helm-helper "cyan" "magenta")
+(set-face 'helm-selection "black" "yellow" 'extra-bold)
+;;(set-face 'helm-selection-line "black" "cyan")
+
+;; red green blue yellow cyan magenta white black
 
 ;; note: list faces with list-faces-display
 
@@ -321,7 +355,12 @@
 (add-hook 'ruby-mode-hook
           (lambda ()
             (visual-line-mode)))
-(add-to-list 'auto-mode-alist '("Gemfile" . ruby-mode))
+(add-hook 'enh-ruby-mode-hook
+          (lambda ()
+            (visual-line-mode)
+            (global-set-key (kbd "RET") 'newline-and-indent)))
+(add-to-list 'auto-mode-alist '("Gemfile" . enh-ruby-mode))
+
 
 ;; SCSS
 (add-hook 'scss-mode-hook
@@ -335,6 +374,14 @@
             (visual-line-mode)
             (set-tab-style nil 4)))
 
+;; YAML
+(autoload 'yaml-mode "yaml-mode" nil t)
+(add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
+(add-to-list 'auto-mode-alist '("\\.yaml$" . yaml-mode))
+(add-hook 'yaml-mode-hook
+          (lambda ()
+            (visual-line-mode)
+            (set-tab-style nil 2)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; END MODE CONFIG
@@ -461,7 +508,11 @@ buffer instead of replacing the text in region."
 
 (when (string= (getenv "TERM") "rxvt")
   (define-key input-decode-map "\e[7@" (kbd "C-S-<home>"))
-  (define-key input-decode-map "\e[8@" (kbd "C-S-<end>")))
+  (define-key input-decode-map "\e[8@" (kbd "C-S-<end>"))
+  (define-key input-decode-map "\e[24~" (kbd "<F12>"))
+  (define-key input-decode-map "\e[24$" (kbd "S-<F12>"))
+  (define-key input-decode-map "\e[23~" (kbd "<F11>"))
+  (define-key input-decode-map "\e[23$" (kbd "S-<F11>")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MISC KEY REBINDINGS / SHORTCUTS
@@ -525,6 +576,11 @@ buffer instead of replacing the text in region."
 ;; semantic navigation with completion
 (global-set-key (kbd "M-i") 'imenu)
 
+;; navigation
+(global-set-key (kbd "<F12>") 'helm-buffers-list)
+(global-set-key (kbd "S-<F12>") 'helm-git-grep)
+(global-set-key (kbd "<F11>") 'projectile-switch-to-buffer)
+(global-set-key (kbd "S-<F11>") 'projectile-find-file)
 
 (defun duplicate-line-or-region ()
   "Duplicate region, or line if no region selected"
@@ -646,6 +702,8 @@ The CHAR is replaced and the point is put before CHAR."
 
 (setq startup-directory default-directory)
 
+;; use locate-dominating-file instead!
+
 (defun find-file-in-parents (file directory)
   "Look for a file in directory and parent directories"
 
@@ -695,9 +753,34 @@ The CHAR is replaced and the point is put before CHAR."
             (file-name-directory listing-file)
             found-file)))))))
 
-(global-set-key (kbd "C-j C-j") 'ido-load-listing)
-(global-set-key (kbd "C-c j") 'ido-load-listing)
+(defun helm-load-listing ()
+  "Use helm-completing-read-default to find a file name from .listing file"
+  (interactive)
+  (let (listing-file lines found-file)
+    (when (setq listing-file (find-file-in-parents ".listing" startup-directory))
+      (when (setq lines (try-read-file-lines listing-file))
+        (when (setq found-file (helm-completing-read-default "Load from listing: " lines))
+          (find-file
+           (concat
+            (file-name-directory listing-file)
+            found-file)))))))
 
+(global-set-key (kbd "C-j C-j") 'helm-load-listing)
+(global-set-key (kbd "C-c j") 'helm-load-listing)
+(global-set-key (kbd "ESC <F12>") 'helm-load-listing)
+
+(defvar current-highlight-word nil
+  "Current word for toggle-word-highlight if any")
+(defun toggle-word-highlight ()
+  "Toggle highlight of word-at-point"
+  (interactive)
+  (let ((new-word (word-at-point)))
+    (unhighlight-regexp current-highlight-word)
+    (if (equal new-word current-highlight-word)
+        (setq current-highlight-word nil)
+      (highlight-regexp new-word)
+      (setq current-highlight-word new-word))))
+(global-set-key (kbd "M-m") 'toggle-word-highlight)
 
 ;; narrowing / widening act on selected region
 ;; C-x n n to narrow
