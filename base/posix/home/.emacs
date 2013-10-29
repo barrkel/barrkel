@@ -144,7 +144,8 @@
 ;;----------------------------------------
 
 (projectile-global-mode)
-(setq projectile-completion-system 'grizzl)
+;;(setq projectile-completion-system 'grizzl)
+(setq projectile-completion-system 'helm-completing-read-default)
 ;; alt: (add-hook 'some-mode-hook 'projectile-on)
 
 ;;----------------------------------------
