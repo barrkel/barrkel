@@ -129,13 +129,14 @@
 
 ;; ido-mode; does iswitchb and more
 (ido-mode)
+;; prefer helm-buffers-list
 
 ;; don't let the cursor go into minibuffer prompt
 (setq minibuffer-prompt-properties
       (quote (read-only t point-entered minibuffer-avoid-prompt face minibuffer-prompt)))
 
 ;; completion for M-x: seriously, why isn't this the default?
-(icomplete-mode)
+;;(icomplete-mode) ;; prefer helm
 
 
 ;;----------------------------------------
@@ -151,9 +152,12 @@
 ;;----------------------------------------
 
 (require 'helm)
+(define-key helm-map (kbd "M-[") nil)
+;;(helm-mode) ;; this is too extreme
 
-
-
+(global-set-key (kbd "C-x b") 'helm-buffers-list)
+(global-set-key (kbd "M-x") 'helm-M-x)
+(global-set-key (kbd "M-G") 'helm-git-grep)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -503,7 +507,11 @@ buffer instead of replacing the text in region."
 
 (when (string= (getenv "TERM") "rxvt")
   (define-key input-decode-map "\e[7@" (kbd "C-S-<home>"))
-  (define-key input-decode-map "\e[8@" (kbd "C-S-<end>")))
+  (define-key input-decode-map "\e[8@" (kbd "C-S-<end>"))
+  (define-key input-decode-map "\e[24~" (kbd "<F12>"))
+  (define-key input-decode-map "\e[24$" (kbd "S-<F12>"))
+  (define-key input-decode-map "\e[23~" (kbd "<F11>"))
+  (define-key input-decode-map "\e[23$" (kbd "S-<F11>")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MISC KEY REBINDINGS / SHORTCUTS
@@ -567,6 +575,11 @@ buffer instead of replacing the text in region."
 ;; semantic navigation with completion
 (global-set-key (kbd "M-i") 'imenu)
 
+;; navigation
+(global-set-key (kbd "<F12>") 'helm-buffers-list)
+(global-set-key (kbd "S-<F12>") 'helm-git-grep)
+(global-set-key (kbd "<F11>") 'projectile-switch-to-buffer)
+(global-set-key (kbd "S-<F11>") 'projectile-find-file)
 
 (defun duplicate-line-or-region ()
   "Duplicate region, or line if no region selected"
@@ -739,9 +752,21 @@ The CHAR is replaced and the point is put before CHAR."
             (file-name-directory listing-file)
             found-file)))))))
 
-(global-set-key (kbd "C-j C-j") 'ido-load-listing)
-(global-set-key (kbd "C-c j") 'ido-load-listing)
+(defun helm-load-listing ()
+  "Use helm-completing-read-default to find a file name from .listing file"
+  (interactive)
+  (let (listing-file lines found-file)
+    (when (setq listing-file (find-file-in-parents ".listing" startup-directory))
+      (when (setq lines (try-read-file-lines listing-file))
+        (when (setq found-file (helm-completing-read-default "Load from listing: " lines))
+          (find-file
+           (concat
+            (file-name-directory listing-file)
+            found-file)))))))
 
+(global-set-key (kbd "C-j C-j") 'helm-load-listing)
+(global-set-key (kbd "C-c j") 'helm-load-listing)
+(global-set-key (kbd "ESC <F12>") 'helm-load-listing)
 
 ;; narrowing / widening act on selected region
 ;; C-x n n to narrow
