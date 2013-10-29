@@ -768,6 +768,19 @@ The CHAR is replaced and the point is put before CHAR."
 (global-set-key (kbd "C-c j") 'helm-load-listing)
 (global-set-key (kbd "ESC <F12>") 'helm-load-listing)
 
+(defvar current-highlight-word nil
+  "Current word for toggle-word-highlight if any")
+(defun toggle-word-highlight ()
+  "Toggle highlight of word-at-point"
+  (interactive)
+  (let ((new-word (word-at-point)))
+    (unhighlight-regexp current-highlight-word)
+    (if (equal new-word current-highlight-word)
+        (setq current-highlight-word nil)
+      (highlight-regexp new-word)
+      (setq current-highlight-word new-word))))
+(global-set-key (kbd "M-m") 'toggle-word-highlight)
+
 ;; narrowing / widening act on selected region
 ;; C-x n n to narrow
 ;; C-x n w to widen
