@@ -1,1 +1,1 @@
-("~/repo/cube/" "~/barrkel-repo/helm/")
+("/c/proj/barrkel/host/" "/c/proj/barrkel/" "~/repo/cube/" "~/barrkel-repo/helm/")
