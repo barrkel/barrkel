@@ -1,3 +1,82 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; TERMINAL FIXES
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(when (string= (getenv "TERM") "screen.rxvt")
+  (define-key input-decode-map "\e[a" (kbd "S-<up>"))
+  (define-key input-decode-map "\e[b" (kbd "S-<down>"))
+  (define-key input-decode-map "\e[7$" (kbd "S-<home>"))
+  (define-key input-decode-map "\e[7^" (kbd "C-<home>"))
+  (define-key input-decode-map "\e[7@" (kbd "C-S-<home>"))
+  (define-key input-decode-map "\e[8$" (kbd "S-<end>"))
+  (define-key input-decode-map "\e[8^" (kbd "C-<end>"))
+  (define-key input-decode-map "\e[8@" (kbd "C-S-<end>"))
+  (define-key input-decode-map "\e[5^" (kbd "C-<prior>"))
+  (define-key input-decode-map "\e[6^" (kbd "C-<next>"))
+  (define-key input-decode-map "\e\e[5^" (kbd "C-M-<prior>"))
+  (define-key input-decode-map "\e\e[6^" (kbd "C-M-<next>"))
+  (define-key input-decode-map "\e\e[5$" (kbd "M-S-<prior>"))
+  (define-key input-decode-map "\e\e[6$" (kbd "M-S-<next>"))
+  (define-key input-decode-map "\e\e[5~" (kbd "M-<prior>"))
+  (define-key input-decode-map "\e\e[6~" (kbd "M-<next>"))
+  
+  (define-key input-decode-map "\e[3^" (kbd "C-<delete>"))
+  (define-key input-decode-map "\eOa" (kbd "C-<up>"))
+  (define-key input-decode-map "\eOb" (kbd "C-<down>"))
+  (define-key input-decode-map "\eOd" (kbd "C-<left>"))
+  (define-key input-decode-map "\eOc" (kbd "C-<right>")))
+
+;; actually, mintty on windows
+(when (string= (getenv "TERM") "xterm")
+  (define-key input-decode-map "\e[1;5m" (kbd "C--")))
+
+;; actually, screen in mintty
+(when (string= (getenv "TERM") "screen")
+  (define-key input-decode-map "\e[1;5F" (kbd "C-<end>"))
+  (define-key input-decode-map "\e[1;2F" (kbd "S-<end>"))
+  (define-key input-decode-map "\e[1;6F" (kbd "C-S-<end>"))
+  (define-key input-decode-map "\e[1;5H" (kbd "C-<home>"))
+  (define-key input-decode-map "\e[1;2H" (kbd "S-<home>"))
+  (define-key input-decode-map "\e[1;6H" (kbd "C-S-<home>"))
+  (define-key input-decode-map "\e[3;3~" (kbd "M-<delete>"))
+  (define-key input-decode-map "\e[3;5~" (kbd "C-<delete>"))
+  (define-key input-decode-map "\e[1;2A" (kbd "S-<up>"))
+  (define-key input-decode-map "\e[1;2B" (kbd "S-<down>"))
+  (define-key input-decode-map "\e[1;2C" (kbd "S-<right>"))
+  (define-key input-decode-map "\e[1;2D" (kbd "S-<left>"))
+  (define-key input-decode-map "\e[1;5A" (kbd "C-<up>"))
+  (define-key input-decode-map "\e[1;5B" (kbd "C-<down>"))
+  (define-key input-decode-map "\e[1;5C" (kbd "C-<right>"))
+  (define-key input-decode-map "\e[1;5D" (kbd "C-<left>"))
+  (define-key input-decode-map "\e[1;6A" (kbd "C-S-<up>"))
+  (define-key input-decode-map "\e[1;6B" (kbd "C-S-<down>"))
+  (define-key input-decode-map "\e[1;6C" (kbd "C-S-<right>"))
+  (define-key input-decode-map "\e[1;6D" (kbd "C-S-<left>"))
+  (define-key input-decode-map "\e[1;3A" (kbd "M-<up>"))
+  (define-key input-decode-map "\e[1;3B" (kbd "M-<down>"))
+  (define-key input-decode-map "\e[1;3C" (kbd "M-<right>"))
+  (define-key input-decode-map "\e[1;3D" (kbd "M-<left>"))
+  (define-key input-decode-map "\e[1;4A" (kbd "M-S-<up>"))
+  (define-key input-decode-map "\e[1;4B" (kbd "M-S-<down>"))
+  (define-key input-decode-map "\e[1;4C" (kbd "M-S-<right>"))
+  (define-key input-decode-map "\e[1;4D" (kbd "M-S-<left>"))
+  (define-key input-decode-map "\e[5;3~" (kbd "M-<prior>"))
+  (define-key input-decode-map "\e[6;3~" (kbd "M-<next>"))
+  (define-key input-decode-map "\e[5;5~" (kbd "C-<prior>"))
+  (define-key input-decode-map "\e[6;5~" (kbd "C-<next>")))
+
+(when (string= (getenv "TERM") "rxvt")
+  (define-key input-decode-map "\e[7@" (kbd "C-S-<home>"))
+  (define-key input-decode-map "\e[8@" (kbd "C-S-<end>"))
+  (define-key input-decode-map "\e[24~" (kbd "<f12>"))
+  (define-key input-decode-map "\e[24$" (kbd "S-<f12>"))
+  (define-key input-decode-map "\e[23~" (kbd "<f11>"))
+  (define-key input-decode-map "\e[23$" (kbd "S-<f11>")))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; MISC INIT
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (setq tab-width 4)
 
 ;; case sensitivity is evil in user input
@@ -145,7 +224,7 @@
 
 (projectile-global-mode)
 ;;(setq projectile-completion-system 'grizzl)
-(setq projectile-completion-system 'helm-completing-read-default)
+(setq projectile-completion-system 'helm-comp-read)
 ;; alt: (add-hook 'some-mode-hook 'projectile-on)
 
 ;;----------------------------------------
@@ -273,6 +352,7 @@
 (global-set-key (kbd "TAB") 'self-insert-command) ;; should be smarter
 ;; move mark begin to be like C-k b in Joe
 (global-set-key (kbd "C-c b") 'set-mark-command)
+(global-set-key (kbd "C-c SPC") 'set-mark-command)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -439,82 +519,6 @@ buffer instead of replacing the text in region."
 ;;(Global-set-key (kbd "S-<delete>") 'kill-region) ;; default
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; TERMINAL FIXES
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(when (string= (getenv "TERM") "screen.rxvt")
-  (define-key input-decode-map "\e[a" (kbd "S-<up>"))
-  (define-key input-decode-map "\e[b" (kbd "S-<down>"))
-  (define-key input-decode-map "\e[7$" (kbd "S-<home>"))
-  (define-key input-decode-map "\e[7^" (kbd "C-<home>"))
-  (define-key input-decode-map "\e[7@" (kbd "C-S-<home>"))
-  (define-key input-decode-map "\e[8$" (kbd "S-<end>"))
-  (define-key input-decode-map "\e[8^" (kbd "C-<end>"))
-  (define-key input-decode-map "\e[8@" (kbd "C-S-<end>"))
-  (define-key input-decode-map "\e[5^" (kbd "C-<prior>"))
-  (define-key input-decode-map "\e[6^" (kbd "C-<next>"))
-  (define-key input-decode-map "\e\e[5^" (kbd "C-M-<prior>"))
-  (define-key input-decode-map "\e\e[6^" (kbd "C-M-<next>"))
-  (define-key input-decode-map "\e\e[5$" (kbd "M-S-<prior>"))
-  (define-key input-decode-map "\e\e[6$" (kbd "M-S-<next>"))
-  (define-key input-decode-map "\e\e[5~" (kbd "M-<prior>"))
-  (define-key input-decode-map "\e\e[6~" (kbd "M-<next>"))
-  
-  (define-key input-decode-map "\e[3^" (kbd "C-<delete>"))
-  (define-key input-decode-map "\eOa" (kbd "C-<up>"))
-  (define-key input-decode-map "\eOb" (kbd "C-<down>"))
-  (define-key input-decode-map "\eOd" (kbd "C-<left>"))
-  (define-key input-decode-map "\eOc" (kbd "C-<right>")))
-
-;; actually, mintty on windows
-(when (string= (getenv "TERM") "xterm")
-  (define-key input-decode-map "\e[1;5m" (kbd "C--")))
-
-;; actually, screen in mintty
-(when (string= (getenv "TERM") "screen")
-  (define-key input-decode-map "\e[1;5F" (kbd "C-<end>"))
-  (define-key input-decode-map "\e[1;2F" (kbd "S-<end>"))
-  (define-key input-decode-map "\e[1;6F" (kbd "C-S-<end>"))
-  (define-key input-decode-map "\e[1;5H" (kbd "C-<home>"))
-  (define-key input-decode-map "\e[1;2H" (kbd "S-<home>"))
-  (define-key input-decode-map "\e[1;6H" (kbd "C-S-<home>"))
-  (define-key input-decode-map "\e[3;3~" (kbd "M-<delete>"))
-  (define-key input-decode-map "\e[3;5~" (kbd "C-<delete>"))
-  (define-key input-decode-map "\e[1;2A" (kbd "S-<up>"))
-  (define-key input-decode-map "\e[1;2B" (kbd "S-<down>"))
-  (define-key input-decode-map "\e[1;2C" (kbd "S-<right>"))
-  (define-key input-decode-map "\e[1;2D" (kbd "S-<left>"))
-  (define-key input-decode-map "\e[1;5A" (kbd "C-<up>"))
-  (define-key input-decode-map "\e[1;5B" (kbd "C-<down>"))
-  (define-key input-decode-map "\e[1;5C" (kbd "C-<right>"))
-  (define-key input-decode-map "\e[1;5D" (kbd "C-<left>"))
-  (define-key input-decode-map "\e[1;6A" (kbd "C-S-<up>"))
-  (define-key input-decode-map "\e[1;6B" (kbd "C-S-<down>"))
-  (define-key input-decode-map "\e[1;6C" (kbd "C-S-<right>"))
-  (define-key input-decode-map "\e[1;6D" (kbd "C-S-<left>"))
-  (define-key input-decode-map "\e[1;3A" (kbd "M-<up>"))
-  (define-key input-decode-map "\e[1;3B" (kbd "M-<down>"))
-  (define-key input-decode-map "\e[1;3C" (kbd "M-<right>"))
-  (define-key input-decode-map "\e[1;3D" (kbd "M-<left>"))
-  (define-key input-decode-map "\e[1;4A" (kbd "M-S-<up>"))
-  (define-key input-decode-map "\e[1;4B" (kbd "M-S-<down>"))
-  (define-key input-decode-map "\e[1;4C" (kbd "M-S-<right>"))
-  (define-key input-decode-map "\e[1;4D" (kbd "M-S-<left>"))
-  (define-key input-decode-map "\e[5;3~" (kbd "M-<prior>"))
-  (define-key input-decode-map "\e[6;3~" (kbd "M-<next>"))
-  (define-key input-decode-map "\e[5;5~" (kbd "C-<prior>"))
-  (define-key input-decode-map "\e[6;5~" (kbd "C-<next>")))
-
-
-(when (string= (getenv "TERM") "rxvt")
-  (define-key input-decode-map "\e[7@" (kbd "C-S-<home>"))
-  (define-key input-decode-map "\e[8@" (kbd "C-S-<end>"))
-  (define-key input-decode-map "\e[24~" (kbd "<F12>"))
-  (define-key input-decode-map "\e[24$" (kbd "S-<F12>"))
-  (define-key input-decode-map "\e[23~" (kbd "<F11>"))
-  (define-key input-decode-map "\e[23$" (kbd "S-<F11>")))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MISC KEY REBINDINGS / SHORTCUTS
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -575,12 +579,6 @@ buffer instead of replacing the text in region."
 
 ;; semantic navigation with completion
 (global-set-key (kbd "M-i") 'imenu)
-
-;; navigation
-(global-set-key (kbd "<F12>") 'helm-buffers-list)
-(global-set-key (kbd "S-<F12>") 'helm-git-grep)
-(global-set-key (kbd "<F11>") 'projectile-switch-to-buffer)
-(global-set-key (kbd "S-<F11>") 'projectile-find-file)
 
 (defun duplicate-line-or-region ()
   "Duplicate region, or line if no region selected"
@@ -754,33 +752,55 @@ The CHAR is replaced and the point is put before CHAR."
             found-file)))))))
 
 (defun helm-load-listing ()
-  "Use helm-completing-read-default to find a file name from .listing file"
+  "Use helm-comp-read to find a file name from .listing file"
   (interactive)
   (let (listing-file lines found-file)
     (when (setq listing-file (find-file-in-parents ".listing" startup-directory))
       (when (setq lines (try-read-file-lines listing-file))
-        (when (setq found-file (helm-completing-read-default "Load from listing: " lines))
+        (when (setq found-file (helm-comp-read "Load from listing: " lines))
           (find-file
            (concat
             (file-name-directory listing-file)
             found-file)))))))
 
-(global-set-key (kbd "C-j C-j") 'helm-load-listing)
-(global-set-key (kbd "C-c j") 'helm-load-listing)
-(global-set-key (kbd "ESC <F12>") 'helm-load-listing)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; HIGHLIGHTING
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun get-point-text ()
+  "Get 'interesting' text at point; either word, or region"
+  (if mark-active
+      (buffer-substring (mark) (point))
+    (word-at-point)))
 
 (defvar current-highlight-word nil
   "Current word for toggle-word-highlight if any")
+(make-variable-buffer-local 'current-highlight-word)
 (defun toggle-word-highlight ()
   "Toggle highlight of word-at-point"
   (interactive)
-  (let ((new-word (word-at-point)))
+  (let ((new-word (get-point-text)))
     (unhighlight-regexp current-highlight-word)
     (if (equal new-word current-highlight-word)
-        (setq current-highlight-word nil)
+        (setq-local current-highlight-word nil)
       (highlight-regexp new-word)
-      (setq current-highlight-word new-word))))
+      (setq-local current-highlight-word new-word))))
 (global-set-key (kbd "M-m") 'toggle-word-highlight)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; PROJECT / FILE / BUFFER NAVIGATION
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(global-set-key (kbd "C-j C-j") 'helm-load-listing)
+(global-set-key (kbd "C-c j") 'helm-load-listing)
+
+(global-set-key (kbd "<f11>") 'helm-load-listing)
+(global-set-key (kbd "S-<f11>") 'helm-buffers-list)
+
+;; TODO: need a version of projectile-find-file with initial text
+(global-set-key (kbd "<f12>") 'projectile-find-file)
+(global-set-key (kbd "S-<f12>") 'projectile-switch-to-buffer)
+(global-set-key (kbd "ESC <f12>") 'helm-resume)
 
 ;; narrowing / widening act on selected region
 ;; C-x n n to narrow
@@ -788,4 +808,5 @@ The CHAR is replaced and the point is put before CHAR."
 (put 'narrow-to-region 'disabled nil)
 ;; C-x n p
 (put 'narrow-to-page 'disabled nil)
+
 
