@@ -301,14 +301,14 @@
 (set-face 'font-lock-regexp-grouping-backslash "white" "black" 'bold)
 (set-face 'font-lock-regexp-grouping-construct "red" "black" 'bold)
 
-(set-face 'hi-yellow "black" "yellow")
-(set-face 'hi-blue "black" "blue")
-(set-face 'hi-blue-b "black" "blue" 'bold)
-(set-face 'hi-green "black" "green")
-(set-face 'hi-green-b "black" "green" 'bold)
-(set-face 'hi-pink "black" "red" 'bold)
-(set-face 'hi-red-b "white" "red" 'bold)
-(set-face 'hi-yellow "black" "yellow")
+;;(set-face 'hi-yellow "black" "yellow")
+;; (set-face 'hi-blue "black" "blue")
+;; (set-face 'hi-blue-b "black" "blue" 'bold)
+;; (set-face 'hi-green "black" "green")
+;; (set-face 'hi-green-b "black" "green" 'bold)
+;; (set-face 'hi-pink "black" "red" 'bold)
+;; (set-face 'hi-red-b "white" "red" 'bold)
+;;(set-face 'hi-yellow "black" "yellow")
 
 (set-face 'match "black" "blue")
 
@@ -322,13 +322,10 @@
 
 ;; helm
 (set-face 'helm-source-header "cyan" "magenta" 'extra-bold)
-;;(set-face 'helm-list-show-completion "magenta" "blue")
 (set-face 'helm-header "white" "magenta")
-(set-face 'helm-match "black" "yellow")
-
-(set-face 'helm-selection "black" "blue")
-(set-face-attribute 'helm-selection nil :underline nil)
-;;(set-face 'helm-selection-line "black" "cyan")
+;;(set-face 'helm-match "black" "yellow") ;; face not found!
+(set-face 'helm-selection "black" "yellow")
+;(set-face 'helm-match "black" "yellow")
 
 ;; red green blue yellow cyan magenta white black
 
@@ -534,7 +531,7 @@ buffer instead of replacing the text in region."
 (global-set-key (kbd "C-y") 'delete-line-command)
 (global-set-key (kbd "C-v") 'yank)
 (global-set-key (kbd "M-v") 'yank-pop)
-(global-set-k[ey (kbd "M-S-<insert>") 'kill-ring-save)
+(global-set-key (kbd "M-S-<insert>") 'kill-ring-save)
 (global-set-key (kbd "M-<insert>") 'yank) ;; mintty
 (global-set-key (kbd "M-<delete>") 'kill-word) ;; for parallel with M-d
 (global-set-key (kbd "ESC <insertchar>") 'yank) ;; rxvt
