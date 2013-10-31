@@ -1,0 +1,126 @@
+#!/bin/bash
+
+function usage
+{
+    echo "usage: $(basename $0) [-v] [-t] <file-size-list>"
+    echo "Finds duplicates. <file-size-list> may be '-' for stdin."
+    echo "  -f   'printf' format to use for output."
+    echo "  -t   Output duplicate and original with tab separation."
+    echo "  -r   Reverse normal order of duplicate and original."
+    echo "  -v   Increase verbosity."
+    echo "Note that for both -f and -t, the 'duplicate' comes first. This matters"
+    echo "because duplicates are only ever listed once, while the first-found"
+    echo "appears with each duplicate. -r reverses this, to duplicate second."
+    exit 1
+}
+
+test -n "$1" || usage
+
+last_size=
+declare -a last_file
+verbose=
+tabs=
+format=
+reverse=0
+
+function print_file # duplicate original
+{
+    local a="$1"
+    local b="$2"
+    
+    (( reverse != 0 )) && {
+        a="$2"
+        b="$1"
+    }
+    
+    if [ -n "$verbose" ]; then
+        echo "$a == $b"
+    elif [ -n "$tabs" ]; then
+        echo "$a	$b"
+    elif [ -n "$format" ]; then
+        printf "$format" "$a" "$b"
+    else
+        # Always print duplicate
+        echo "$1"
+    fi
+}
+
+function add_file
+{
+    for ((i=0; i < ${#last_file[@]}; ++i)); do
+        #echo diff -q "$1" "${last_file[$i]}"
+        diff -q "$1" "${last_file[$i]}" > /dev/null && {
+            
+            print_file "$1" "${last_file[$i]}"
+            
+            # Don't add to list, because we found a duplicate.
+            return
+        }
+    done
+    last_file[${#last_file[@]}]="$1"
+}
+
+function set_file
+{
+    unset last_file
+    last_file[0]="$1"
+}
+
+while [ -n "$1" ]; do
+    case "$1" in
+        
+        -h | --help)
+            usage
+            exit 1
+            ;;
+        
+        -v)
+            verbose=1
+            shift
+            ;;
+        
+        -f)
+            shift
+            test -n "$1" || usage
+            format="$1"
+            shift
+            ;;
+        
+        -t)
+            tabs=1
+            shift
+            ;;
+        
+        -r)
+            reverse=1
+            shift
+            ;;
+        
+        *)
+            cat "$1" |
+                while read -r line; do
+                    file="${line/*	/}"
+                    size="${line/	*/}"
+                    
+                    # Ignore null files - not semantically duplicated data.
+                    (( $size == 0 )) && continue
+                    
+                    if [ -z "$last_size" ]; then
+                        set_file "$file"
+                        last_size="$size"
+                        continue
+                    fi
+                    
+                    if (( $last_size != $size )); then
+                        set_file "$file"
+                        last_size="$size"
+                        continue
+                    fi
+                    
+                    add_file "$file"
+                done
+            unset last_size
+            shift
+            ;;
+    esac
+done
