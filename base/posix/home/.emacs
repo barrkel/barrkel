@@ -797,7 +797,7 @@ The CHAR is replaced and the point is put before CHAR."
 (defun toggle-word-highlight ()
   "Toggle highlight of word-at-point"
   (interactive)
-  (let ((new-word (get-point-text)))
+  (let ((new-word (regexp-quote (get-point-text))))
     (unhighlight-regexp current-highlight-word)
     (if (equal new-word current-highlight-word)
         (setq-local current-highlight-word nil)
