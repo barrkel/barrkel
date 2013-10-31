@@ -320,12 +320,12 @@
 
 (set-face 'show-paren-mismatch "white" "red" 'extra-bold)
 
-;; helm
-(set-face 'helm-source-header "cyan" "magenta" 'extra-bold)
-(set-face 'helm-header "white" "magenta")
-;;(set-face 'helm-match "black" "yellow") ;; face not found!
-(set-face 'helm-selection "black" "yellow")
-;(set-face 'helm-match "black" "yellow")
+(defun setup-helm-faces ()
+  (set-face 'helm-source-header "cyan" "magenta" 'extra-bold)
+  (set-face 'helm-header "white" "magenta")
+  (set-face 'helm-selection "black" "yellow")
+  (set-face 'helm-match "black" "yellow"))
+(eval-after-load "helm" '(setup-helm-faces))
 
 ;; red green blue yellow cyan magenta white black
 
@@ -450,6 +450,11 @@
 ;; Puppet
 (require 'puppet-mode-autoloads)
 
+;; Rspec
+(eval-after-load "rspec-mode" ;; I don't think this works
+  '(lambda ()
+     (global-set-key (kbd "M-T") 'rspec-toggle-spec-and-target)))
+
 ;; Ruby
 (add-hook 'ruby-mode-hook
           (lambda ()
@@ -466,6 +471,7 @@
 (add-hook 'scss-mode-hook
           (lambda ()
             (visual-line-mode)
+            (setq scss-compile-at-save nil)
             (set-tab-style nil 2)))
 
 ;; Shell script
