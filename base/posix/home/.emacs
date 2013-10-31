@@ -19,7 +19,6 @@
   (define-key input-decode-map "\e\e[6$" (kbd "M-S-<next>"))
   (define-key input-decode-map "\e\e[5~" (kbd "M-<prior>"))
   (define-key input-decode-map "\e\e[6~" (kbd "M-<next>"))
-  
   (define-key input-decode-map "\e[3^" (kbd "C-<delete>"))
   (define-key input-decode-map "\eOa" (kbd "C-<up>"))
   (define-key input-decode-map "\eOb" (kbd "C-<down>"))
@@ -65,6 +64,8 @@
   (define-key input-decode-map "\e[5;5~" (kbd "C-<prior>"))
   (define-key input-decode-map "\e[6;5~" (kbd "C-<next>")))
 
+;; note existence of this for rxvt:
+;; http://www.emacswiki.org/emacs/rxvt.el
 (when (string= (getenv "TERM") "rxvt")
   (define-key input-decode-map "\e[7@" (kbd "C-S-<home>"))
   (define-key input-decode-map "\e[8@" (kbd "C-S-<end>"))
@@ -238,6 +239,12 @@
 (global-set-key (kbd "C-x b") 'helm-buffers-list)
 (global-set-key (kbd "M-x") 'helm-M-x)
 (global-set-key (kbd "M-G") 'helm-git-grep)
+
+
+;;----------------------------------------
+;; robe
+;;----------------------------------------
+(setq robe-completing-read-func 'helm-completing-read-default)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -437,6 +444,7 @@
             (visual-line-mode)))
 (add-hook 'enh-ruby-mode-hook
           (lambda ()
+            (robe-mode)
             (visual-line-mode)
             (global-set-key (kbd "RET") 'newline-and-indent)))
 (add-to-list 'auto-mode-alist '("Gemfile" . enh-ruby-mode))
@@ -524,9 +532,6 @@ buffer instead of replacing the text in region."
 
 ;; TODO: put these in minor modes
 
-;; note existence of this for rxvt:
-;; http://www.emacswiki.org/emacs/rxvt.el
-
 ;; my custom macros bound to keys past C-j, by convention
 (global-unset-key (kbd "C-j"))
 
@@ -543,7 +548,8 @@ buffer instead of replacing the text in region."
 (global-set-key (kbd "C-<prior>") 'previous-buffer)
 (global-set-key (kbd "C-j /") 'comment-or-uncomment-region)
 (global-set-key (kbd "C-j C-_") 'comment-or-uncomment-region)
-(global-set-key (kbd "C-j C-j") 'reposition-window)
+(global-set-key (kbd "C-j -") 'reposition-window)
+(global-set-key (kbd "C-x _") 'shrink-window)
 (global-set-key (kbd "ESC <deletechar>") 'kill-word) ;; alt delete
 
 ;; navigation start
@@ -801,6 +807,7 @@ The CHAR is replaced and the point is put before CHAR."
 (global-set-key (kbd "<f12>") 'projectile-find-file)
 (global-set-key (kbd "S-<f12>") 'projectile-switch-to-buffer)
 (global-set-key (kbd "ESC <f12>") 'helm-resume)
+(global-set-key (kbd "ESC S-<f12>") 'helm-semantic-or-imenu)
 
 ;; narrowing / widening act on selected region
 ;; C-x n n to narrow
