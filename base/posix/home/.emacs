@@ -234,7 +234,7 @@
 
 (require 'helm)
 (define-key helm-map (kbd "M-[") nil)
-;;(helm-mode) ;; this is too extreme
+(helm-mode)
 
 (global-set-key (kbd "C-x b") 'helm-buffers-list)
 (global-set-key (kbd "M-x") 'helm-M-x)
@@ -323,9 +323,10 @@
 (defun setup-helm-faces ()
   (set-face 'helm-source-header "cyan" "magenta" 'extra-bold)
   (set-face 'helm-header "white" "magenta")
-  (set-face 'helm-selection "black" "yellow")
+  (set-face 'helm-selection "black" "blue")
   (set-face 'helm-match "black" "yellow"))
-(eval-after-load "helm" '(setup-helm-faces))
+(eval-after-load "helm-match-plugin" '(setup-helm-faces))
+
 
 ;; red green blue yellow cyan magenta white black
 
@@ -820,10 +821,12 @@ The CHAR is replaced and the point is put before CHAR."
 
 (global-set-key (kbd "<f11>") 'helm-load-listing)
 (global-set-key (kbd "S-<f11>") 'helm-buffers-list)
+(global-set-key (kbd "<f21>") 'helm-buffers-list) ;; S-<f11> in screen
 
 ;; TODO: need a version of projectile-find-file with initial text
 (global-set-key (kbd "<f12>") 'projectile-find-file)
 (global-set-key (kbd "S-<f12>") 'projectile-switch-to-buffer)
+(global-set-key (kbd "<f22>") 'projectile-switch-to-buffer) ;; S-<f12> in screen
 (global-set-key (kbd "ESC <f12>") 'helm-resume)
 (global-set-key (kbd "ESC S-<f12>") 'helm-semantic-or-imenu)
 
