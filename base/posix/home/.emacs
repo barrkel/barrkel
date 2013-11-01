@@ -294,14 +294,13 @@
 (set-face 'font-lock-regexp-grouping-backslash "white" "black" 'bold)
 (set-face 'font-lock-regexp-grouping-construct "red" "black" 'bold)
 
-(set-face 'hi-yellow "black" "yellow")
-(set-face 'hi-blue "black" "blue")
-(set-face 'hi-blue-b "black" "blue" 'bold)
-(set-face 'hi-green "black" "green")
-(set-face 'hi-green-b "black" "green" 'bold)
-(set-face 'hi-pink "black" "red" 'bold)
-(set-face 'hi-red-b "white" "red" 'bold)
-(set-face 'hi-yellow "black" "yellow")
+;; (set-face 'hi-blue "black" "blue")
+;; (set-face 'hi-blue-b "black" "blue" 'bold)
+;; (set-face 'hi-green "black" "green")
+;; (set-face 'hi-green-b "black" "green" 'bold)
+;; (set-face 'hi-pink "black" "red" 'bold)
+;; (set-face 'hi-red-b "white" "red" 'bold)
+;; (set-face 'hi-yellow "black" "yellow")
 
 (set-face 'match "black" "blue")
 
@@ -592,9 +591,6 @@ buffer instead of replacing the text in region."
 (global-set-key (kbd "C-s") 'isearch-forward-regexp)
 (global-set-key (kbd "C-r") 'isearch-backward-regexp)
 
-;; semantic navigation with completion
-(global-set-key (kbd "M-i") 'imenu)
-
 (defun duplicate-line-or-region ()
   "Duplicate region, or line if no region selected"
   (interactive)
@@ -816,6 +812,11 @@ The CHAR is replaced and the point is put before CHAR."
 (global-set-key (kbd "<f12>") 'projectile-find-file)
 (global-set-key (kbd "S-<f12>") 'projectile-switch-to-buffer)
 (global-set-key (kbd "ESC <f12>") 'helm-resume)
+(global-set-key (kbd "M-<f12>") 'helm-resume)
+
+;; semantic navigation with completion
+(global-set-key (kbd "M-i") 'helm-semantic-or-imenu)
+(global-set-key (kbd "M-S-<f12>") 'helm-semantic-or-imenu)
 
 ;; narrowing / widening act on selected region
 ;; C-x n n to narrow
