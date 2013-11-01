@@ -33,3 +33,4 @@ ClicksPlaceCursor=no
 BackspaceSendsBS=no
 Title=Barry's Bash
 SwitchShortcuts=no
+AltFnShortcuts=no
