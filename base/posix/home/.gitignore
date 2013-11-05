@@ -3,6 +3,7 @@
 .emacs.desktop*
 .listing
 .listing.sh
+TAGS
 
 # Compiled source #
 ###################

@@ -19,7 +19,6 @@
   (define-key input-decode-map "\e\e[6$" (kbd "M-S-<next>"))
   (define-key input-decode-map "\e\e[5~" (kbd "M-<prior>"))
   (define-key input-decode-map "\e\e[6~" (kbd "M-<next>"))
-  
   (define-key input-decode-map "\e[3^" (kbd "C-<delete>"))
   (define-key input-decode-map "\eOa" (kbd "C-<up>"))
   (define-key input-decode-map "\eOb" (kbd "C-<down>"))
@@ -65,6 +64,8 @@
   (define-key input-decode-map "\e[5;5~" (kbd "C-<prior>"))
   (define-key input-decode-map "\e[6;5~" (kbd "C-<next>")))
 
+;; note existence of this for rxvt:
+;; http://www.emacswiki.org/emacs/rxvt.el
 (when (string= (getenv "TERM") "rxvt")
   (define-key input-decode-map "\e[7@" (kbd "C-S-<home>"))
   (define-key input-decode-map "\e[8@" (kbd "C-S-<end>"))
@@ -239,6 +240,12 @@
 (global-set-key (kbd "M-x") 'helm-M-x)
 (global-set-key (kbd "M-G") 'helm-git-grep)
 
+
+;;----------------------------------------
+;; robe
+;;----------------------------------------
+(setq robe-completing-read-func 'helm-completing-read-default)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; COLORS ETC
@@ -294,13 +301,15 @@
 (set-face 'font-lock-regexp-grouping-backslash "white" "black" 'bold)
 (set-face 'font-lock-regexp-grouping-construct "red" "black" 'bold)
 
-;; (set-face 'hi-blue "black" "blue")
-;; (set-face 'hi-blue-b "black" "blue" 'bold)
-;; (set-face 'hi-green "black" "green")
-;; (set-face 'hi-green-b "black" "green" 'bold)
-;; (set-face 'hi-pink "black" "red" 'bold)
-;; (set-face 'hi-red-b "white" "red" 'bold)
-;; (set-face 'hi-yellow "black" "yellow")
+(defun setup-hilock-faces ()
+  (set-face 'hi-blue "black" "blue")
+  (set-face 'hi-blue-b "black" "blue" 'bold)
+  (set-face 'hi-green "black" "green")
+  (set-face 'hi-green-b "black" "green" 'bold)
+  (set-face 'hi-pink "black" "red" 'bold)
+  (set-face 'hi-red-b "white" "red" 'bold)
+  (set-face 'hi-yellow "black" "yellow"))
+(eval-after-load "hi-lock" '(setup-hilock-faces))
 
 (set-face 'match "black" "blue")
 
@@ -312,15 +321,12 @@
 
 (set-face 'show-paren-mismatch "white" "red" 'extra-bold)
 
-;; helm
-(set-face 'helm-source-header "cyan" "magenta" 'extra-bold)
-;;(set-face 'helm-list-show-completion "magenta" "blue")
-(set-face 'helm-header "white" "magenta")
-(set-face 'helm-match "black" "yellow")
-
-(set-face 'helm-selection "black" "blue")
-(set-face-attribute 'helm-selection nil :underline nil)
-;;(set-face 'helm-selection-line "black" "cyan")
+(defun setup-helm-faces ()
+  (set-face 'helm-source-header "cyan" "magenta" 'extra-bold)
+  (set-face 'helm-header "white" "magenta")
+  (set-face 'helm-selection "black" "yellow")
+  (set-face 'helm-match "black" "yellow"))
+(eval-after-load "helm-match-plugin" '(setup-helm-faces))
 
 ;; red green blue yellow cyan magenta white black
 
@@ -445,12 +451,18 @@
 ;; Puppet
 (require 'puppet-mode-autoloads)
 
+;; Rspec
+(eval-after-load "rspec-mode" ;; I don't think this works
+  '(lambda ()
+     (global-set-key (kbd "M-T") 'rspec-toggle-spec-and-target)))
+
 ;; Ruby
 (add-hook 'ruby-mode-hook
           (lambda ()
             (visual-line-mode)))
 (add-hook 'enh-ruby-mode-hook
           (lambda ()
+            (robe-mode)
             (visual-line-mode)
             (global-set-key (kbd "RET") 'newline-and-indent)))
 (add-to-list 'auto-mode-alist '("Gemfile" . enh-ruby-mode))
@@ -460,6 +472,7 @@
 (add-hook 'scss-mode-hook
           (lambda ()
             (visual-line-mode)
+            (setq scss-compile-at-save nil)
             (set-tab-style nil 2)))
 
 ;; Shell script
@@ -525,7 +538,7 @@ buffer instead of replacing the text in region."
 (global-set-key (kbd "C-y") 'delete-line-command)
 (global-set-key (kbd "C-v") 'yank)
 (global-set-key (kbd "M-v") 'yank-pop)
-(global-set-k[ey (kbd "M-S-<insert>") 'kill-ring-save)
+(global-set-key (kbd "M-S-<insert>") 'kill-ring-save)
 (global-set-key (kbd "M-<insert>") 'yank) ;; mintty
 (global-set-key (kbd "M-<delete>") 'kill-word) ;; for parallel with M-d
 (global-set-key (kbd "ESC <insertchar>") 'yank) ;; rxvt
@@ -537,9 +550,6 @@ buffer instead of replacing the text in region."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; TODO: put these in minor modes
-
-;; note existence of this for rxvt:
-;; http://www.emacswiki.org/emacs/rxvt.el
 
 ;; my custom macros bound to keys past C-j, by convention
 (global-unset-key (kbd "C-j"))
@@ -557,7 +567,8 @@ buffer instead of replacing the text in region."
 (global-set-key (kbd "C-<prior>") 'previous-buffer)
 (global-set-key (kbd "C-j /") 'comment-or-uncomment-region)
 (global-set-key (kbd "C-j C-_") 'comment-or-uncomment-region)
-(global-set-key (kbd "C-j C-j") 'reposition-window)
+(global-set-key (kbd "C-j -") 'reposition-window)
+(global-set-key (kbd "C-x _") 'shrink-window)
 (global-set-key (kbd "ESC <deletechar>") 'kill-word) ;; alt delete
 
 ;; navigation start
@@ -790,7 +801,7 @@ The CHAR is replaced and the point is put before CHAR."
 (defun toggle-word-highlight ()
   "Toggle highlight of word-at-point"
   (interactive)
-  (let ((new-word (get-point-text)))
+  (let ((new-word (regexp-quote (get-point-text))))
     (unhighlight-regexp current-highlight-word)
     (if (equal new-word current-highlight-word)
         (setq-local current-highlight-word nil)
@@ -814,9 +825,9 @@ The CHAR is replaced and the point is put before CHAR."
 (global-set-key (kbd "ESC <f12>") 'helm-resume)
 (global-set-key (kbd "M-<f12>") 'helm-resume)
 
-;; semantic navigation with completion
 (global-set-key (kbd "M-i") 'helm-semantic-or-imenu)
 (global-set-key (kbd "M-S-<f12>") 'helm-semantic-or-imenu)
+(global-set-key (kbd "ESC S-<f12>") 'helm-semantic-or-imenu)
 
 ;; narrowing / widening act on selected region
 ;; C-x n n to narrow
