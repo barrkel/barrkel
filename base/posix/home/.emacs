@@ -452,8 +452,8 @@
 (require 'puppet-mode-autoloads)
 
 ;; Rspec
-(eval-after-load "rspec-mode" ;; I don't think this works
-  '(lambda ()
+(eval-after-load "rspec-mode"
+  '(progn
      (global-set-key (kbd "M-T") 'rspec-toggle-spec-and-target)))
 
 ;; Ruby
@@ -604,6 +604,7 @@ buffer instead of replacing the text in region."
 
 ;; semantic navigation with completion
 (global-set-key (kbd "M-i") 'imenu)
+(setq imenu-max-item-length 120)
 
 (defun duplicate-line-or-region ()
   "Duplicate region, or line if no region selected"
