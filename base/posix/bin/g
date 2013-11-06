@@ -1,0 +1,6 @@
+#!/bin/bash
+
+query="$*"
+query="${query// /+}"
+
+start "https://www.google.com/search?q=$query"
