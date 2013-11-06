@@ -301,14 +301,15 @@
 (set-face 'font-lock-regexp-grouping-backslash "white" "black" 'bold)
 (set-face 'font-lock-regexp-grouping-construct "red" "black" 'bold)
 
-;;(set-face 'hi-yellow "black" "yellow")
-;; (set-face 'hi-blue "black" "blue")
-;; (set-face 'hi-blue-b "black" "blue" 'bold)
-;; (set-face 'hi-green "black" "green")
-;; (set-face 'hi-green-b "black" "green" 'bold)
-;; (set-face 'hi-pink "black" "red" 'bold)
-;; (set-face 'hi-red-b "white" "red" 'bold)
-;;(set-face 'hi-yellow "black" "yellow")
+(defun setup-hilock-faces ()
+  (set-face 'hi-blue "black" "blue")
+  (set-face 'hi-blue-b "black" "blue" 'bold)
+  (set-face 'hi-green "black" "green")
+  (set-face 'hi-green-b "black" "green" 'bold)
+  (set-face 'hi-pink "black" "red" 'bold)
+  (set-face 'hi-red-b "white" "red" 'bold)
+  (set-face 'hi-yellow "black" "yellow"))
+(eval-after-load "hi-lock" '(setup-hilock-faces))
 
 (set-face 'match "black" "blue")
 
@@ -326,7 +327,6 @@
   (set-face 'helm-selection "black" "blue")
   (set-face 'helm-match "black" "yellow"))
 (eval-after-load "helm-match-plugin" '(setup-helm-faces))
-
 
 ;; red green blue yellow cyan magenta white black
 
@@ -829,6 +829,10 @@ The CHAR is replaced and the point is put before CHAR."
 (global-set-key (kbd "S-<f12>") 'projectile-switch-to-buffer)
 (global-set-key (kbd "<f22>") 'projectile-switch-to-buffer) ;; S-<f12> in screen
 (global-set-key (kbd "ESC <f12>") 'helm-resume)
+(global-set-key (kbd "M-<f12>") 'helm-resume)
+
+(global-set-key (kbd "M-i") 'helm-semantic-or-imenu)
+(global-set-key (kbd "M-S-<f12>") 'helm-semantic-or-imenu)
 (global-set-key (kbd "ESC S-<f12>") 'helm-semantic-or-imenu)
 
 ;; narrowing / widening act on selected region
