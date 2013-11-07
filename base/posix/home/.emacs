@@ -267,7 +267,7 @@
       (set-face-attribute face nil :weight 'extra-bold)
     (set-face-attribute face nil :weight 'normal))
   (if underline
-      (set-face-attribute face nil :underline 'underline)
+      (set-face-attribute face nil :underline t)
     (set-face-attribute face nil :underline nil)))
 
 
@@ -327,6 +327,12 @@
   (set-face 'helm-selection "black" "blue")
   (set-face 'helm-match "black" "yellow"))
 (eval-after-load "helm-match-plugin" '(setup-helm-faces))
+
+(defun setup-magit-faces ()
+  (loop for face in '(magit-blame-culprit magit-blame-header magit-blame-sha1
+                                          magit-blame-subject magit-blame-time)
+        do (set-face face "magenta" "black" nil t)))
+(eval-after-load "magit-blame" '(setup-magit-faces))
 
 ;; red green blue yellow cyan magenta white black
 
@@ -464,7 +470,10 @@
           (lambda ()
             (robe-mode)
             (visual-line-mode)
-            (global-set-key (kbd "RET") 'newline-and-indent)))
+            (global-set-key (kbd "RET") 'newline-and-indent)
+            ;; hopefully the bits below will work
+            (er/enable-mode-expansions 'enh-ruby-mode 'er/add-ruby-mode-expansions)
+            (eval-after-load "enh-ruby-mode"    '(require 'ruby-mode-expansions))))
 (add-to-list 'auto-mode-alist '("Gemfile" . enh-ruby-mode))
 
 
@@ -841,5 +850,3 @@ The CHAR is replaced and the point is put before CHAR."
 (put 'narrow-to-region 'disabled nil)
 ;; C-x n p
 (put 'narrow-to-page 'disabled nil)
-
-
