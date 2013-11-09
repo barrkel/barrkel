@@ -22,7 +22,7 @@ Tree layout:
     |-- host
     |   `-- <hostname>     - directory structure mirrors pattern of base/
     |-- setup
-    |-- src                - TODO: source for some utilities that need compiling per-arch / per-OS
+    |-- src                - source for some utilities that need compiling per-arch / per-OS
     |-- cache              - a copy of the home directory as it is expected to be; symlinks are absolute
     `-- staging            - setup builds up the home directory in here
 
