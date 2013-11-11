@@ -2,15 +2,18 @@
 ;; TERMINAL FIXES
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(when (string= (getenv "TERM") "screen.rxvt")
+;; note existence of this for rxvt:
+;; http://www.emacswiki.org/emacs/rxvt.el
+(defun fix-rxvt-inputs ()
+  "Fix inputs for rxvt"
   (define-key input-decode-map "\e[a" (kbd "S-<up>"))
   (define-key input-decode-map "\e[b" (kbd "S-<down>"))
   (define-key input-decode-map "\e[7$" (kbd "S-<home>"))
   (define-key input-decode-map "\e[7^" (kbd "C-<home>"))
   (define-key input-decode-map "\e[7@" (kbd "C-S-<home>"))
+  (define-key input-decode-map "\e[8@" (kbd "C-S-<end>"))
   (define-key input-decode-map "\e[8$" (kbd "S-<end>"))
   (define-key input-decode-map "\e[8^" (kbd "C-<end>"))
-  (define-key input-decode-map "\e[8@" (kbd "C-S-<end>"))
   (define-key input-decode-map "\e[5^" (kbd "C-<prior>"))
   (define-key input-decode-map "\e[6^" (kbd "C-<next>"))
   (define-key input-decode-map "\e\e[5^" (kbd "C-M-<prior>"))
@@ -23,7 +26,16 @@
   (define-key input-decode-map "\eOa" (kbd "C-<up>"))
   (define-key input-decode-map "\eOb" (kbd "C-<down>"))
   (define-key input-decode-map "\eOd" (kbd "C-<left>"))
-  (define-key input-decode-map "\eOc" (kbd "C-<right>")))
+  (define-key input-decode-map "\eOc" (kbd "C-<right>"))  
+  (define-key input-decode-map "\e[24~" (kbd "<f12>"))
+  (define-key input-decode-map "\e[24$" (kbd "S-<f12>"))
+  (define-key input-decode-map "\e[23~" (kbd "<f11>"))
+  (define-key input-decode-map "\e[23$" (kbd "S-<f11>")))
+
+(when (string= (getenv "TERM") "screen.rxvt")
+  (fix-rxvt-inputs))
+(when (string= (getenv "TERM") "rxvt")
+  (fix-rxvt-inputs))
 
 ;; actually, mintty on windows
 (when (string= (getenv "TERM") "xterm")
@@ -63,16 +75,6 @@
   (define-key input-decode-map "\e[6;3~" (kbd "M-<next>"))
   (define-key input-decode-map "\e[5;5~" (kbd "C-<prior>"))
   (define-key input-decode-map "\e[6;5~" (kbd "C-<next>")))
-
-;; note existence of this for rxvt:
-;; http://www.emacswiki.org/emacs/rxvt.el
-(when (string= (getenv "TERM") "rxvt")
-  (define-key input-decode-map "\e[7@" (kbd "C-S-<home>"))
-  (define-key input-decode-map "\e[8@" (kbd "C-S-<end>"))
-  (define-key input-decode-map "\e[24~" (kbd "<f12>"))
-  (define-key input-decode-map "\e[24$" (kbd "S-<f12>"))
-  (define-key input-decode-map "\e[23~" (kbd "<f11>"))
-  (define-key input-decode-map "\e[23$" (kbd "S-<f11>")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MISC INIT
