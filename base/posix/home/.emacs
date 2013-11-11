@@ -475,7 +475,12 @@
             (global-set-key (kbd "RET") 'newline-and-indent)
             ;; hopefully the bits below will work
             (er/enable-mode-expansions 'enh-ruby-mode 'er/add-ruby-mode-expansions)
-            (eval-after-load "enh-ruby-mode"    '(require 'ruby-mode-expansions))))
+            (eval-after-load "enh-ruby-mode" '(require 'ruby-mode-expansions))
+            (defun ruby-replace-symbol-map-syntax ()
+              (interactive)
+              (replace-regexp ":\\([^:']+\\) =>" "\\1:" nil
+                              (if (and transient-mark-mode mark-active) (region-beginning))
+                              (if (and transient-mark-mode mark-active) (region-end))))))
 (add-to-list 'auto-mode-alist '("Gemfile" . enh-ruby-mode))
 
 
