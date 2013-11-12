@@ -201,6 +201,11 @@
 (setq wrap-region-keep-mark t)
 
 ;;----------------------------------------
+;; undo trees
+;;----------------------------------------
+(undo-tree-mode)
+
+;;----------------------------------------
 ;; minibuffer
 ;;----------------------------------------
 
@@ -859,9 +864,29 @@ The CHAR is replaced and the point is put before CHAR."
 (global-set-key (kbd "M-S-<f12>") 'helm-semantic-or-imenu)
 (global-set-key (kbd "ESC S-<f12>") 'helm-semantic-or-imenu)
 
+(global-set-key (kbd "M-C") 'ace-jump-char-mode)
+(global-set-key (kbd "M-L") 'ace-jump-line-mode)
+(global-set-key (kbd "M-U") 'undo-tree-visualize)
+
+(defun other-window-back ()
+  "Reverse of other-window"
+  (interactive)
+  (other-window -1))
+(global-set-key (kbd "C-x O") 'other-window-back)
+
 ;; narrowing / widening act on selected region
 ;; C-x n n to narrow
 ;; C-x n w to widen
 (put 'narrow-to-region 'disabled nil)
 ;; C-x n p
 (put 'narrow-to-page 'disabled nil)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; KEY CHORDING
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; (key-chord-mode 1)
+;; (key-chord-define-global "JJ" 'helm-load-listing)
+;; (key-chord-define-global "UU" 'undo-tree-visualize)
+
