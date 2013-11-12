@@ -392,11 +392,13 @@
 ;; C
 (add-hook 'c-mode-hook
           (lambda ()
+            (subword-mode)
             (set-tab-style t 4)))
 
 ;; C++
 (add-hook 'c++-mode-hook
           (lambda ()
+            (subword-mode)
             (set-tab-style t 4)))
 
 ;; C & C++
@@ -409,6 +411,7 @@
 (add-hook 'coffee-mode-hook
           (lambda ()
             (visual-line-mode)
+            (subword-mode)
             (set-tab-style nil 2)))
 
 ;; Conf
@@ -419,6 +422,7 @@
 (add-to-list 'auto-mode-alist '("\\.cs\\'" . csharp-mode))
 (add-hook 'csharp-mode-hook
           (lambda ()
+            (subword-mode)
             (set-tab-style t 4)))
 
 ;; elisp mode
@@ -445,12 +449,14 @@
 (add-hook 'java-mode-hook
           (lambda()
             (set-tab-style t 4)
+            (subword-mode)
             (visual-line-mode)))
 
 ;; Javascript
 (add-hook 'js-mode-hook
           (lambda ()
             (set-tab-style nil 2)
+            (subword-mode)
             (visual-line-mode)))
 
 ;; Markdown
