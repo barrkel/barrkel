@@ -149,10 +149,12 @@ function find_in_atom_dirs # relative-path
 function build_initial_profile
 {
     local _utils=$(find_in_atom_dirs bin/_barrkel_utils) || exit
-    printf "source ~/.bashrc\\n" > "$staging/.bash_profile"
+    printf 'export BARRKEL_PROFILE=1\n'                             >  "$staging/.bash_profile"
+    printf 'source ~/.bashrc\n'                                     >> "$staging/.bash_profile"
 
-    printf "export BARRKEL_HOME='%s'\\n" "$barrkel" > "$staging/.bashrc"
-    printf "source '%s'\n" "$_utils" >> "$staging/.bashrc"
+    printf 'export BARRKEL_HOME='%s'\n' "$barrkel"                  >  "$staging/.bashrc"
+    printf "source '%s'\\n" "$_utils"                               >> "$staging/.bashrc"
+    printf 'test -n "$BARRKEL_PROFILE" || source ~/.bash_profile\n' >> "$staging/.bashrc"
 }
 
 function symlink_files # from-dir to-dir
