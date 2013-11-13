@@ -116,4 +116,7 @@ function semacs
     sudo_check emacs "$@"
 }
 
+# completion
+
+test -e /etc/bash_completion && source /etc/bash_completion
 
