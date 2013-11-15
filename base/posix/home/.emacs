@@ -510,7 +510,7 @@
           (lambda ()
             (robe-mode)
             (visual-line-mode)
-            (global-set-key (kbd "RET") 'newline-and-indent)
+            (define-key enh-ruby-mode-map (kbd "RET") 'newline-and-indent)
             ;; hopefully the bits below will work
             (er/enable-mode-expansions 'enh-ruby-mode 'er/add-ruby-mode-expansions)
             (eval-after-load "enh-ruby-mode" '(require 'ruby-mode-expansions))
@@ -520,6 +520,7 @@
                               (if (and transient-mark-mode mark-active) (region-beginning))
                               (if (and transient-mark-mode mark-active) (region-end))))))
 (add-to-list 'auto-mode-alist '("Gemfile" . enh-ruby-mode))
+(add-to-list 'auto-mode-alist '("\\.json.jbuilder\\'" . enh-ruby-mode))
 
 
 ;; SCSS
