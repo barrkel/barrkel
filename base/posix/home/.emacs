@@ -2,54 +2,58 @@
 ;; TERMINAL FIXES
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(setq term-original (getenv "TERM"))
+
+  
+
 (defun fix-mintty-inputs ()
   "Fix inputs for mintty"
   (interactive)
-  (define-key input-decode-map "\e[1;5F" (kbd "C-<end>"))
-  (define-key input-decode-map "\e[1;2F" (kbd "S-<end>"))
-  (define-key input-decode-map "\e[1;6F" (kbd "C-S-<end>"))
-  (define-key input-decode-map "\e[1;5H" (kbd "C-<home>"))
-  (define-key input-decode-map "\e[1;2H" (kbd "S-<home>"))
-  (define-key input-decode-map "\e[1;6H" (kbd "C-S-<home>"))
-  (define-key input-decode-map "\e[3;2~" (kbd "S-<delete>"))
-  (define-key input-decode-map "\e[3;3~" (kbd "M-<delete>"))
-  (define-key input-decode-map "\e[3;4~" (kbd "M-S-<delete>"))
-  (define-key input-decode-map "\e[3;5~" (kbd "C-<delete>"))
-  (define-key input-decode-map "\e[3;6~" (kbd "C-S-<delete>"))
-  (define-key input-decode-map "\e[2;2~" (kbd "S-<insert>"))
-  (define-key input-decode-map "\e[2;3~" (kbd "M-<insert>"))
-  (define-key input-decode-map "\e[2;4~" (kbd "M-S-<insert>"))
-  (define-key input-decode-map "\e[2;5~" (kbd "C-<insert>"))
-  (define-key input-decode-map "\e[2;6~" (kbd "C-S-<insert>"))
-  (define-key input-decode-map "\e[1;2A" (kbd "S-<up>"))
-  (define-key input-decode-map "\e[1;2B" (kbd "S-<down>"))
-  (define-key input-decode-map "\e[1;2C" (kbd "S-<right>"))
-  (define-key input-decode-map "\e[1;2D" (kbd "S-<left>"))
-  (define-key input-decode-map "\e[1;5A" (kbd "C-<up>"))
-  (define-key input-decode-map "\e[1;5B" (kbd "C-<down>"))
-  (define-key input-decode-map "\e[1;5C" (kbd "C-<right>"))
-  (define-key input-decode-map "\e[1;5D" (kbd "C-<left>"))
-  (define-key input-decode-map "\e[1;6A" (kbd "C-S-<up>"))
-  (define-key input-decode-map "\e[1;6B" (kbd "C-S-<down>"))
-  (define-key input-decode-map "\e[1;6C" (kbd "C-S-<right>"))
-  (define-key input-decode-map "\e[1;6D" (kbd "C-S-<left>"))
-  (define-key input-decode-map "\e[1;3A" (kbd "M-<up>"))
-  (define-key input-decode-map "\e[1;3B" (kbd "M-<down>"))
-  (define-key input-decode-map "\e[1;3C" (kbd "M-<right>"))
-  (define-key input-decode-map "\e[1;3D" (kbd "M-<left>"))
-  (define-key input-decode-map "\e[1;4A" (kbd "M-S-<up>"))
-  (define-key input-decode-map "\e[1;4B" (kbd "M-S-<down>"))
-  (define-key input-decode-map "\e[1;4C" (kbd "M-S-<right>"))
-  (define-key input-decode-map "\e[1;4D" (kbd "M-S-<left>"))
-  (define-key input-decode-map "\e[5;3~" (kbd "M-<prior>"))
-  (define-key input-decode-map "\e[6;3~" (kbd "M-<next>"))
-  (define-key input-decode-map "\e[5;5~" (kbd "C-<prior>"))
-  (define-key input-decode-map "\e[6;5~" (kbd "C-<next>")))
+
+  ;; Define a mintty key modifiers based on mintty's encoding
+  ;; Pattern should use %d where the modifier digit goes
+    ;; n -> n-1 in binary => 1: shift, 2: meta, 4: control
+  (defun define-mintty-key-modifiers (pattern key)
+    (define-key input-decode-map (format pattern 2) (kbd (format "S-%s" key)))
+    (define-key input-decode-map (format pattern 3) (kbd (format "M-%s" key)))
+    (define-key input-decode-map (format pattern 4) (kbd (format "M-S-%s" key)))
+    (define-key input-decode-map (format pattern 5) (kbd (format "C-%s" key)))
+    (define-key input-decode-map (format pattern 6) (kbd (format "C-S-%s" key)))
+    (define-key input-decode-map (format pattern 7) (kbd (format "C-M-%s" key)))
+    (define-key input-decode-map (format pattern 8) (kbd (format "C-M-S-%s" key))))
+
+  (define-key input-decode-map "\e[1;5m" (kbd "C--"))
+  (define-key input-decode-map "\e[1;7m" (kbd "C-M--"))
+
+  (define-mintty-key-modifiers "\e[2;%d~" "<insert>")
+  (define-mintty-key-modifiers "\e[3;%d~" "<delete>")
+  (define-mintty-key-modifiers "\e[5;%d~" "<prior>")
+  (define-mintty-key-modifiers "\e[6;%d~" "<next>")
+  
+  (define-mintty-key-modifiers "\e[1;%dA" "<up>")
+  (define-mintty-key-modifiers "\e[1;%dB" "<down>")
+  (define-mintty-key-modifiers "\e[1;%dC" "<right>")
+  (define-mintty-key-modifiers "\e[1;%dD" "<left>")
+
+  (define-mintty-key-modifiers "\e[1;%dF" "<end>")
+  (define-mintty-key-modifiers "\e[1;%dH" "<home>")
+  
+  (define-mintty-key-modifiers "\e[1;%dP" "<f1>")
+  (define-mintty-key-modifiers "\e[1;%dQ" "<f2>")
+  (define-mintty-key-modifiers "\e[1;%dR" "<f3>")
+  (define-mintty-key-modifiers "\e[1;%dS" "<f4>")
+  (define-mintty-key-modifiers "\e[15;%d~" "<f5>")
+  (define-mintty-key-modifiers "\e[17;%d~" "<f6>")
+  (define-mintty-key-modifiers "\e[18;%d~" "<f7>")
+  (define-mintty-key-modifiers "\e[19;%d~" "<f8>")
+  (define-mintty-key-modifiers "\e[20;%d~" "<f9>")
+  (define-mintty-key-modifiers "\e[21;%d~" "<f10>")
+  (define-mintty-key-modifiers "\e[23;%d~" "<f11>")
+  (define-mintty-key-modifiers "\e[24;%d~" "<f12>"))
 
 (defun fix-mintty-screen-inputs ()
   "Fix inputs for screen inside mintty"
-  (interactive)
-  )
+  (interactive))
 
 ;; note existence of this for rxvt:
 ;; http://www.emacswiki.org/emacs/rxvt.el
@@ -76,7 +80,7 @@
   (define-key input-decode-map "\eOa" (kbd "C-<up>"))
   (define-key input-decode-map "\eOb" (kbd "C-<down>"))
   (define-key input-decode-map "\eOd" (kbd "C-<left>"))
-  (define-key input-decode-map "\eOc" (kbd "C-<right>"))  
+  (define-key input-decode-map "\eOc" (kbd "C-<right>"))
   (define-key input-decode-map "\e[24~" (kbd "<f12>"))
   (define-key input-decode-map "\e[24$" (kbd "S-<f12>"))
   (define-key input-decode-map "\e[23~" (kbd "<f11>"))
@@ -86,16 +90,24 @@
   "Fix inputs for screen inside rxvt"
   (interactive))
 
+;; My configurations
+;; mintty        => TERM=xterm
+;; rxvt          => TERM=rxvt
+;; screen/mintty => TERM=screen
+;; screen/rxvt   => TERM=screen.rxvt
+;; Screen generally passes extended keys through unaltered.
+
+;; screen/rxvt
 (when (string= (getenv "TERM") "screen.rxvt")
   (fix-rxvt-inputs)
   (fix-rxvt-screen-inputs))
+;; rxvt
 (when (string= (getenv "TERM") "rxvt")
   (fix-rxvt-inputs))
-
-;; actually, mintty on windows
+;; mintty
 (when (string= (getenv "TERM") "xterm")
-  (define-key input-decode-map "\e[1;5m" (kbd "C--")))
-
+  (fix-mintty-inputs))
+;; screen/mintty
 ;; actually, screen in mintty
 (when (string= (getenv "TERM") "screen")
   (fix-mintty-inputs)
