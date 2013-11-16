@@ -624,6 +624,7 @@ buffer instead of replacing the text in region."
 (global-set-key (kbd "C-x /") 'generalized-shell-command)
 (global-set-key (kbd "C-x C-_") 'generalized-shell-command) ;; C-x C-/
 (global-set-key (kbd "C-c /") 'generalized-shell-command)
+(global-set-key (kbd "C-c C-_") 'comment-or-uncomment-region) ;; C-c C-/
 ;; C-x z and C-x C-z still background emacs
 (global-set-key (kbd "C-z") 'undo)
 (global-set-key (kbd "C-c w") 'write-region)
@@ -901,7 +902,7 @@ The CHAR is replaced and the point is put before CHAR."
 (global-set-key (kbd "M-S-<f12>") 'helm-semantic-or-imenu)
 (global-set-key (kbd "ESC S-<f12>") 'helm-semantic-or-imenu)
 
-(global-set-key (kbd "M-C") 'ace-jump-char-mode)
+(global-set-key (kbd "M-C") 'ace-jump-word-mode)
 (global-set-key (kbd "M-L") 'ace-jump-line-mode)
 (global-set-key (kbd "M-U") 'undo-tree-visualize)
 
@@ -917,6 +918,9 @@ The CHAR is replaced and the point is put before CHAR."
 (put 'narrow-to-region 'disabled nil)
 ;; C-x n p
 (put 'narrow-to-page 'disabled nil)
+
+
+(define-key dired-mode-map (kbd "W") 'wdired-change-to-wdired-mode)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
