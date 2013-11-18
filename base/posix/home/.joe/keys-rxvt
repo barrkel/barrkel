@@ -1,0 +1,616 @@
+ Section names you must provide:
+
+	:main		For editing window
+	:prompt		For prompt lines
+	:query		For single-character query lines
+	:querya		Singe-character query for quote
+	:querysr	Search & Replace single-character query
+
+ Other sections may be given as well for organization purposes or for
+ use with the '-keymap' option.
+
+ Use:
+ :inherit name		To copy the named section into the current one
+ :delete key		To delete a key sequence from the current section
+
+ Keys:
+
+ Use ^@ through ^_ and ^? for Ctrl chars
+ Use SP for space
+ Use a TO b to generate a range of characters
+ Use MDOWN, MDRAG, MUP, M2DOWN, M2DRAG, M2UP, M3DOWN, M3DRAG, M3UP for mouse
+ Use MWDOWN, MWUP for wheel mouse motion
+ Use ^# for 0x9B (for Amiga).  But warning: this breaks UTF-8 keyboards.
+
+ You can also use termcap string capability names.  For example:
+
+	.ku		Up
+	.kd		Down
+	.kl		Left
+	.kr		Right
+	.kh		Home
+	.kH		End
+	.kI		Insert
+	.kD		Delete
+	.kP		PgUp
+	.kN		PgDn
+	.k1 - .k9	F1 - F9
+	.k0		F0 or F10
+	.k;		F10
+
+ Macros:
+
+ Simple macros can be made by comma seperating 2 or more command names.  For
+ example:
+
+ eof,bol	^T Z		Goto beginning of last line
+
+ Also quoted matter is typed in literally:
+
+ bol,">",dnarw	.k1		Quote news article line
+
+ Macros may cross lines if they end with ,
+
+ Commands or named macros may be created with :def.  For example, you can
+ use:
+
+ :def foo eof,bol
+
+ To define a command foo which will goto the beginning of the last line.
+
+:windows		Bindings common to all windows
+
+type		^@ TO ÿ		Type a character
+
+abort		^C		Abort window
+
+arg		^K \		Repeat next command
+
+explode		^K I		Show all windows or show only one window
+explode		^K ^I
+explode		^K i
+
+help		^K ^H		Help menu
+
+hnext		^[ .		Next help window
+hprev		^[ ,		Previous help window
+
+math		^[ m		Calculator
+math		^[ M		Calculator
+
+ msg		^[ h		Display a message
+ msg		^[ H		Display a message
+ msg		^[ ^H		Display a message
+
+ nextw		^K N		Goto next window
+ nextw		^K ^N
+ nextw		^K n
+ prevw		^K P		Goto previous window
+ prevw		^K ^P
+ prevw		^K p
+
+prevw	^[ [ 5 ^		Rxvt Ctrl+PgUp
+nextw	^[ [ 6 ^		Rxvt Ctrl+PgDn
+
+pgdn		.kN		Screen down
+pgdn		^V
+pgdn		^[ [ 6 ~
+
+pgup		.kP		Screen up
+pgup		^U
+pgup		^[ [ 5 ~
+
+play		^K 0 TO 9	Execute macro
+query		^K ?		Macro query insert
+record		^K [		Record a macro
+stop		^K ]		Stop recording
+
+ Simple one-off macro in position 0
+record,"0"	^R
+stop		^[ r
+play,"0"	^P
+
+ retype		^R		Refresh screen
+ 
+rtn			^M		Return
+shell		^K Z		Shell escape
+shell		^K ^Z
+shell		^K z
+
+
+ Mouse handling
+defmdown	MDOWN		Move the cursor to the mouse location
+defmup		MUP
+defmdrag	MDRAG		Select a region of characters
+defm2down	M2DOWN		Select the word at the mouse location
+defm2up		M2UP
+defm2drag	M2DRAG		Select a region of words
+defm3down	M3DOWN		Select the line at the mouse location
+defm3up		M3UP
+defm3drag	M3DRAG		Select a region of lines
+
+xtmouse		^[ [ M		Introduces an xterm mouse event
+
+if,"char==65",then,"it's an A",else,"it's not an a",endif	^[ q
+
+:main			Text editing window
+:inherit windows
+
+ Spell-check macros
+
+ Ispell
+:def ispellfile filt,"cat >ispell.tmp;ispell ispell.tmp </dev/tty >/dev/tty;cat ispell.tmp;/bin/rm ispell.tmp",rtn,retype
+:def ispellword psh,nextword,markk,prevword,markb,filt,"cat >ispell.tmp;ispell ispell.tmp </dev/tty >/dev/tty;tr -d <ispell.tmp '\\012';/bin/rm ispell.tmp",rtn,retype,nextword
+
+ Aspell
+:def aspellfile filt,"SPLTMP=ispell.tmp;cat >$SPLTMP;aspell --lang=",language,".",charset," -x -c $SPLTMP </dev/tty >/dev/tty;cat $SPLTMP;/bin/rm $SPLTMP",rtn,retype
+:def aspellword psh,nextword,markk,prevword,markb,filt,"SPLTMP=ispell.tmp;cat >$SPLTMP;aspell --lang=",language,".",charset," -x -c $SPLTMP </dev/tty >/dev/tty;tr -d <$SPLTMP '\\012';/bin/rm $SPLTMP",rtn,retype,nextword
+
+
+aspellfile	^[ l
+aspellword	^[ n
+
+ Barry's macros
+
+:def braces "{",rtn,"}",uparw,eol,rtn,"\t"
+braces		^J b r
+
+:def beginEnd "begin",rtn,"end;",uparw,eol,rtn,"\t"
+beginEnd	^J b b
+beginEnd	^J b e
+
+ Compile
+
+:def compile mwind!,mfit!,querysave,query,scratch,"* Build Log *",rtn,bof,markb,eof," ",markk,blkdel,build
+
+ Grep
+
+:def grep_find mwind!,mfit!,scratch,"* Grep Log *",rtn,bof,markb,eof," ",markk,blkdel,grep
+
+ Man page
+
+:def man scratch,"* Man Page *",rtn,bof,markb,eof," ",markk,blkdel," ",ltarw,run,"man -P cat -S 2:3 "
+
+ Here we guess some common key sequences which either do not have termcap
+ sequences or which are frequently wrong.  Note that if the termcap entry is
+ correct, it will override these later on.
+
+paste			^[ ] 5 2 ;		Bracketed paste
+
+insc			^[ [ 2 ~
+insc			^[ [ L			SCO
+
+delch			^[ [ 3 ~
+
+pgup			^[ [ I		SCO
+
+pgdn			^[ [ G		SCO
+
+home			^[ [ 1 ~		Putty, Linux, Cygwin
+home			^[ [ H			Xterm, Konsole, SCO
+home			^[ O H			gnome-terminal
+home			^[ [ 7 ~		RxVT
+ home			^# SP A		Amiga
+
+eol			^[ [ 4 ~		Putty, Linux, Cygwin, ssh
+eol			^[ [ F			Xterm, Konsole, SCO
+eol			^[ O F			gnome-terminal
+eol			^[ [ 8 ~		RxVT
+ eol			^# SP @		Amiga
+
+
+ Change marking to use Shift rather than Ctrl
+
+ Xterm
+ rtarw,ltarw,begin_marking,rtarw,toggle_marking	^[ [ 1 ; 5 C    Mark right Xterm
+ ltarw,rtarw,begin_marking,ltarw,toggle_marking	^[ [ 1 ; 5 D    Mark left
+ uparw,dnarw,begin_marking,uparw,toggle_marking	^[ [ 1 ; 5 A    Mark up
+ dnarw,uparw,begin_marking,dnarw,toggle_marking	^[ [ 1 ; 5 B    Mark down
+ 
+ Putty
+ rtarw,ltarw,begin_marking,rtarw,toggle_marking	^[ O C		Mark right Putty Ctrl-rtarw
+ ltarw,rtarw,begin_marking,ltarw,toggle_marking	^[ O D		Mark left Putty Ctrl-ltarw
+ uparw,dnarw,begin_marking,uparw,toggle_marking	^[ O A		Mark up Putty Ctrl-uparw
+ dnarw,uparw,begin_marking,dnarw,toggle_marking	^[ O B		Mark down Putty Ctrl-dnarw
+ 
+ RxVT
+rtarw,ltarw,begin_marking,rtarw,toggle_marking	^[ [ c		Mark right RxVT Shift-rtarw
+ltarw,rtarw,begin_marking,ltarw,toggle_marking	^[ [ d		Mark left RxVT Shift-ltarw
+uparw,dnarw,begin_marking,uparw,toggle_marking	^[ [ a		Mark up RxVT Shift-uparw
+dnarw,uparw,begin_marking,dnarw,toggle_marking	^[ [ b		Mark down RxVT Shift-dnarw
+ 
+ mintty (Shift+arrow)
+rtarw,ltarw,begin_marking,rtarw,toggle_marking	^[ [ 1 ; 2 C    Mark right
+ltarw,rtarw,begin_marking,ltarw,toggle_marking	^[ [ 1 ; 2 D    Mark left
+uparw,dnarw,begin_marking,uparw,toggle_marking	^[ [ 1 ; 2 A    Mark up
+dnarw,uparw,begin_marking,dnarw,toggle_marking	^[ [ 1 ; 2 B    Mark down
+dnarw,uparw,begin_marking,pgdn,toggle_marking	^[ [ 6 ; 2 ~    Mark page down
+uparw,dnarw,begin_marking,pgup,toggle_marking	^[ [ 5 ; 2 ~    Mark page up
+dnarw,uparw,begin_marking,eof,toggle_marking	^[ [ 1 ; 6 F	Mark to end of file
+uparw,dnarw,begin_marking,bof,toggle_marking	^[ [ 1 ; 6 H	Mark to start of file
+rtarw,ltarw,begin_marking,eol,toggle_marking	^[ [ 1 ; 2 F	Mark to end of line
+ltarw,rtarw,begin_marking,bol,toggle_marking	^[ [ 1 ; 2 H	Mark to start of line
+bof,begin_marking,eof,toggle_marking			^A				Select all
+
+ Gnome-terminal
+ rtarw,ltarw,begin_marking,rtarw,toggle_marking	^[ [ 5 C        Mark right Gnome-terminal
+
+blkdel,nmark   ^[ [ 3 ; 5 -	Gnome-terminal Ctrl-Del
+blkdel,nmark   ^[ [ 3 ; 5 ~	Xterm Ctrl-Del
+
+
+ Extra functions not really part of JOE user interface:
+
+ delbol		^[ o		Delete to beginning of line
+ delbol		^[ ^O		Delete to beginning of line
+ 
+
+upslide		^[ w		Scroll up one line
+upslide		^[ ^W		Scroll up one line
+upslide		^[ W		Scroll up one line
+upslide,upslide,upslide,upslide		MWUP
+upslide		^[ [ 7 $	Rxvt Shift+Home
+
+dnslide		^[ z		Scroll down one line
+dnslide		^[ Z		Scroll down one line
+dnslide		^[ ^Z		Scroll down one line
+dnslide,dnslide,dnslide,dnslide		MWDOWN
+dnslide		^[ [ 8 $	Rxvt Shift+End
+
+
+compile		^[ c		Compile
+compile		^[ C
+compile		^[ ^C		Compile
+
+grep_find	^[ g		Grep
+grep_find	^[ G		Grep
+grep_find	^[ ^G		Grep
+
+execmd		^[ x		Prompt for command to execute
+execmd		^[ X		Prompt for command to execute
+execmd		^[ ^X		Prompt for command to execute
+
+finish		^[ ^I		Complete word in document
+finish		^[ ^M		Complete word: used to be math
+mwind,mfit,jump,bol		^[ SP
+notmod		^[ ~		Not modified
+mwind,mfit,prevw,nxterr		^[ =		To next error
+parserr		^[ e		Parse errors in current buffer
+parserr		^[ E		Parse errors in current buffer
+parserr		^[ ^E		Parse errors in current buffer
+mwind,mfit,prevw,prverr		^[ -		To previous error
+
+
+ isrch		^[ s		Forward incremental search
+ isrch		^[ S		Forward incremental search
+ isrch		^[ ^S		Forward incremental search
+ rsrch		^[ r		Backward incremental search
+ rsrch		^[ R		Backward incremental search
+ rsrch		^[ ^R		Backward incremental search
+isrch		^E
+rsrch		^[ e
+
+run			^[ !		Run a program in a window
+tomarkb		^[ b		Go to beginning of marked block
+tomarkb		^[ ^B		Go to beginning of marked block
+tomarkk		^[ k		Go to end of marked block
+tomarkk		^[ ^K		Go to end of marked block
+tomarkk		^[ K		Go to end of marked block
+txt			^[ i		Prompt for text and insert it
+txt			^[ I		Prompt for text and insert it
+
+
+toggle_marking	^@		Ctrl-space block selection method
+ insc		^@		Ctrl-space used to insert a space
+
+ bufed		^[ d		Menu of buffers
+ nbuf		^[ v		Next buffer
+ nbuf		^[ V		Next buffer
+ nbuf		^[ ^V		Next buffer
+ pbuf		^[ u		Prev buffer
+ pbuf		^[ U		Prev buffer
+ pbuf		^[ ^U		Prev buffer
+pbuf		^[ 9
+nbuf		^[ 0
+bufed		^[ 8
+
+ query		^[ q		Quoted insert
+ byte		^[ n		Goto byte
+ col		^[ c		Goto column
+ abortbuf	^[ k		Kill current buffer- don't mess with windows
+ ask		^[ a		Ask to save current buffer
+ bop		^[ p		Backwards paragraph
+ bos		^[ x		Bottom of screen
+ copy		^[ ^W		Copy block into yank
+ dupw		^[ \		Split window
+ eop		^[ n		Forwards paragraph
+ format		^[ j		Format paragraph ignore block
+ markl		^[ l		Mark line
+ nmark		^[ @		Turn off ^KB ^KK
+ pop		^[ >		Pop ^KB ^KK
+ psh		^[ <		Push ^KB ^KK
+ swap		^[ x		Swap ^KB and cursor
+ tomarkbk	^[ g		Switch between beginning and end of marked
+ tos		^[ e		Top of screen
+ tw0		^[ 0		Kill current window (orphans buffer)
+ tw1		^[ 1		Kill all other windows (orphans buffers)
+ uarg		^[ u		Universal argument
+
+ yank		^[ ^Y		Undelete previous text
+ yapp		^[ w		Append next delete to previous yank
+yank		^[ y		Undelete text
+yankpop		^[ ^Y		Undelete text
+yank		^[ Y		Undelete text
+yank		^[ [ 2 ; 5 -	Gnome-terminal Ctrl-Ins
+yank		^[ [ 2 ; 5 ~    Xterm Ctrl-Ins
+yank		^[ [ 2 ^	Rxvt Ctrl+Ins
+
+ Standard JOE user interface
+
+quote8		^\		Enter Meta chars
+ quote		`		Enter Ctrl chars
+quote		^[ '		Enter Ctrl chars
+quote		^Q
+
+backs		^?		Backspace
+ backw		^H		word
+backs		^H		RXVT/Cygwin is sending ^H (BS) for backspace
+
+bknd		^K '		Shell window
+blkcpy		^K C		Copy marked block
+blkcpy		^K ^C
+blkcpy		^K c
+blkdel		^K Y		Delete marked block
+blkdel		^K ^Y
+blkdel		^K y
+blkmove		^K M		Move marked block
+blkmove		^K ^M
+blkmove		^K m
+blksave		^K W		Save marked block
+blksave		^K ^W
+blksave		^K w
+home		.kh
+ home		^A
+center		^K A		Center line
+center		^K ^A
+center		^K a
+crawll		^K <		Pan left
+crawlr		^K >		Pan right
+delch		.kD		Delete character
+delch		^D
+ deleol		^J		Delete to end of line
+dellin		^Y		Delete entire line
+ delw		^W		Delete word to right
+delw		^[ [ 3 ^	Ctrl+Del
+
+dnarw		.kd		Go down
+dnarw		^[ O B
+dnarw		^[ [ B
+ dnarw		^# B
+ 
+edit		^K E		Edit a file
+edit		^K ^E
+edit		^K e
+edit		^O
+
+ bof		^K U		Goto beginning of file
+ bof		^K ^U
+ bof		^K u
+ eof		^K V		Go to end of file
+ eof		^K ^V
+ eof		^K v
+
+bof			^[ [ 7 ^	Rxvt Ctrl+Home
+eof			^[ [ 8 ^	Rxvt Ctrl+End
+
+bof			^[ [ 1 ; 5 H	mintty Ctrl+Home
+eof			^[ [ 1 ; 5 F	mintty Ctrl+End
+
+ bol		.kh		Goto beginning of line
+ bol		^A
+ bol      ^# SP A
+eol		.kH		Go to end of line
+eol		.@7
+ eol		^E
+
+exsave		^K X		Save and exit
+exsave		^K ^X
+exsave		^K x
+
+ffirst		^K F		Find first
+ffirst		^K ^F
+ffirst		^K f
+fnext		^L			Find next
+ffirst		^F
+fnext		^[ [ 1 3 ~	Rxvt F3
+fnext		^[ O R		Screen F3
+
+filt		^K /		Filter block
+ finish		^K ^M		Complete text under cursor
+fmtblk		^K J		Format paragraphs in block
+fmtblk		^K ^J
+fmtblk		^K j
+
+gomark		^[ 1 TO 7	Goto bookmark
+
+groww		^K G		Grow window
+groww		^K ^G
+groww		^K g
+
+insc		.kI		Insert a space
+ insc		^@
+insf		^K R		Insert a file
+insf		^K ^R
+insf		^K r
+lindent		^K ,		Indent to left
+
+ line		^K L		Goto line no.
+ line		^K ^L
+ line		^K l
+line		^G
+
+ltarw		.kl		Go left
+ ltarw		^B
+ltarw		^[ O D
+ltarw		^[ [ D
+ ltarw          ^# D
+
+macros		^[ d		Dump keyboard macros
+macros		^[ ^D
+
+markb		^K B		Set beginning of marked block
+markb		^K ^B
+markb		^K b
+markk		^K K		Set end of marked block
+markk		^K ^K
+markk		^K k
+
+mode		^T		Options menu
+
+
+ prevword	^Z		Previous word
+ nextword	^X		Goto next word
+prevword	^[ O d	Rxvt Ctrl+Left
+nextword	^[ O c	Rxvt Ctrl+Right
+prevword	^[ [ 1 ; 5 D	mintty Ctrl+Left
+nextword	^[ [ 1 ; 5 C	mintty Ctrl+Right
+
+open		^]		Split line
+redo		^^		Redo changes
+rindent		^K .		Indent to right
+rtarw		.kr		Go right
+rtarw		^[ O C
+rtarw		^[ [ C
+ rtarw          ^# C
+run		^K !		Run a shell command
+
+save		^K D		Save file
+save		^K S
+save		^K ^D
+save		^K ^S
+save		^K d
+save		^K s
+save		^S
+
+setmark		^[ ^[		Set bookmark
+shrinkw		^K T		Shrink window
+shrinkw		^K ^T
+shrinkw		^K t
+splitw		^K O		Split window
+splitw		^K ^O
+splitw		^K o
+stat		^K SP		Show status
+
+tag		^K ;			Tags file search
+tag		^[ O a			Ctrl+Up
+
+prevpos		^K -		Previous position in history
+prevpos		^[ <
+prevpos		^[ [ O b	Ctrl+Down
+nextpos		^K =		Goto next position in position history
+nextpos		^[ >
+
+ tomatch		^G		Goto matching parenthasis
+
+undo		^_		Undo changes
+undo		^Z
+
+uparw		.ku		Go up
+ uparw		^# A
+uparw		^[ O A
+uparw		^[ [ A
+
+:prompt			Prompt windows
+:inherit main
+if,"byte>size",then,complete,complete,else,delch,endif	^D
+complete	^I
+dnarw,eol	.kd		Go down
+dnarw,eol	^N
+dnarw,eol	^[ O B
+dnarw,eol	^[ [ B
+ dnarw,eol	^# B
+uparw,eol	.ku		Go up
+ uparw,eol	^# A
+uparw,eol	^P
+uparw,eol	^[ O A
+uparw,eol	^[ [ A
+
+:menu			Selection menus
+:inherit windows
+
+pgupmenu			^[ [ I
+
+pgdnmenu			^[ [ G
+
+bolmenu			^[ [ 1 ~		Putty, Linux, Cygwin
+bolmenu			^[ [ H			Xterm, Konsole
+bolmenu			^[ O H			gnome-terminal
+bolmenu			^[ [ 7 ~		RxVT
+ bolmenu			^# SP A		Amiga
+
+eolmenu			^[ [ 4 ~		Putty, Linux, Cygwin, ssh
+eolmenu			^[ [ F			Xterm, Konsole
+eolmenu			^[ O F			gnome-terminal
+eolmenu			^[ [ 8 ~		RxVT
+ eolmenu			^# SP @		Amiga
+
+abort		^[ ^[	Why?
+backsmenu	^?
+backsmenu	^H
+bofmenu		^K U
+bofmenu		^K ^U
+bofmenu		^K u
+bolmenu		.kh
+ bolmenu		^A
+dnarwmenu	.kd
+dnarwmenu	^N
+dnarwmenu	^[ [ B
+dnarwmenu	^[ O B
+ dnarwmenu ^# B
+dnarwmenu	MWDOWN
+eofmenu		^K V
+eofmenu		^K ^V
+eofmenu		^K v
+eolmenu		.kH
+eolmenu		^E
+ltarwmenu	.kl
+ltarwmenu	^B
+ltarwmenu	^[ [ D
+ltarwmenu	^[ O D
+ ltarwmenu ^# D
+pgdnmenu	.kN		Screen down
+pgdnmenu	^V
+pgdnmenu	^[ [ 6 ~
+ pgdnmenu  ^# S
+pgupmenu	.kP		Screen up
+pgupmenu	^U
+pgupmenu	^[ [ 5 ~
+ pgupmenu  ^# T
+rtarwmenu	.kr
+rtarwmenu	^F
+rtarwmenu	^[ [ C
+ rtarwmenu ^# C
+rtarwmenu	^[ O C
+rtn		SP
+rtn		^I
+rtn		^K H
+rtn		^K h
+rtn		^K ^H
+tabmenu		^I
+uparwmenu	.ku
+uparwmenu	^P
+uparwmenu	^[ [ A
+uparwmenu	^[ O A
+ uparwmenu ^# A
+uparwmenu	MWUP
+defm2down	M2DOWN		Hits return key
+
+:query			Single-key query window
+:inherit windows
+
+:querya			Single-key query window for quoting
+type		^@ TO ÿ
+
+:querysr		Search & replace query window
+type		^@ TO ÿ
+
