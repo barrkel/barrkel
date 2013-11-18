@@ -15,5 +15,5 @@ test -n "$1" || usage
 target="$1"
 shift
 
-ssh "$@" -t "$target" "screen -S $screen_name -dr || screen -S $screen_name"
+ssh -A "$@" -t "$target" "screen -S $screen_name -dr || screen -S $screen_name"
 
