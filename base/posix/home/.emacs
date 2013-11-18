@@ -501,6 +501,11 @@
             (subword-mode)
             (visual-line-mode)))
 
+;; Man
+(add-hook 'Man-mode-hook
+          (lambda ()
+            (linum-mode 0)))
+
 ;; Markdown
 (autoload 'markdown-mode "markdown-mode" "Major mode for editing Markdown files" t)
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
@@ -666,6 +671,7 @@ buffer instead of replacing the text in region."
 
 ;; search and replace
 (global-set-key (kbd "M-r") 'replace-regexp)
+(global-set-key (kbd "M-R") 'query-replace-regexp)
 (global-set-key (kbd "C-s") 'isearch-forward-regexp)
 (global-set-key (kbd "C-r") 'isearch-backward-regexp)
 
