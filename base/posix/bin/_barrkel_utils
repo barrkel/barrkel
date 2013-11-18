@@ -2,8 +2,13 @@
 
 function die # message
 {
-    echo "$(basename $0): fatal: $@"
+    echo "$(basename $0): fatal: $@" >/dev/stderr
     exit 255
+}
+
+function warn # message
+{
+    echo "$(basename $0): warn: $@" >/dev/stderr
 }
 
 # None of these bash functions should fork. If they require output, they use result
