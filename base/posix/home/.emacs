@@ -284,7 +284,6 @@
 
 (global-set-key (kbd "C-x b") 'helm-buffers-list)
 (global-set-key (kbd "M-x") 'helm-M-x)
-(global-set-key (kbd "M-G") 'helm-git-grep)
 
 
 ;;----------------------------------------
@@ -871,7 +870,7 @@ The CHAR is replaced and the point is put before CHAR."
   "Get 'interesting' text at point; either word, or region"
   (if mark-active
       (buffer-substring (mark) (point))
-    (word-at-point)))
+    (thing-at-point 'symbol)))
 
 (defvar current-highlight-word nil
   "Current word for toggle-word-highlight if any")
@@ -937,4 +936,29 @@ The CHAR is replaced and the point is put before CHAR."
 ;; (key-chord-mode 1)
 ;; (key-chord-define-global "JJ" 'helm-load-listing)
 ;; (key-chord-define-global "UU" 'undo-tree-visualize)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; SEMANTIC JUMPING
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun find-definition-at-point ()
+  "Try and find definition for thing at point"
+  (interactive)
+  (helm-git-grep-1 (format "\\(def\\|class\\|module\\) %s" (get-point-text))))
+(global-set-key (kbd "M-M") 'find-definition-at-point)
+
+(defun git-grep-text-at-point ()
+  "Git grep for select text, or word at point otherwise"
+  (interactive)
+  (helm-git-grep-1 (get-point-text)))
+(global-set-key (kbd "M-<up>") 'ace-jump-line-mode)
+
+(defun git-grep-selected-text ()
+  "Git grep for selected text"
+  (interactive)
+  (if mark-active
+      (helm-git-grep-1 (buffer-substring (mark) (point)))
+    (helm-git-grep)))
+(global-set-key (kbd "M-G") 'git-grep-selected-text)
 
