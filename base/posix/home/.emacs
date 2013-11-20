@@ -962,3 +962,19 @@ The CHAR is replaced and the point is put before CHAR."
     (helm-git-grep)))
 (global-set-key (kbd "M-G") 'git-grep-selected-text)
 
+
+(defun helm-occur-1 (initial-value)
+  "Preconfigured helm for Occur with initial input."
+  (setq helm-multi-occur-buffer-list (list (buffer-name (current-buffer))))
+  (helm-occur-init-source)
+  (helm :sources 'helm-source-occur
+        :buffer "*helm occur*"
+        :history 'helm-grep-history
+        :truncate-lines t
+        :input initial-value))
+(defun bk-helm-occur ()
+  "Invoke helm-occur with initial input configured from text at point"
+  (interactive)
+  (helm-occur-1 (get-point-text)))
+(global-set-key (kbd "M-o") 'bk-helm-occur)  
+;;(global-set-key (kbd "M-O") 'helm-occur)
