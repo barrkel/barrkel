@@ -1,0 +1,62 @@
+#!/bin/bash
+
+function die
+{
+    echo "$(basename $0): $*"
+    exit 1
+}
+
+test -z "$1" && {
+	echo "usage: $(basename $0) [-d <base-path>] [-v] <rar-files>"
+	echo "Unrars each rar file on the command line in its directory, optionally rooted at <base-path>."
+	echo "If the directory already exists, the rar will be skipped."
+	echo "  -k    Keep broken"
+	echo "  -v    Verbose mode"
+	exit 1
+}
+
+base_path=
+verbose=0
+args=
+
+while [ -n "$1" ]; do
+    case "$1" in
+        -d)
+            shift
+            test -d "$1" || die "Expected directory argument after '-d'"
+            base_path="$1"/
+            ;;
+
+        -k)
+            args="$args -kb"
+            ;;
+
+        -v)
+            verbose=1
+            ;;
+
+        *)
+            (( verbose )) && echo "Processing '$1'..."
+
+            name="$1"
+            # strip of ext
+            name="${name%.[Rr][Aa][Rr]}"
+            # strip of any path
+            name="${name##*/}"
+
+            if [ -n "$base_path" ]; then
+                dir="$base_path/$name"
+            else
+                dir="$(dirname "$1")/$name"
+            fi
+
+            test -d "$dir" || {
+                (( verbose )) && echo "unrar x $args '$1' '$dir'"
+                mkdir "$dir"
+                unrar x $args "$1" "$dir" > /dev/null
+            }
+            ;;
+    esac
+
+    shift
+done
