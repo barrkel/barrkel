@@ -1,0 +1,52 @@
+#!/bin/bash
+
+function die # message
+{
+    echo "$@" > /dev/stderr
+    exit 2
+}
+
+function now
+{
+    date +'%Y-%m-%d_%H-%M'
+}
+
+function usage # missing-arg
+{
+    test -n "$1" && {
+        echo "missing argument: $@"
+        echo
+    }
+
+    echo "usage: $(basename $0) <snapshot-base-name> <keep-count> <file-system>..."
+    echo "Creates snapshots with names like <snapshot-base-name>_2001-01-20_19-45."
+    echo "If there are more than keep-count snapshots after a new snapshot is created,"
+    echo "they will be deleted using a lexcographical sort with <snapshot-base-name>."
+    echo "Only the listed file systems will be snapshotted."
+    echo "Don't make <snapshot-base-name> a prefix of any other snapshot, or they may"
+    echo "be deleted."
+
+    exit 1
+}
+
+test -n "$1" || usage "<snapshot-base-name>"
+base_name="$1"; shift
+test -n "$1" || usage "<keep-count>"
+let keep_count=$1; shift
+(( keep_count <= 0 )) && die "<keep-count> must be positive"
+test -n "$1" || usage "<file-system>"
+
+set -e
+
+for fs; do
+
+    # create snapshot
+    zfs snapshot "${fs}@${base_name}_$(now)" || die "failed to snapshot $fs"
+
+    # delete old snapshots
+    zfs list -t snapshot | grep "${fs}@${base_name}_" | sort -r | \
+        tail -n +"${keep_count}" | awk '{ print $1 }' | 
+        while read -r line; do
+            zfs destroy "${line}"
+        done
+done
