@@ -1,15 +1,21 @@
 #!/bin/bash
 
-case "$1" in
-    s*)
-        xclip -o -sel primary
-        ;;
-    
-    c*)
-        xclip -o -sel clipboard
-        ;;
+if [[ -x "$(which xclip 2>/dev/stderr)" ]]; then
+    case "$1" in
+        s*)
+            xclip -o -sel primary
+            ;;
         
-    *)
-        xclip -o -sel clipboard
-        ;;
-esac
+        c*)
+            xclip -o -sel clipboard
+            ;;
+        
+        *)
+            xclip -o -sel clipboard
+            ;;
+    esac
+
+else
+    clip_file="/tmp/clipboard.$(id -un)"
+    test -f "$clip_file" && cat "$clip_file"
+fi

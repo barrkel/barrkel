@@ -1,12 +1,18 @@
 #!/bin/bash
 
-t=$(mktemp)
-cat "$@" > "$t"
+if [[ -x "$(which xclip 2>/dev/stderr)" ]]; then
 
-# xclip does something weird with the terminal when being called via Joe, so disconnect it
-(
-    setsid sh -c "xclip -i -sel primary  < $t"
-    setsid sh -c "xclip -i -sel secondary < $t"
-    setsid sh -c "xclip -i -sel clipboard < $t"
-    rm $t
-) >/dev/null 2>/dev/null </dev/null &
+    t=$(mktemp)
+    cat "$@" > "$t"
+
+    # xclip does something weird with the terminal when being called via Joe, so disconnect it
+    (
+        setsid sh -c "xclip -i -sel primary  < $t"
+        setsid sh -c "xclip -i -sel secondary < $t"
+        setsid sh -c "xclip -i -sel clipboard < $t"
+        rm $t
+    ) >/dev/null 2>/dev/null </dev/null &
+else
+    clip_file="/tmp/clipboard.$(id -un)"
+    cat - > "$clip_file"
+fi

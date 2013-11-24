@@ -1,0 +1,16 @@
+#!/bin/bash
+
+function usage
+{
+    echo "usage: $(basename $0) <prefix>"
+    echo "Move files into directories based on prefixes"
+    exit 1
+}
+
+test -n "$1" || usage
+
+for arg; do
+    mkdir "$arg"
+    mv "$arg"?* "$arg"
+done
+
