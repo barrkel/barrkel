@@ -5,4 +5,4 @@ test -d "$BARRKEL_HOME" || {
     exit
 }
 
-rdir "$BARRKEL_HOME" | grep '~$' | print0 | xargs -0 rm
+find "$BARRKEL_HOME" -type f | grep '~$' | print0 | xargs -0 rm
