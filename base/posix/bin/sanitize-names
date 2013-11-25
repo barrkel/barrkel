@@ -1,0 +1,41 @@
+#!/bin/bash
+
+. _barrkel_utils
+
+function process_files # files
+{
+    rename -v 's|[^A-Za-z0-9_.-]+|-|g;s|--+|-|g;s|-\.|.|g;s|-$||' -- "$@"
+}
+
+function process_dirs # dirs
+{
+    local dir
+    rename -v 's|[^A-Za-z0-9_-]+|-|g;s|--+|-|g;s|-\.|.|g;s|-$||' -- "$@"
+    for dir; do
+        (
+            echo "in $dir"
+            cd "$dir"
+            main *
+        )
+    done
+}
+
+function main
+{
+    local f
+    declare -a files
+    declare -a dirs
+
+    for f; do
+        if [[ -d "$f" ]]; then
+            array_add dirs "$f"
+        else
+            array_add files "$f"
+        fi
+    done
+
+    (( ${#files[@]} > 0 )) && process_files "${files[@]}"
+    (( ${#dirs[@]} > 0 )) && process_dirs "${dirs[@]}"
+}
+
+main "$@"
