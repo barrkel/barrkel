@@ -954,6 +954,8 @@ The CHAR is replaced and the point is put before CHAR."
 
 (define-key dired-mode-map (kbd "W") 'wdired-change-to-wdired-mode)
 
+;; regex for finding Java class definitions
+;; \(\(public\|private\|protected\|final\)[[:space:]]\+\)class[[:space:]]*\w\+[[:space:]]{
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; KEY CHORDING
