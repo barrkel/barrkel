@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if [ -z "$1" ]; then
+	echo "usage: $(basename $0) <info-topic>"
+	echo "Dumps an info topic tree to "'$PAGER'"."
+	exit 1
+fi
+
+info "$1" --subnodes -o - 2> /dev/null | $PAGER
+
