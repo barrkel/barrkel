@@ -357,6 +357,16 @@
   (set-face 'hi-yellow "black" "yellow"))
 (eval-after-load "hi-lock" '(setup-hilock-faces))
 
+(defun setup-company-faces ()
+  (set-face 'company-preview "white" "magenta")
+  (set-face 'company-preview-common "white" "magenta")
+  (set-face 'company-preview-search "white" "magenta")
+  (set-face 'company-tooltip "white" "magenta")
+  (set-face 'company-tooltip-common "white" "magenta")
+  (set-face 'company-tooltip-common-selection "black" "yellow")
+  (set-face 'company-tooltip-selection "black" "green"))
+(eval-after-load "company" '(setup-company-faces))
+
 (defun setup-ediff-faces ()
   (setq-default ediff-split-window-function 'split-window-sensibly)
   (set-face 'ediff-odd-diff-A "black" "red" 'bold)
