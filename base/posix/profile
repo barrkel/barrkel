@@ -43,9 +43,7 @@ fi
 # initialization
 #--------------------------------------------------------------------------------
 eval "$(dircolors -b ~/.dircolors)"
-stty-sane
+test -n "$SSH_CONNECTION" || stty-sane
 
 [ -x "$(which fortune 2>/dev/null)" ] && fortune -a
-
-
 
