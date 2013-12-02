@@ -2,40 +2,37 @@
 
 . _barrkel_utils
 
-function process_files # files
+set -e
+
+function sanitize_tree # dir
 {
-    rename -v 's|[^A-Za-z0-9_.-]+|-|g;s|--+|-|g;s|-\.|.|g;s|-$||' -- "$@"
+    test -d "$1" || return 1
+    (
+        cd "$1"
+        declare -a files dirs
+
+        for f in *; do
+            if [[ -d "$f" ]]; then
+                array_add dirs "$f"
+            else
+                array_add files "$f"
+            fi
+        done
+
+        (( ${#files[@]} > 0 )) && rename -v 's|[^A-Za-z0-9_.-]+|-|g;s|--+|-|g;s|-\.|.|g;s|-$||;s|^-||' -- "${files[@]}"
+        (( ${#dirs[@]} > 0 )) &&  rename -v 's|[^A-Za-z0-9_-]+|-|g;s|--+|-|g;s|-\.|.|g;s|-$||;s|^-||' -- "${dirs[@]}"
+
+        for f in *; do
+            test -d "$f" || continue
+            sanitize_tree "$f"
+        done
+    )
 }
 
-function process_dirs # dirs
-{
-    local dir
-    rename -v 's|[^A-Za-z0-9_-]+|-|g;s|--+|-|g;s|-\.|.|g;s|-$||' -- "$@"
-    for dir; do
-        (
-            echo "in $dir"
-            cd "$dir"
-            main *
-        )
-    done
-}
-
-function main
-{
-    local f
-    declare -a files
-    declare -a dirs
-
-    for f; do
-        if [[ -d "$f" ]]; then
-            array_add dirs "$f"
-        else
-            array_add files "$f"
-        fi
-    done
-
-    (( ${#files[@]} > 0 )) && process_files "${files[@]}"
-    (( ${#dirs[@]} > 0 )) && process_dirs "${dirs[@]}"
-}
-
-main "$@"
+for d; do
+    if [[ -d "$d" ]]; then
+        sanitize_tree "$d"
+    else
+        echo "skipping $d"
+    fi
+done

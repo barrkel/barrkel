@@ -1,0 +1,31 @@
+#!/bin/bash
+
+. _barrkel_utils
+
+set -e
+
+function usage
+{
+    echo "usage: $(basename $0) <directory>..."
+    echo "Moves directories in <directory> into <directory>/.., taking account of <directory>-named files"
+    exit 1
+}
+
+test -d "$1" || usage
+
+for dir; do
+    test -d "$dir" || continue
+    (
+        cd "$(dirname "$dir")" || die "couldn't chdir to directory of '$dir'"
+        base="$(basename "$dir")"
+        exists_file "$base"/* && {
+            echo "warning: skipping '$dir' because files exist in it"
+            exit
+        }
+        mkdir tmp.$$
+        mv "$base"/* tmp.$$/
+        rmdir "$base"
+        mv tmp.$$/* .
+        rmdir tmp.$$
+    ) || exit 1
+done

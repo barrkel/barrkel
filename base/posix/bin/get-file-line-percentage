@@ -1,0 +1,26 @@
+#!/bin/bash
+
+set -e
+
+function usage
+{
+    echo "usage: $(basename $0) <file> <line>"
+    echo "Looks for line in file and prints percentage corresponding to position"
+    exit 1
+}
+
+test -f "$1" || usage
+test -n "$2" || usage
+
+line_pos=$(fgrep -n -e "$2" "$1" | cut -d : -f 1) || {
+    echo '???'
+    exit 2
+}
+line_count=$(wc -l < "$1")
+
+if (( line_count == line_pos )); then
+    echo '100%'
+else
+    percent=$(printf 'scale=2\n100 * %d / %d\n' $line_pos $line_count | bc)
+    echo "$percent%"
+fi
