@@ -154,7 +154,7 @@ function build_initial_profile
 
     printf 'export BARRKEL_HOME='%s'\n' "$barrkel"                  >  "$staging/.bashrc"
     printf "source '%s'\\n" "$_utils"                               >> "$staging/.bashrc"
-    printf '[[ -z "$BARRKEL_PROFILE" && -z "$SSH_CONNECTION" ]] && source ~/.bash_profile\n' >> "$staging/.bashrc"
+    printf '[[ -z "$BARRKEL_PROFILE" ]] && source ~/.bash_profile\n' >> "$staging/.bashrc"
 }
 
 function symlink_files # from-dir to-dir
