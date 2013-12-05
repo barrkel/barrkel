@@ -1026,6 +1026,7 @@ The CHAR is replaced and the point is put before CHAR."
   "Attempt to set up eclim"
   (interactive)
   (require 'eclimd)
+  (global-eclim-mode 1)
   (setq eclim-eclipse-dirs '("~/apps/eclipse"))
   
   (require 'company-emacs-eclim)
@@ -1046,6 +1047,8 @@ The CHAR is replaced and the point is put before CHAR."
   (setq eclimd-default-workspace "~/workspace")
   (setq eclim-executable "~/apps/eclipse/eclim"))
 
-(add-hook 'eclim-mode-hook 'bjk-setup-eclim)
-
+(defun recompile-all-the-things ()
+  "Recompile all out of date .el files in ~/.emacs.d"
+  (interactive)
+  (byte-recompile-directory (expand-file-name "~/.emacs.d") 0))
 
