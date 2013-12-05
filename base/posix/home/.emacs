@@ -451,14 +451,15 @@
 (global-set-key (kbd "C-@") 'indent-for-tab-command)
 (global-set-key (kbd "M-`") 'hippie-expand)
 (global-set-key (kbd "M-?") 'hippie-expand) ;; M-S-/
-(global-set-key (kbd "TAB") 'self-insert-command) ;; should be smarter
+(global-set-key (kbd "TAB") 'indent-for-tab-command)
+;;(global-set-key (kbd "TAB") 'self-insert-command) ;; should be smarter
 ;; move mark begin to be like C-k b in Joe
 (global-set-key (kbd "C-c b") 'set-mark-command)
 (global-set-key (kbd "C-c SPC") 'set-mark-command)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; LANGUAGE MODE CONFIG
+;; MODE CONFIG
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; C
@@ -1016,3 +1017,35 @@ The CHAR is replaced and the point is put before CHAR."
   (helm-occur-1 (get-point-text)))
 (global-set-key (kbd "M-o") 'bk-helm-occur)  
 ;;(global-set-key (kbd "M-O") 'helm-occur)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; eclim support
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun bjk-setup-eclim ()
+  "Attempt to set up eclim"
+  (interactive)
+  (require 'eclimd)
+  (setq eclim-eclipse-dirs '("~/apps/eclipse"))
+  
+  (require 'company-emacs-eclim)
+  (company-emacs-eclim-setup)
+  (global-company-mode t)
+  (local-set-key (kbd "C-@") 'company-complete)
+
+  ;; ;; regular auto-complete initialization
+  ;; (require 'auto-complete-config)
+  ;; (ac-config-default)
+
+  ;; ;; add the emacs-eclim source
+  ;; (require 'ac-emacs-eclim-source)
+  ;; (ac-emacs-eclim-config)
+  ;; (auto-complete-mode t)
+
+  (setq eclim-use-yasnippet nil)
+  (setq eclimd-default-workspace "~/workspace")
+  (setq eclim-executable "~/apps/eclipse/eclim"))
+
+(add-hook 'eclim-mode-hook 'bjk-setup-eclim)
+
+
