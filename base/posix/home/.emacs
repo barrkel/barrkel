@@ -1033,6 +1033,7 @@ The CHAR is replaced and the point is put before CHAR."
   (company-emacs-eclim-setup)
   (global-company-mode t)
   (local-set-key (kbd "C-@") 'company-complete)
+  (local-set-key (kbd "M-.") 'eclim-java-find-declaration)
 
   ;; ;; regular auto-complete initialization
   ;; (require 'auto-complete-config)

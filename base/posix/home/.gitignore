@@ -1,6 +1,7 @@
 *~
 \#*\#
 .emacs.desktop*
+.dir-locals.el
 .listing
 .listing.sh
 TAGS
