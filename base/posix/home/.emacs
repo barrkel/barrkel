@@ -280,6 +280,8 @@
 (define-key helm-map (kbd "M-[") nil)
 (helm-mode)
 
+(setq helm-ff-auto-update-initial-value nil)
+
 (global-set-key (kbd "C-x b") 'helm-buffers-list)
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (global-set-key (kbd "M-x") 'helm-M-x)
