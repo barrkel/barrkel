@@ -4,8 +4,6 @@
 
 (setq term-original (getenv "TERM"))
 
-  
-
 (defun fix-mintty-inputs ()
   "Fix inputs for mintty"
   (interactive)
@@ -291,6 +289,11 @@
 ;; robe
 ;;----------------------------------------
 (setq robe-completing-read-func 'helm-completing-read-default)
+
+
+;; unique file names that would otherwise be duplicates
+(require 'uniquify)
+(setq-default uniquify-buffer-name-style 'post-forward)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -679,11 +682,15 @@ buffer instead of replacing the text in region."
 (global-set-key (kbd "C-x _") 'shrink-window)
 (global-set-key (kbd "ESC <deletechar>") 'kill-word) ;; alt delete
 
-;; navigation start
-(global-set-key (kbd "ESC <S-left>") 'pop-global-mark) ;; alt shift left
-(global-set-key (kbd "ESC <left>") 'pop-to-mark-command) ;; alt left
-(global-set-key (kbd "M-S-<left>") 'pop-global-mark) ;; alt shift left
-(global-set-key (kbd "M-<left>") 'pop-to-mark-command) ;; alt left
+;; window manipulation
+(global-set-key (kbd "ESC <left>") 'windmove-left)
+(global-set-key (kbd "M-<left>") 'windmove-left)
+(global-set-key (kbd "ESC <right>") 'windmove-right)
+(global-set-key (kbd "M-<right>") 'windmove-right)
+(global-set-key (kbd "ESC <up>") 'windmove-up)
+(global-set-key (kbd "M-<up>") 'windmove-up)
+(global-set-key (kbd "ESC <down>") 'windmove-down)
+(global-set-key (kbd "M-<down>") 'windmove-down)
 
 ;; scrolling
 (defun scroll-up-line-other-window ()
@@ -991,7 +998,6 @@ The CHAR is replaced and the point is put before CHAR."
   "Git grep for select text, or word at point otherwise"
   (interactive)
   (helm-git-grep-1 (get-point-text)))
-(global-set-key (kbd "M-<up>") 'ace-jump-line-mode)
 
 (defun git-grep-selected-text ()
   "Git grep for selected text"
