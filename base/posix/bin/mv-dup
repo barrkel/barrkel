@@ -1,0 +1,43 @@
+#!/bin/bash
+
+. _barrkel_utils
+
+function usage
+{
+    echo "usage: $(basename $0) <files...> <target>"
+    echo "Moves files into target directory, renaming by appending a number to avoid conflicts."
+    exit 1
+}
+
+test -e "$1" || usage
+
+declare -a files
+
+array_add files "$@"
+
+last_index=$((${#files[@]} - 1))
+target="${files[$last_index]}"
+
+test -d "$target" || die "'$target' is not a directory."
+
+function move_file
+{
+    # echo "moving '$1' to '$target'"
+    
+    local name="$(basename "$1")"
+    
+    local base="${name%%.*}"
+    local ext="${name#$base}"
+    local i=1
+    
+    while [ -e "$target"/"$name" ]; do
+        name="$(printf '%s-%3.3d%s' "$base" "$i" "$ext")"
+        let ++i
+    done
+    
+    mv "$1" "$target"/"$name"
+}
+
+for ((i=0; i< $last_index; ++i)); do
+    move_file "${files[$i]}"
+done
