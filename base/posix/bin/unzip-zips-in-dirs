@@ -7,15 +7,18 @@ function die
 }
 
 test -z "$1" && {
-	echo "usage: $(basename $0) [-d <basePath>] [-v] <zip-files>"
+	echo "usage: $(basename $0) [-d <basePath>] [options] <zip-files>"
 	echo "Unzips each zip file on the command line in its directory, optionally rooted at basePath."
 	echo "If the directory already exists, the zip will be skipped."
+    echo "options:"
 	echo "  -v    Verbose mode"
+    echo "  -k    Keep broken unzips"
 	exit 1
 }
 
 base_path=
 verbose=0
+keep=0
 
 while [ -n "$1" ]; do
     
@@ -25,12 +28,16 @@ while [ -n "$1" ]; do
             test -d "$1" || die "Expected directory argument after '-d'"
             base_path="$1"
             ;;
-        
+
+        -k)
+            keep=1
+            ;;
+
         -v)
             shift
             verbose=1
             ;;
-        
+
         *)
             (( verbose )) &&
                 echo "Processing '$1'..."
@@ -43,12 +50,12 @@ while [ -n "$1" ]; do
             
             if [ ! -d "$dir" ]; then 
                 unzip -b -qq -d "$dir" "$1" || {
-                    rm -rf "$dir"
+                    (( keep )) || rm -rf "$dir"
                 }
             fi
             ;;
     esac
-    
+
     shift
 done
 
