@@ -1,0 +1,40 @@
+#!/bin/bash # not really
+
+# Implement terminal title support.
+
+. _barrkel_utils
+
+test -n "$TERM_TITLE" || {
+    declare -a TERM_TITLE_STACK
+    # Default title
+    declare TERM_TITLE="Barry's Bash"
+    
+    export TERM_TITLE_STACK TERM_TITLE
+}
+
+function title_set # title
+{
+    test -n "$1" || {
+        echo "usage: set-title <title>"
+        echo "Changes terminal title to the given title."
+        return 1
+    } 
+
+    printf "\033]2;$1\007"
+    TERM_TITLE="$1"
+}
+
+function title_push # title
+{
+    array_add TERM_TITLE_STACK "$TERM_TITLE"
+    title_set "$1"
+}
+
+function title_pop
+{
+    local prev
+    
+    prev=$(array_get_last TERM_TITLE_STACK)
+    array_pop TERM_TITLE_STACK
+    title_set "$prev"
+}
