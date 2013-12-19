@@ -1,0 +1,86 @@
+#!/bin/bash
+
+. _barrkel_utils
+
+function usage
+{
+	echo "usage: $(basename $0) [options] <image>..."
+	echo "Prints photo dates, one for each image."
+	echo "Date is retrieved from photo if it exists, otherwise from file."
+	echo "Options:"
+	echo "  -q   Quick operation: only look at file time, not EXIF data (default)."
+	echo "  -q-  Use EXIF information."
+	echo "  -t   Include time info."
+	exit 1
+}
+
+test -n "$1" || usage
+
+quick=1
+time=0
+
+function get-date
+{
+    local result
+    local format
+    
+    case "$1" in
+        *.jpg | *.JPG)
+            (( quick == 0 )) &&
+                result="$(gm identify -format '%[EXIF:DateTimeOriginal]' "$1")"
+            ;;
+    esac
+    
+    if [ -n "$result" ]; then
+        result="${result/:/-}" # first
+        result="${result/:/-}" # second
+        result="${result/./}" # Clip final '.'
+    else
+        result="$(date -r "$1")"
+    fi
+    
+    if (( time == 0 )); then
+        format=+'%Y-%m-%d'
+    else
+        format=+'%Y-%m-%d_%H-%M-%S'
+    fi
+    
+    date -d "$result" "$format"
+}
+
+while [ -n "$1" ]; do
+    
+    case "$1" in
+        
+        -q)
+            quick=1
+            shift
+            continue
+            ;;
+        
+        -q-)
+            quick=0
+            shift
+            continue
+            ;;
+        
+        -t)
+            time=1
+            shift
+            continue
+            ;;
+            
+        -t-)
+            time=0
+            shift
+            continue
+            ;;
+        
+        *)
+            test -f "$1" || usage
+            ;;
+    esac
+    
+    get-date "$1"
+    shift
+done
