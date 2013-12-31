@@ -251,14 +251,16 @@ function pathlist_append # pathvar path...
         shift
     }
 
-    local __X__values
+    local __X__append_values
     local __X__arg
 
-    string_split "${!__X__var}" "$__X__sep" __X__values
+    string_split "${!__X__var}" "$__X__sep" __X__append_values
     for __X__arg; do
-        array_contains __X__values "$__X__arg" || array_add __X__values "$__X__arg"
+        array_contains __X__append_values "$__X__arg" || {
+            array_add __X__append_values "$__X__arg"
+        }
     done
-    array_join __X__values "$__X__sep" "$__X__var"
+    array_join __X__append_values "$__X__sep" "$__X__var"
 }
 
 function pathlist_prepend # pathvar path...
