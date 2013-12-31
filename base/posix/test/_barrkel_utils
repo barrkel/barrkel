@@ -362,6 +362,10 @@ function test_pathlist_append
     x=a:b
     pathlist_append x c d e
     eq "$x" a:b:c:d:e
+
+    x=a:b:c
+    pathlist_append x d a 1 b 2 c
+    eq "$x" a:b:c:d:1:2
 }
 
 function test_pathlist_prepend
