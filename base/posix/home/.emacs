@@ -917,13 +917,19 @@ The CHAR is replaced and the point is put before CHAR."
       (buffer-substring (mark) (point))
     (thing-at-point 'symbol)))
 
+(defun get-point-regex ()
+  "Get 'interesting' text at point as a regex, with word boundaries if symbol"
+  (if mark-active
+      (regexp-quote (buffer-substring (mark) (point)))
+    (concat "\\<" (regexp-quote (thing-at-point 'symbol)) "\\>")))
+
 (defvar current-highlight-word nil
   "Current word for toggle-word-highlight if any")
 (make-variable-buffer-local 'current-highlight-word)
 (defun toggle-word-highlight ()
   "Toggle highlight of word-at-point"
   (interactive)
-  (let ((new-word (regexp-quote (get-point-text))))
+  (let ((new-word (get-point-regex)))
     (unhighlight-regexp current-highlight-word)
     (if (equal new-word current-highlight-word)
         (setq-local current-highlight-word nil)
