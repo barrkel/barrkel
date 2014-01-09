@@ -95,29 +95,42 @@
 ;; screen/rxvt   => TERM=screen.rxvt
 ;; Screen generally passes extended keys through unaltered.
 
-;; screen/rxvt
-(when (string= (getenv "TERM") "screen.rxvt")
-  (fix-rxvt-inputs)
-  (fix-rxvt-screen-inputs))
-;; rxvt
-(when (string= (getenv "TERM") "rxvt")
-  (fix-rxvt-inputs))
-;; mintty
-(defadvice terminal-init-xterm (after fix-mintty-advice)
-  "Initialize mintty input map"
-  (fix-mintty-inputs))
-(ad-activate 'terminal-init-xterm)
+;; ;; screen/rxvt
+;; (when (string= (getenv "TERM") "screen.rxvt")
+;;   (fix-rxvt-inputs)
+;;   (fix-rxvt-screen-inputs))
+;; ;; rxvt
+;; (when (string= (getenv "TERM") "rxvt")
+;;   (fix-rxvt-inputs))
 ;;(when (string= (getenv "TERM") "xterm")
 ;;  (fix-mintty-inputs))
-
-;; screen/mintty
-;; actually, screen in mintty
-(defadvice terminal-init-screen (after fix-mintty-screen-advice)
-  (fix-mintty-inputs))
-(ad-activate 'terminal-init-screen)
 ;; (when (string= (getenv "TERM") "screen")
 ;;   (fix-mintty-inputs)
 ;;   (fix-mintty-screen-inputs))
+
+;; mintty
+(defadvice terminal-init-xterm (after fix-xterm-init)
+  "Initialize mintty input map"
+  (fix-mintty-inputs))
+(ad-activate 'terminal-init-xterm)
+
+(defun terminal-init-rxvt ()
+  (message "terminal-init-rxvt")
+  (fix-rxvt-inputs))
+
+(defun terminal-init-screen.rxvt ()
+  (message "terminal-init-screen.rxvt")
+  (fix-rxvt-inputs)
+  (fix-rxvt-screen-inputs))
+
+;; screen/mintty
+;; actually, screen in mintty
+(defadvice terminal-init-screen (after fix-screen-init)
+  "Initialize screen input map"
+  (message "in terminal-init-screen, TERM=%s" (getenv "TERM"))
+  (fix-mintty-inputs)
+  (fix-mintty-screen-inputs))
+(ad-activate 'terminal-init-screen)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MISC INIT
