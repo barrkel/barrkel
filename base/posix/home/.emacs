@@ -103,13 +103,21 @@
 (when (string= (getenv "TERM") "rxvt")
   (fix-rxvt-inputs))
 ;; mintty
-(when (string= (getenv "TERM") "xterm")
+(defadvice terminal-init-xterm (after fix-mintty-advice)
+  "Initialize mintty input map"
   (fix-mintty-inputs))
+(ad-activate 'terminal-init-xterm)
+;;(when (string= (getenv "TERM") "xterm")
+;;  (fix-mintty-inputs))
+
 ;; screen/mintty
 ;; actually, screen in mintty
-(when (string= (getenv "TERM") "screen")
-  (fix-mintty-inputs)
-  (fix-mintty-screen-inputs))
+(defadvice terminal-init-screen (after fix-mintty-screen-advice)
+  (fix-mintty-inputs))
+(ad-activate 'terminal-init-screen)
+;; (when (string= (getenv "TERM") "screen")
+;;   (fix-mintty-inputs)
+;;   (fix-mintty-screen-inputs))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MISC INIT
@@ -203,6 +211,9 @@
   (add-to-list 'package-archives
                '("melpa" . "http://melpa.milkbox.net/packages/"))
   (package-initialize))
+
+;; my custom libraries
+(add-to-list 'load-path "~/.emacs.d/init/")
 
 ;; plugins; everything in plugins, and subdirectories
 (add-to-list 'load-path "~/.emacs.d/plugins/")
@@ -917,13 +928,19 @@ The CHAR is replaced and the point is put before CHAR."
       (buffer-substring (mark) (point))
     (thing-at-point 'symbol)))
 
+(defun get-point-regex ()
+  "Get 'interesting' text at point as a regex, with word boundaries if symbol"
+  (if mark-active
+      (regexp-quote (buffer-substring (mark) (point)))
+    (concat "\\<" (regexp-quote (thing-at-point 'symbol)) "\\>")))
+
 (defvar current-highlight-word nil
   "Current word for toggle-word-highlight if any")
 (make-variable-buffer-local 'current-highlight-word)
 (defun toggle-word-highlight ()
   "Toggle highlight of word-at-point"
   (interactive)
-  (let ((new-word (regexp-quote (get-point-text))))
+  (let ((new-word (get-point-regex)))
     (unhighlight-regexp current-highlight-word)
     (if (equal new-word current-highlight-word)
         (setq-local current-highlight-word nil)
