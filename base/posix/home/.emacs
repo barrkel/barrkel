@@ -392,6 +392,11 @@
   (set-face 'ediff-current-diff-Ancestor "black" "yellow"))
 (eval-after-load "ediff" '(setup-ediff-faces))
 
+(defun setup-nxml-faces ()
+  ;; todo
+  (define-key nxml-mode-map (kbd "M-h") nil))
+(eval-after-load "nxml" '(setup-nxml-faces))
+
 (set-face 'match "black" "blue")
 
 (set-face 'linum "magenta")
@@ -597,6 +602,11 @@
           (lambda ()
             (visual-line-mode)
             (set-tab-style nil 2)))
+
+;; XML
+(add-hook 'nxml-mode-hook
+          (lambda ()
+            (define-key nxml-mode-map (kbd "M-h") nil)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; END MODE CONFIG
