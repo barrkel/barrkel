@@ -1,7 +1,7 @@
 BoldAsFont=yes
 CursorType=line
 CursorBlinks=yes
-Font=Dina
+Font=Dina TTF
 FontHeight=8
 FontSmoothing=full
 BoldAsColour=yes
