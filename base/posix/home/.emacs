@@ -103,13 +103,21 @@
 (when (string= (getenv "TERM") "rxvt")
   (fix-rxvt-inputs))
 ;; mintty
-(when (string= (getenv "TERM") "xterm")
+(defadvice terminal-init-xterm (after fix-mintty-advice)
+  "Initialize mintty input map"
   (fix-mintty-inputs))
+(ad-activate 'terminal-init-xterm)
+;;(when (string= (getenv "TERM") "xterm")
+;;  (fix-mintty-inputs))
+
 ;; screen/mintty
 ;; actually, screen in mintty
-(when (string= (getenv "TERM") "screen")
-  (fix-mintty-inputs)
-  (fix-mintty-screen-inputs))
+(defadvice terminal-init-screen (after fix-mintty-screen-advice)
+  (fix-mintty-inputs))
+(ad-activate 'terminal-init-screen)
+;; (when (string= (getenv "TERM") "screen")
+;;   (fix-mintty-inputs)
+;;   (fix-mintty-screen-inputs))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MISC INIT
@@ -203,6 +211,9 @@
   (add-to-list 'package-archives
                '("melpa" . "http://melpa.milkbox.net/packages/"))
   (package-initialize))
+
+;; my custom libraries
+(add-to-list 'load-path "~/.emacs.d/init/")
 
 ;; plugins; everything in plugins, and subdirectories
 (add-to-list 'load-path "~/.emacs.d/plugins/")

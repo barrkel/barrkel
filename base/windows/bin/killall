@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if test -z "$1"; then
+    echo "usage: $(basename $0) <grep-spec>..."
+    echo "Kills all specified processes."
+    exit
+fi
+
+while [ -n "$1" ]; do
+    ps -W | grep -i "$1" | cut -b -10 | xargs kill -f
+    shift
+done
