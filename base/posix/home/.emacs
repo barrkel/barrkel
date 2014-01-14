@@ -490,6 +490,7 @@
 ;; move mark begin to be like C-k b in Joe
 (global-set-key (kbd "C-c b") 'set-mark-command)
 (global-set-key (kbd "C-c SPC") 'set-mark-command)
+(global-set-key (kbd "C-x SPC") 'set-mark-command)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
