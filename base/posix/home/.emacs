@@ -8,6 +8,7 @@
   "Fix inputs for mintty"
   (interactive)
 
+  (message "Fixing mintty inputs")
   ;; Define a mintty key modifiers based on mintty's encoding
   ;; Pattern should use %d where the modifier digit goes
     ;; n -> n-1 in binary => 1: shift, 2: meta, 4: control
@@ -58,6 +59,7 @@
 (defun fix-rxvt-inputs ()
   "Fix inputs for rxvt"
   (interactive)
+  (message "Fixing rxvt inputs")
   (define-key input-decode-map "\e[a" (kbd "S-<up>"))
   (define-key input-decode-map "\e[b" (kbd "S-<down>"))
   (define-key input-decode-map "\e[7$" (kbd "S-<home>"))
@@ -114,9 +116,11 @@
   (fix-mintty-inputs))
 (ad-activate 'terminal-init-xterm)
 
-(defun terminal-init-rxvt ()
-  (message "terminal-init-rxvt")
+(message (concat "terminal init section TERM=" (getenv "TERM")))
+(defadvice terminal-init-rxvt (after fix-rxvt-init)
+  "Initialize rxvt input map"
   (fix-rxvt-inputs))
+(ad-activate 'terminal-init-rxvt)
 
 (defun terminal-init-screen.rxvt ()
   (message "terminal-init-screen.rxvt")
