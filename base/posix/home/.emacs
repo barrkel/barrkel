@@ -8,6 +8,7 @@
   "Fix inputs for mintty"
   (interactive)
 
+  (message "Fixing mintty inputs")
   ;; Define a mintty key modifiers based on mintty's encoding
   ;; Pattern should use %d where the modifier digit goes
     ;; n -> n-1 in binary => 1: shift, 2: meta, 4: control
@@ -58,6 +59,7 @@
 (defun fix-rxvt-inputs ()
   "Fix inputs for rxvt"
   (interactive)
+  (message "Fixing rxvt inputs")
   (define-key input-decode-map "\e[a" (kbd "S-<up>"))
   (define-key input-decode-map "\e[b" (kbd "S-<down>"))
   (define-key input-decode-map "\e[7$" (kbd "S-<home>"))
@@ -95,29 +97,44 @@
 ;; screen/rxvt   => TERM=screen.rxvt
 ;; Screen generally passes extended keys through unaltered.
 
-;; screen/rxvt
-(when (string= (getenv "TERM") "screen.rxvt")
-  (fix-rxvt-inputs)
-  (fix-rxvt-screen-inputs))
-;; rxvt
-(when (string= (getenv "TERM") "rxvt")
-  (fix-rxvt-inputs))
-;; mintty
-(defadvice terminal-init-xterm (after fix-mintty-advice)
-  "Initialize mintty input map"
-  (fix-mintty-inputs))
-(ad-activate 'terminal-init-xterm)
+;; ;; screen/rxvt
+;; (when (string= (getenv "TERM") "screen.rxvt")
+;;   (fix-rxvt-inputs)
+;;   (fix-rxvt-screen-inputs))
+;; ;; rxvt
+;; (when (string= (getenv "TERM") "rxvt")
+;;   (fix-rxvt-inputs))
 ;;(when (string= (getenv "TERM") "xterm")
 ;;  (fix-mintty-inputs))
-
-;; screen/mintty
-;; actually, screen in mintty
-(defadvice terminal-init-screen (after fix-mintty-screen-advice)
-  (fix-mintty-inputs))
-(ad-activate 'terminal-init-screen)
 ;; (when (string= (getenv "TERM") "screen")
 ;;   (fix-mintty-inputs)
 ;;   (fix-mintty-screen-inputs))
+
+;; mintty
+(defadvice terminal-init-xterm (after fix-xterm-init)
+  "Initialize mintty input map"
+  (fix-mintty-inputs))
+(ad-activate 'terminal-init-xterm)
+
+(message (concat "terminal init section TERM=" (getenv "TERM")))
+(defadvice terminal-init-rxvt (after fix-rxvt-init)
+  "Initialize rxvt input map"
+  (fix-rxvt-inputs))
+(ad-activate 'terminal-init-rxvt)
+
+(defun terminal-init-screen.rxvt ()
+  (message "terminal-init-screen.rxvt")
+  (fix-rxvt-inputs)
+  (fix-rxvt-screen-inputs))
+
+;; screen/mintty
+;; actually, screen in mintty
+(defadvice terminal-init-screen (after fix-screen-init)
+  "Initialize screen input map"
+  (message "in terminal-init-screen, TERM=%s" (getenv "TERM"))
+  (fix-mintty-inputs)
+  (fix-mintty-screen-inputs))
+(ad-activate 'terminal-init-screen)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MISC INIT
@@ -403,6 +420,11 @@
   (set-face 'ediff-current-diff-Ancestor "black" "yellow"))
 (eval-after-load "ediff" '(setup-ediff-faces))
 
+(defun setup-nxml-faces ()
+  ;; todo
+  (define-key nxml-mode-map (kbd "M-h") nil))
+(eval-after-load "nxml" '(setup-nxml-faces))
+
 (set-face 'match "black" "blue")
 
 (set-face 'linum "magenta")
@@ -472,6 +494,7 @@
 ;; move mark begin to be like C-k b in Joe
 (global-set-key (kbd "C-c b") 'set-mark-command)
 (global-set-key (kbd "C-c SPC") 'set-mark-command)
+(global-set-key (kbd "C-x SPC") 'set-mark-command)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -608,6 +631,11 @@
           (lambda ()
             (visual-line-mode)
             (set-tab-style nil 2)))
+
+;; XML
+(add-hook 'nxml-mode-hook
+          (lambda ()
+            (define-key nxml-mode-map (kbd "M-h") nil)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; END MODE CONFIG
