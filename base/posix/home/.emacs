@@ -495,6 +495,8 @@
 (global-set-key (kbd "C-c b") 'set-mark-command)
 (global-set-key (kbd "C-c SPC") 'set-mark-command)
 (global-set-key (kbd "C-x SPC") 'set-mark-command)
+(global-set-key (kbd "C-c C-SPC") 'set-mark-command)
+(global-set-key (kbd "C-x C-SPC") 'set-mark-command)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1106,3 +1108,4 @@ The CHAR is replaced and the point is put before CHAR."
   (interactive)
   (byte-recompile-directory (expand-file-name "~/.emacs.d") 0))
 
+(put 'upcase-region 'disabled nil)
