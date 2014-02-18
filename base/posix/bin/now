@@ -1,2 +1,11 @@
 #!/bin/bash
-date +'%Y-%m-%d_%H-%M'
+
+case "$1" in
+    -s)
+        date +'%Y-%m-%d_%H-%M-%S'
+        ;;
+
+    *)
+        date +'%Y-%m-%d_%H-%M'
+        ;;
+esac
