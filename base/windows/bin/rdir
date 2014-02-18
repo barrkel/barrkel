@@ -37,6 +37,7 @@ orig_pwd="$PWD"
 # We need to replace physical path with nothing to get relative
 # path in that case.
 physical_wd="$(pwd -P)"
+cygwin_wd="$(pwd)"
 
 # Changing to root directory because if we invoke cmd.exe
 # when PWD is a UNC path, it will moan.
@@ -69,7 +70,8 @@ function do_rdir # dir
     else
         cmd /c dir "$(cygpath -w "$1")" $recurse_args /b $attr_args | 
             cygpath -f - -u | 
-            sed "s|^$physical_wd/||i"
+            sed "s|^$physical_wd/||i" |
+            sed "s|^$cygwin_wd/||i"
     fi
 }
 

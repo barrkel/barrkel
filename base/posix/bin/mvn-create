@@ -1,0 +1,17 @@
+#!/bin/bash
+
+function usage
+{
+    echo "usage: $(basename $0) <group> <project>"
+    echo "Create new maven project with group and project name"
+    echo "The project will be placed in <project> directory with <group> reverse domain name"
+}
+
+test -n "$1" || usage
+group="$1"
+test -n "$2" || usage
+proj="$2"
+test -z "$3" || usage
+
+mvn archetype:generate -DgroupId="$group" -DartifactId="$proj" -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
+
