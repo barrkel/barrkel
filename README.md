@@ -33,7 +33,6 @@ How to use:
 Create a file config/$(hostname) containing one line per directory in base/ to apply, ordered
 from most specific to least specific.
 
-Ensure a valid implementation of _pathlist exists in the bin/ directory of one of the applied profiles. The
-existing _pathlist expects GNU grep and sed.
+Ensure a valid implementation of _barrkel_utils exists in the bin/ directory of one of the applied profiles.
 
 
