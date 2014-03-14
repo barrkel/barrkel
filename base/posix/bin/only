@@ -24,7 +24,7 @@ function add_filter
     add_param -f "$1"
 }
 
-add_param grep -i
+add_param egrep -i
 
 while test -n "$1"; do
     file="$config/filters/$1"
