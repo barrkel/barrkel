@@ -34,6 +34,8 @@ base_name="$1"; shift
 test -n "$1" || usage "<keep-count>"
 let keep_count=$1; shift
 (( keep_count <= 0 )) && die "<keep-count> must be positive"
+# tail skips keep_count-1 lines
+let ++keep_count
 test -n "$1" || usage "<file-system>"
 
 set -e
