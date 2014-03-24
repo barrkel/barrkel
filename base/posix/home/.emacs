@@ -706,6 +706,7 @@ buffer instead of replacing the text in region."
 (global-set-key (kbd "RET") 'newline-and-indent)
 (global-set-key (kbd "C-x /") 'generalized-shell-command)
 (global-set-key (kbd "C-x C-_") 'generalized-shell-command) ;; C-x C-/
+(global-set-key (kbd "C-x |") 'generalized-shell-command)
 (global-set-key (kbd "C-c /") 'generalized-shell-command)
 (global-set-key (kbd "C-c C-_") 'comment-or-uncomment-region) ;; C-c C-/
 
