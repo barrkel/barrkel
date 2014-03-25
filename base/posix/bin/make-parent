@@ -1,0 +1,15 @@
+#!/bin/bash
+
+while [[ ! -f Makefile && "$PWD" != '/' ]]; do
+    cd ..
+done
+
+test -f Makefile || {
+    echo "Couldn't find Makefile"
+    exit 1
+}
+
+echo "Found $PWD/Makefile"
+
+make "$@"
+
