@@ -702,6 +702,12 @@ buffer instead of replacing the text in region."
 
 (global-set-key (kbd "M-W") 'fixup-whitespace)
 
+(defun compile-make-parent ()
+  "Compile using make-parent shell script on path"
+  (interactive)
+  (compile "make-parent"))
+(global-set-key (kbd "<f9>") 'compile-make-parent)
+
 ;; my custom macros bound to keys past C-j, by convention
 (global-unset-key (kbd "C-j"))
 
