@@ -700,6 +700,8 @@ buffer instead of replacing the text in region."
 
 ;; TODO: put these in minor modes
 
+(global-set-key (kbd "M-W") 'fixup-whitespace)
+
 ;; my custom macros bound to keys past C-j, by convention
 (global-unset-key (kbd "C-j"))
 
