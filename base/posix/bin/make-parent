@@ -11,5 +11,5 @@ test -f Makefile || {
 
 echo "Found $PWD/Makefile"
 
-make "$@"
+make -j8 "$@"
 

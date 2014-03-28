@@ -314,6 +314,9 @@
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (global-set-key (kbd "M-x") 'helm-M-x)
 
+;; helm is locking up for me if I type too quickly...
+(setq-default helm-input-idle-delay 0.3)
+
 
 ;;----------------------------------------
 ;; robe
