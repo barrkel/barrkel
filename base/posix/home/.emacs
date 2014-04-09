@@ -423,6 +423,10 @@
   (set-face 'ediff-current-diff-Ancestor "black" "yellow"))
 (eval-after-load "ediff" '(setup-ediff-faces))
 
+(defun setup-which-func-faces ()
+  (set-face 'which-func "white" "magenta"))
+(eval-after-load "which-func" '(setup-which-func-faces))
+
 (defun setup-nxml-faces ()
   ;; todo
   (define-key nxml-mode-map (kbd "M-h") nil))
