@@ -1,0 +1,18 @@
+#!/bin/bash
+
+candidate=
+while [[ "$PWD" != '/' ]]; do
+    test -f Makefile && candidate="$PWD/Makefile"
+    cd ..
+done
+
+test -n "$candidate" || {
+    echo "Couldn't find Makefile"
+    exit 1
+}
+
+echo "Found $candidate"
+
+cd "$(dirname "$candidate")"
+make -j8 "$@"
+
