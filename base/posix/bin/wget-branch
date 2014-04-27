@@ -1,0 +1,12 @@
+#!/bin/bash
+
+function usage
+{
+	echo "usage: $(basename $0) <url>"
+    echo "Retrieve URL branch recursively to one level, including page requisites across hosts."
+    exit 1
+}
+
+test -n "$1" || usage
+
+wget-firefox -r -l 1 -np -k -E -p -H "$1"
