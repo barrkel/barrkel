@@ -34,3 +34,4 @@ BackspaceSendsBS=no
 Title=Barry's Bash
 SwitchShortcuts=no
 AltFnShortcuts=no
+Term=xterm
