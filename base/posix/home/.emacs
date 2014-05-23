@@ -317,6 +317,8 @@
 ;; helm is locking up for me if I type too quickly...
 (setq-default helm-input-idle-delay 0.3)
 
+(setq helm-ff-auto-update-initial-value nil)
+
 ;;----------------------------------------
 ;; robe
 ;;----------------------------------------
@@ -1016,7 +1018,7 @@ The CHAR is replaced and the point is put before CHAR."
 (global-set-key (kbd "ESC S-<f12>") 'helm-semantic-or-imenu)
 
 (global-set-key (kbd "M-C") 'ace-jump-word-mode)
-(global-set-key (kbd "M-L") 'ace-jump-line-mode)
+(global-set-key (kbd "M-L") 'ace-jump-char-mode)
 (global-set-key (kbd "M-U") 'undo-tree-visualize)
 
 (defun other-window-back ()
@@ -1348,3 +1350,8 @@ The CHAR is replaced and the point is put before CHAR."
 
 (put 'upcase-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
+
+(turn-off-auto-fill)
+(auto-fill-mode -1)
+(remove-hook 'text-mode-hook #'turn-on-auto-fill)
+
