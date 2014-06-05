@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# Copy code block, removing initial indent.
+
+t=$(mktemp)
+
+cat "$@" > $t
+
+indent="$(cat $t | egrep -o '^ +' | sort | head -1)"
+
+sed 's|^'"$indent"'||' < $t
+
+rm $t
+
