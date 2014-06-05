@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# Remove indent from code block
+
+t=$(mktemp)
+
+trap "rm $t" EXIT
+
+cat "$@" > $t
+
+indent="$(cat $t | sed -r 's|^( *).*|\1|' | sort | head -1)"
+
+sed 's|^'"$indent"'||' <$t
+
