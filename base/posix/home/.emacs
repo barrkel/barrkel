@@ -855,29 +855,41 @@ The CHAR is replaced and the point is put before CHAR."
   (forward-char -1))
 ;; note: bound to M-z
 
+(defun get-current-line-indent ()
+  (let (result start)
+    (save-excursion
+      (beginning-of-line)
+      (setq start (point))
+      (forward-to-indentation 0)
+      (setq result (buffer-substring start (point))))
+    result))
+
+(defun insert-block-pair (left right)
+  (let ((indent (get-current-line-indent)))
+    (insert left)
+    (newline)
+    (insert indent)
+    (save-excursion
+      (newline)
+      (insert indent)
+      (insert right)))
+  (indent-for-tab-command))
+
 (defun insert-braces-macro ()
   (interactive)
-  (insert "{")
-  (newline) (indent-according-to-mode)
-  (save-excursion
-    (newline)
-    (insert "}")
-    (indent-according-to-mode)))
+  (insert-block-pair "{" "}"))
+(defun insert-parens-macro ()
+  (interactive)
+  (insert-block-pair "(" ")"))
+(defun insert-brackets-macro ()
+  (interactive)
+  (insert-block-pair "[" "]"))
 
-
-;;(defun insert-braces-macro ()
-;;  (interactive)
-;;  (insert "{")
-;;  (newline)
-;;  (indent-relative t)
-;;  (insert "}")
-;;  (forward-line -1)
-;;  (end-of-line)
-;;  (newline)
-;;  (indent-relative t)
-;;  (indent-relative nil))
 
 (global-set-key (kbd "C-j b r") 'insert-braces-macro)
+(global-set-key (kbd "C-j b {") 'insert-braces-macro)
+(global-set-key (kbd "C-j b (") 'insert-parens-macro)
+(global-set-key (kbd "C-j b [") 'insert-brackets-macro)
 
 (defvar dumb-indent-string "	"
   "The indent string to use in dumb-indenting mode")
