@@ -891,6 +891,12 @@ The CHAR is replaced and the point is put before CHAR."
 (global-set-key (kbd "C-j b (") 'insert-parens-macro)
 (global-set-key (kbd "C-j b [") 'insert-brackets-macro)
 
+(defun dumb-newline ()
+  (interactive)
+  (let ((indent (get-current-line-indent)))
+    (newline)
+    (insert indent)))
+
 (defvar dumb-indent-string "	"
   "The indent string to use in dumb-indenting mode")
 
@@ -907,6 +913,9 @@ The CHAR is replaced and the point is put before CHAR."
     (insert prior-indent)))
 
 (global-set-key (kbd "C-j RET") 'dumb-indent-return)
+
+
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load using completions from .listing file found in a parent directory
@@ -1044,6 +1053,22 @@ The CHAR is replaced and the point is put before CHAR."
       (setq-local current-highlight-word new-word))))
 (global-set-key (kbd "M-m") 'toggle-word-highlight)
 
+
+;; Highlight lines containing just whitespace
+(defvar highlight-whitespace-active nil
+  "Non-nil if whitespace highlight active")
+(defun toggle-highlight-whitespace ()
+  "Highlight lines containing just whitespace"
+  (interactive)
+  (if highlight-whitespace-active
+      (progn
+        (unhighlight-regexp "^[[:space:]]+$")
+        (setq highlight-whitespace-active nil))
+    (highlight-regexp "^[[:space:]]+$" 'hi-pink)
+    (setq highlight-whitespace-active t)))
+
+(global-set-key (kbd "C-M-w") 'toggle-highlight-whitespace)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; PROJECT / FILE / BUFFER NAVIGATION
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1180,4 +1205,16 @@ The CHAR is replaced and the point is put before CHAR."
 (turn-off-auto-fill)
 (auto-fill-mode -1)
 (remove-hook 'text-mode-hook #'turn-on-auto-fill)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; my custom key binding mode
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;(defvar barrkel-keys-minor-mode-map (make-keymap) "barrkel-keys-minor-mode keymap")
+;;(define-key barrkel-keys-minor-mode-map (kbd "RET") 'dumb-indent-return)
+;;(define-minor-mode barrkel-keys-minor-mode
+;;  "A minor mode for barrkel key bindings"
+;;  t " BKey" 'barrkel-keys-minor-mode-map)
+;;(barrkel-keys-minor-mode 0)
+
 
