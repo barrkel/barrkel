@@ -1347,3 +1347,4 @@ The CHAR is replaced and the point is put before CHAR."
   (byte-recompile-directory (expand-file-name "~/.emacs.d") 0))
 
 (put 'upcase-region 'disabled nil)
+(put 'downcase-region 'disabled nil)
