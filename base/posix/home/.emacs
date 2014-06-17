@@ -317,6 +317,8 @@
 ;; helm is locking up for me if I type too quickly...
 (setq-default helm-input-idle-delay 0.3)
 
+(setq helm-ff-auto-update-initial-value nil)
+
 ;;----------------------------------------
 ;; robe
 ;;----------------------------------------
@@ -853,29 +855,41 @@ The CHAR is replaced and the point is put before CHAR."
   (forward-char -1))
 ;; note: bound to M-z
 
+(defun get-current-line-indent ()
+  (let (result start)
+    (save-excursion
+      (beginning-of-line)
+      (setq start (point))
+      (forward-to-indentation 0)
+      (setq result (buffer-substring start (point))))
+    result))
+
+(defun insert-block-pair (left right)
+  (let ((indent (get-current-line-indent)))
+    (insert left)
+    (newline)
+    (insert indent)
+    (save-excursion
+      (newline)
+      (insert indent)
+      (insert right)))
+  (indent-for-tab-command))
+
 (defun insert-braces-macro ()
   (interactive)
-  (insert "{")
-  (newline) (indent-according-to-mode)
-  (save-excursion
-    (newline)
-    (insert "}")
-    (indent-according-to-mode)))
+  (insert-block-pair "{" "}"))
+(defun insert-parens-macro ()
+  (interactive)
+  (insert-block-pair "(" ")"))
+(defun insert-brackets-macro ()
+  (interactive)
+  (insert-block-pair "[" "]"))
 
-
-;;(defun insert-braces-macro ()
-;;  (interactive)
-;;  (insert "{")
-;;  (newline)
-;;  (indent-relative t)
-;;  (insert "}")
-;;  (forward-line -1)
-;;  (end-of-line)
-;;  (newline)
-;;  (indent-relative t)
-;;  (indent-relative nil))
 
 (global-set-key (kbd "C-j b r") 'insert-braces-macro)
+(global-set-key (kbd "C-j b {") 'insert-braces-macro)
+(global-set-key (kbd "C-j b (") 'insert-parens-macro)
+(global-set-key (kbd "C-j b [") 'insert-brackets-macro)
 
 (defvar dumb-indent-string "	"
   "The indent string to use in dumb-indenting mode")
@@ -963,130 +977,6 @@ The CHAR is replaced and the point is put before CHAR."
             (file-name-directory listing-file)
             found-file)))))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; HIGHLIGHTING
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defun get-point-text ()
-  "Get 'interesting' text at point; either word, or region"
-  (if mark-active
-      (buffer-substring (mark) (point))
-    (thing-at-point 'symbol)))
-
-(defun get-point-regex ()
-  "Get 'interesting' text at point as a regex, with word boundaries if symbol"
-  (if mark-active
-      (regexp-quote (buffer-substring (mark) (point)))
-    (concat "\\<" (regexp-quote (thing-at-point 'symbol)) "\\>")))
-
-(defvar current-highlight-word nil
-  "Current word for toggle-word-highlight if any")
-(make-variable-buffer-local 'current-highlight-word)
-(defun toggle-word-highlight ()
-  "Toggle highlight of word-at-point"
-  (interactive)
-  (let ((new-word (get-point-regex)))
-    (unhighlight-regexp current-highlight-word)
-    (if (equal new-word current-highlight-word)
-        (setq-local current-highlight-word nil)
-      (highlight-regexp new-word)
-      (setq-local current-highlight-word new-word))))
-(global-set-key (kbd "M-m") 'toggle-word-highlight)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; PROJECT / FILE / BUFFER NAVIGATION
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(global-set-key (kbd "C-j C-j") 'helm-load-listing)
-(global-set-key (kbd "C-c j") 'helm-load-listing)
-
-(global-set-key (kbd "<f11>") 'helm-load-listing)
-(global-set-key (kbd "S-<f11>") 'helm-buffers-list)
-(global-set-key (kbd "<f21>") 'helm-buffers-list) ;; S-<f11> in screen
-
-;; TODO: need a version of projectile-find-file with initial text
-(global-set-key (kbd "<f12>") 'projectile-find-file)
-(global-set-key (kbd "S-<f12>") 'projectile-switch-to-buffer)
-(global-set-key (kbd "<f22>") 'projectile-switch-to-buffer) ;; S-<f12> in screen
-(global-set-key (kbd "ESC <f12>") 'helm-resume)
-(global-set-key (kbd "M-<f12>") 'helm-resume)
-
-(global-set-key (kbd "M-i") 'helm-semantic-or-imenu)
-(global-set-key (kbd "M-S-<f12>") 'helm-semantic-or-imenu)
-(global-set-key (kbd "ESC S-<f12>") 'helm-semantic-or-imenu)
-
-(global-set-key (kbd "M-C") 'ace-jump-word-mode)
-(global-set-key (kbd "M-L") 'ace-jump-line-mode)
-(global-set-key (kbd "M-U") 'undo-tree-visualize)
-
-(defun other-window-back ()
-  "Reverse of other-window"
-  (interactive)
-  (other-window -1))
-(global-set-key (kbd "C-x O") 'other-window-back)
-
-;; narrowing / widening act on selected region
-;; C-x n n to narrow
-;; C-x n w to widen
-(put 'narrow-to-region 'disabled nil)
-;; C-x n p
-(put 'narrow-to-page 'disabled nil)
-
-(global-set-key (kbd "M-A") 'align-regexp)
-
-(define-key dired-mode-map (kbd "W") 'wdired-change-to-wdired-mode)
-
-;; regex for finding Java class definitions
-;; \(\(public\|private\|protected\|final\)[[:space:]]\+\)class[[:space:]]*\w\+[[:space:]]{
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; KEY CHORDING
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; (key-chord-mode 1)
-;; (key-chord-define-global "JJ" 'helm-load-listing)
-;; (key-chord-define-global "UU" 'undo-tree-visualize)
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; SEMANTIC JUMPING
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defun find-definition-at-point ()
-  "Try and find definition for thing at point"
-  (interactive)
-  (helm-git-grep-1 (format "\\(def\\|class\\|module\\) %s" (get-point-text))))
-(global-set-key (kbd "M-M") 'find-definition-at-point)
-
-(defun git-grep-text-at-point ()
-  "Git grep for select text, or word at point otherwise"
-  (interactive)
-  (helm-git-grep-1 (get-point-text)))
-
-(defun git-grep-selected-text ()
-  "Git grep for selected text"
-  (interactive)
-  (if mark-active
-      (helm-git-grep-1 (buffer-substring (mark) (point)))
-    (helm-git-grep)))
-(global-set-key (kbd "M-G") 'git-grep-selected-text)
-
-
-(defun helm-occur-1 (initial-value)
-  "Preconfigured helm for Occur with initial input."
-  (setq helm-multi-occur-buffer-list (list (buffer-name (current-buffer))))
-  (helm-occur-init-source)
-  (helm :sources 'helm-source-occur
-        :buffer "*helm occur*"
-        :history 'helm-grep-history
-        :truncate-lines t
-        :input initial-value))
-(defun bk-helm-occur ()
-  "Invoke helm-occur with initial input configured from text at point"
-  (interactive)
-  (helm-occur-1 (get-point-text)))
-(global-set-key (kbd "M-o") 'bk-helm-occur)  
-;;(global-set-key (kbd "M-O") 'helm-occur)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; eclim support
@@ -1123,68 +1013,6 @@ The CHAR is replaced and the point is put before CHAR."
   (interactive)
   (byte-recompile-directory (expand-file-name "~/.emacs.d") 0))
 
-;; use locate-dominating-file instead!
-
-(defun find-file-in-parents (file directory)
-  "Look for a file in directory and parent directories"
-
-  (defun get-path-elems (path)
-    "Get vector of path elements"
-    (vconcat (split-string (expand-file-name path) "/" t)))
-
-  (defun for-each-path-to-root (path fn)
-    "Call fn for each directory in path (inclusive) to root while fn returns nil"
-    (let (elems i p ret)
-      (setq elems (get-path-elems path))
-      (setq i (length elems))
-      (catch 'ret
-        (while (> i 0)
-          (setq p (concat "/" (reduce (lambda (x y) (concat x "/" y))
-                                      (subseq elems 0 i))))
-          (setq ret (funcall fn (concat p "/")))
-          (when ret (throw 'ret ret))
-          (decf i))
-        (funcall fn "/"))))
-  
-  (for-each-path-to-root
-   directory
-   (lambda (path)
-     (let ((ret (concat path file)))
-       (when (file-attributes ret)
-         ret)))))
-
-
-(defun try-read-file-lines (file)
-  (if (file-attributes file)
-      (with-temp-buffer
-        (insert-file-contents file)
-        (split-string (buffer-string) "\n" t))
-    nil))
-
-;; almost, but not quite: doesn't take into account differences in path
-(defun ido-load-listing ()
-  "Use ido-completing-read to find a file name from .listing file"
-  (interactive)
-  (let (listing-file lines found-file)
-    (when (setq listing-file (find-file-in-parents ".listing" startup-directory))
-      (when (setq lines (try-read-file-lines listing-file))
-        (when (setq found-file (ido-completing-read "Load from listing: " lines))
-          (find-file
-           (concat
-            (file-name-directory listing-file)
-            found-file)))))))
-
-(defun helm-load-listing ()
-  "Use helm-comp-read to find a file name from .listing file"
-  (interactive)
-  (let (listing-file lines found-file)
-    (when (setq listing-file (find-file-in-parents ".listing" startup-directory))
-      (when (setq lines (try-read-file-lines listing-file))
-        (when (setq found-file (helm-comp-read "Load from listing: " lines))
-          (find-file
-           (concat
-            (file-name-directory listing-file)
-            found-file)))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; HIGHLIGHTING
@@ -1239,7 +1067,7 @@ The CHAR is replaced and the point is put before CHAR."
 (global-set-key (kbd "ESC S-<f12>") 'helm-semantic-or-imenu)
 
 (global-set-key (kbd "M-C") 'ace-jump-word-mode)
-(global-set-key (kbd "M-L") 'ace-jump-line-mode)
+(global-set-key (kbd "M-L") 'ace-jump-char-mode)
 (global-set-key (kbd "M-U") 'undo-tree-visualize)
 
 (defun other-window-back ()
@@ -1348,3 +1176,8 @@ The CHAR is replaced and the point is put before CHAR."
 
 (put 'upcase-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
+
+(turn-off-auto-fill)
+(auto-fill-mode -1)
+(remove-hook 'text-mode-hook #'turn-on-auto-fill)
+
