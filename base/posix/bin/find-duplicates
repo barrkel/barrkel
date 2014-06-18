@@ -18,8 +18,8 @@ test -n "$1" || usage
 
 last_size=
 declare -a last_file
-verbose=
-tabs=
+verbose=0
+tabs=0
 format=
 reverse=0
 
@@ -32,10 +32,10 @@ function print_file # duplicate original
         a="$2"
         b="$1"
     }
-    
-    if [ -n "$verbose" ]; then
+
+    if (( verbose )); then
         echo "$a == $b"
-    elif [ -n "$tabs" ]; then
+    elif (( tabs )); then
         echo "$a	$b"
     elif [ -n "$format" ]; then
         printf "$format" "$a" "$b"
@@ -51,13 +51,14 @@ function add_file
         #echo diff -q "$1" "${last_file[$i]}"
         diff -q "$1" "${last_file[$i]}" > /dev/null && {
             
+            #echo print_file "$1" "${last_file[$i]}"
             print_file "$1" "${last_file[$i]}"
             
             # Don't add to list, because we found a duplicate.
             return
         }
     done
-    last_file[${#last_file[@]}]="$1"
+    last_file+=("$1")
 }
 
 function set_file
