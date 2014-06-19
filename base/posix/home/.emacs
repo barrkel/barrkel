@@ -608,6 +608,7 @@
             (robe-mode)
             (visual-line-mode)
             (define-key enh-ruby-mode-map (kbd "RET") 'newline-and-indent)
+            (define-key enh-ruby-mode-map (kbd "C-j") nil)
             ;; hopefully the bits below will work
             (er/enable-mode-expansions 'enh-ruby-mode 'er/add-ruby-mode-expansions)
             (eval-after-load "enh-ruby-mode" '(require 'ruby-mode-expansions))
@@ -1062,9 +1063,9 @@ The CHAR is replaced and the point is put before CHAR."
   (interactive)
   (if highlight-whitespace-active
       (progn
-        (unhighlight-regexp "^[[:space:]]+$")
+        (unhighlight-regexp "[[:space:]]+$")
         (setq highlight-whitespace-active nil))
-    (highlight-regexp "^[[:space:]]+$" 'hi-pink)
+    (highlight-regexp "[[:space:]]+$" 'hi-pink)
     (setq highlight-whitespace-active t)))
 
 (global-set-key (kbd "C-M-w") 'toggle-highlight-whitespace)
@@ -1218,3 +1219,15 @@ The CHAR is replaced and the point is put before CHAR."
 ;;(barrkel-keys-minor-mode 0)
 
 
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(enh-ruby-deep-indent-paren nil))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
