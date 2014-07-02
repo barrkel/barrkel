@@ -533,6 +533,7 @@
 (add-hook 'coffee-mode-hook
           (lambda ()
             (visual-line-mode)
+            (highlight-indentation-current-column-mode)
             (subword-mode)
             (set-tab-style nil 2)))
 
@@ -838,15 +839,16 @@ With prefix ARG, silently save all file-visiting buffers, then kill."
            (advice-name (concat command-name "-keep-region")))
     `(progn
        (defadvice ,command (around ,(intern advice-name))
-         (let (deactivate-mark)
-           (save-excursion
-             ad-do-it)
-           (exchange-point-and-mark)
-           (exchange-point-and-mark)))
+         ;; TODO: figure out how to make mark transient
+         (save-excursion
+           ad-do-it)
+         (push-mark (mark) t t)
+         (pop-mark))
        (ad-activate (quote ,command)))))
 
 (keep-region replace-string)
 (keep-region replace-regexp)
+;;(keep-region indent-for-tab-command)
 
 ;; make zap-to-char act like zap-up-to-char
 (defadvice zap-to-char (after my-zap-to-char-advice (arg char) activate)
@@ -1208,6 +1210,13 @@ The CHAR is replaced and the point is put before CHAR."
 (remove-hook 'text-mode-hook #'turn-on-auto-fill)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; howdoi
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(global-set-key (kbd "<f1> <f1>") 'howdoi-query)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; my custom key binding mode
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -1230,4 +1239,5 @@ The CHAR is replaced and the point is put before CHAR."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(highlight-indentation-current-column-face ((t (:inherit nil :background "magenta"))))
+ '(highlight-indentation-face ((t (:inherit nil :background "magenta")))))
