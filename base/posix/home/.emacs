@@ -839,15 +839,16 @@ With prefix ARG, silently save all file-visiting buffers, then kill."
            (advice-name (concat command-name "-keep-region")))
     `(progn
        (defadvice ,command (around ,(intern advice-name))
-         (let (deactivate-mark)
-           (save-excursion
-             ad-do-it)
-           (exchange-point-and-mark)
-           (exchange-point-and-mark)))
+         ;; TODO: figure out how to make mark transient
+         (save-excursion
+           ad-do-it)
+         (push-mark (mark) t t)
+         (pop-mark))
        (ad-activate (quote ,command)))))
 
 (keep-region replace-string)
 (keep-region replace-regexp)
+;;(keep-region indent-for-tab-command)
 
 ;; make zap-to-char act like zap-up-to-char
 (defadvice zap-to-char (after my-zap-to-char-advice (arg char) activate)

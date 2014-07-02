@@ -1,0 +1,33 @@
+#!/bin/bash
+
+intf='eth0'
+
+function get_ip # intf
+{
+    ip addr show "$1" | egrep -o 'inet ([0-9]+\.){3}[0-9]+' | sed 's|^inet ||'
+}
+
+my_ip="$(get_ip $intf)"
+
+if (( UID != 0 )); then
+    echo "Run this script as root"
+    exit
+fi
+
+# Kill all rules and chains
+iptables -F
+iptables -X
+
+# Set default policy
+iptables -P INPUT DROP
+iptables -P FORWARD DROP
+
+# Allow unlimited traffic on loopback
+iptables -A INPUT -i lo -j ACCEPT
+
+# Allow incoming ssh only
+iptables -A INPUT -p tcp -s 0/0 -d "$my_ip" --dport 22 -m state --state NEW -j ACCEPT
+
+# Allow return traffic from established outgoing connections
+iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+
