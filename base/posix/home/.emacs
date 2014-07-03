@@ -255,6 +255,7 @@
 (require 'expand-region)
 (global-set-key (kbd "M-h") 'er/expand-region)
 (global-set-key (kbd "M-H") 'er/contract-region)
+(setq expand-region-fast-keys-enabled nil)
 
 (require 'auto-mark)
 (auto-mark-mode)
@@ -839,11 +840,9 @@ With prefix ARG, silently save all file-visiting buffers, then kill."
            (advice-name (concat command-name "-keep-region")))
     `(progn
        (defadvice ,command (around ,(intern advice-name))
-         ;; TODO: figure out how to make mark transient
-         (save-excursion
-           ad-do-it)
-         (push-mark (mark) t t)
-         (pop-mark))
+         (let (deactivate-mark)
+           (save-excursion
+             ad-do-it)))
        (ad-activate (quote ,command)))))
 
 (keep-region replace-string)
