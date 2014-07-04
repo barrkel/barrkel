@@ -1,0 +1,60 @@
+#!/usr/bin/env ruby
+
+require 'pry'
+
+# Ui.module 'Base', (Base, UiKit, Backbone, Marionette, $, _) ->
+#   class Base.Collection extends Backbone.Collection
+
+$current_module_alias = ''
+$current_module = ''
+
+def transform_name(name)
+  name_parts = name.split('.')
+  if name_parts.first == $current_module_alias
+    $current_module + '.' + (name_parts[1..-1].join('.'))
+  else
+    name
+  end
+end
+
+$module_map = {}
+$inheritance_pairs = []
+
+$<.each_line do |line|
+  case
+  when line =~ /([a-zA-Z]+)\.module '([^']+)', \(+([^,]+),/
+    $current_module_alias = $3
+    $current_module = "#{$1}.#{$2}"
+  when line =~ /class (\w+(?:\.\w+)*) extends (\w+(?:\.\w+)*)/
+    #puts "found class #{transform_name($1)} extending #{transform_name($2)}"
+    $module_map[$current_module] ||= []
+    $module_map[$current_module] << transform_name($1)
+
+    $inheritance_pairs << [transform_name($1), transform_name($2)]
+  end
+end
+
+roots = ($inheritance_pairs.map { |x, y| y } - $inheritance_pairs.map { |x, y| x }).uniq.sort
+
+ancestors = {}
+$inheritance_pairs.each do |b, a|
+  ancestors[b] ||= []
+  ancestors[b] << a
+end
+
+descendants = {}
+$inheritance_pairs.each do |b, a|
+  descendants[a] ||= []
+  descendants[a] << b
+end
+
+def walk_tree(tree, item, depth)
+  puts "#{'  ' * depth}#{item}"
+  children = tree[item]
+  if children
+    children.each { |child| walk_tree(tree, child, depth + 1) }
+  end
+end
+
+roots.each { |root| walk_tree(descendants, root, 0) }
+
