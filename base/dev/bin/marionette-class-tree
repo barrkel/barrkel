@@ -2,6 +2,8 @@
 
 require 'pry'
 
+# ggrep -h 'class.*extends|\.module'
+
 # Ui.module 'Base', (Base, UiKit, Backbone, Marionette, $, _) ->
 #   class Base.Collection extends Backbone.Collection
 
