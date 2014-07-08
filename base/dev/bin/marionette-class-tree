@@ -36,6 +36,16 @@ $<.each_line do |line|
   end
 end
 
+# Insert known inheritance relationships
+$inheritance_pairs << ['Backbone.AssociatedModel', 'Backbone.Model']
+$inheritance_pairs << ['Backbone.PageableCollection', 'Backbone.Collection']
+$inheritance_pairs << ['Marionette.CollectionView', 'Marionette.View']
+$inheritance_pairs << ['Marionette.ItemView', 'Marionette.View']
+$inheritance_pairs << ['Marionette.AppRouter', 'Backbone.Router']
+$inheritance_pairs << ['Marionette.LayoutView', 'Marionette.ItemView']
+$inheritance_pairs << ['Marionette.CompositeView', 'Marionette.CollectionView']
+$inheritance_pairs << ['Marionette.CompositeView', 'Marionette.CollectionView']
+
 roots = ($inheritance_pairs.map { |x, y| y } - $inheritance_pairs.map { |x, y| x }).uniq.sort
 
 ancestors = {}
@@ -50,11 +60,13 @@ $inheritance_pairs.each do |b, a|
   descendants[a] << b
 end
 
+
+
 def walk_tree(tree, item, depth)
   puts "#{'  ' * depth}#{item}"
   children = tree[item]
   if children
-    children.each { |child| walk_tree(tree, child, depth + 1) }
+    children.sort.each { |child| walk_tree(tree, child, depth + 1) }
   end
 end
 
