@@ -536,7 +536,10 @@
             (visual-line-mode)
             (highlight-indentation-current-column-mode)
             (subword-mode)
-            (set-tab-style nil 2)))
+            (set-tab-style nil 2)
+            (define-key coffee-mode-map (kbd "M-,") 'coffee-indent-shift-left)
+            (define-key coffee-mode-map (kbd "M-.") 'coffee-indent-shift-right)))
+
 
 ;; Conf
 (add-to-list 'auto-mode-alist '("my.cnf" . conf-mode))
