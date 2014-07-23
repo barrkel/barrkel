@@ -700,6 +700,9 @@ buffer instead of replacing the text in region."
 ;; clipboard reconfiguration
 (global-set-key (kbd "C-y") 'delete-line-command)
 (global-set-key (kbd "C-v") 'yank)
+;; prevent helm from stealing our stuff
+(define-key helm-map (kbd "C-v") nil)
+(define-key helm-map (kbd "M-v") nil)
 (global-set-key (kbd "M-v") 'yank-pop)
 (global-set-key (kbd "M-S-<insert>") 'kill-ring-save)
 (global-set-key (kbd "M-<insert>") 'yank) ;; mintty
@@ -851,7 +854,6 @@ With prefix ARG, silently save all file-visiting buffers, then kill."
 
 (keep-region replace-string)
 (keep-region replace-regexp)
-(keep-region indent-for-tab-command)
 
 ;; make zap-to-char act like zap-up-to-char
 (defadvice zap-to-char (after my-zap-to-char-advice (arg char) activate)
@@ -1244,3 +1246,4 @@ The CHAR is replaced and the point is put before CHAR."
  ;; If there is more than one, they won't work right.
  '(highlight-indentation-current-column-face ((t (:inherit nil :background "magenta"))))
  '(highlight-indentation-face ((t (:inherit nil :background "magenta")))))
+(put 'set-goal-column 'disabled nil)
