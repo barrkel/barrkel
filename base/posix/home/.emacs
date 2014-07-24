@@ -788,7 +788,7 @@ buffer instead of replacing the text in region."
 (global-set-key (kbd "C-r") 'isearch-backward-regexp)
 
 ;; semantic navigation with completion
-(global-set-key (kbd "M-i") 'imenu)
+(global-set-key (kbd "M-i") 'iedit-mode)
 (setq imenu-max-item-length 120)
 
 (defun duplicate-line-or-region ()
