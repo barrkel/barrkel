@@ -639,6 +639,13 @@
             (visual-line-mode)
             (set-tab-style nil 4)))
 
+;; Text
+(add-hook 'text-mode-hook
+          (lambda ()
+            (setq indent-tabs-mode nil)
+            (setq tab-stop-list (number-sequence 2 200 2))
+            (setq indent-line-function 'insert-tab)))
+
 ;; YAML
 (autoload 'yaml-mode "yaml-mode" nil t)
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
