@@ -639,6 +639,13 @@
             (visual-line-mode)
             (set-tab-style nil 4)))
 
+;; Text
+(add-hook 'text-mode-hook
+          (lambda ()
+            (setq indent-tabs-mode nil)
+            (setq tab-stop-list (number-sequence 2 200 2))
+            (setq indent-line-function 'insert-tab)))
+
 ;; YAML
 (autoload 'yaml-mode "yaml-mode" nil t)
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
@@ -700,6 +707,9 @@ buffer instead of replacing the text in region."
 ;; clipboard reconfiguration
 (global-set-key (kbd "C-y") 'delete-line-command)
 (global-set-key (kbd "C-v") 'yank)
+;; prevent helm from stealing our stuff
+(define-key helm-map (kbd "C-v") nil)
+(define-key helm-map (kbd "M-v") nil)
 (global-set-key (kbd "M-v") 'yank-pop)
 (global-set-key (kbd "M-S-<insert>") 'kill-ring-save)
 (global-set-key (kbd "M-<insert>") 'yank) ;; mintty
@@ -784,8 +794,11 @@ buffer instead of replacing the text in region."
 (global-set-key (kbd "C-s") 'isearch-forward-regexp)
 (global-set-key (kbd "C-r") 'isearch-backward-regexp)
 
+;; sync-edit thing
+(global-set-key (kbd "M-i") 'iedit-mode)
+(global-set-key (kbd "M-I") 'iedit-restrict-function)
+
 ;; semantic navigation with completion
-(global-set-key (kbd "M-i") 'imenu)
 (setq imenu-max-item-length 120)
 
 (defun duplicate-line-or-region ()
@@ -851,7 +864,6 @@ With prefix ARG, silently save all file-visiting buffers, then kill."
 
 (keep-region replace-string)
 (keep-region replace-regexp)
-(keep-region indent-for-tab-command)
 
 ;; make zap-to-char act like zap-up-to-char
 (defadvice zap-to-char (after my-zap-to-char-advice (arg char) activate)
@@ -1244,3 +1256,4 @@ The CHAR is replaced and the point is put before CHAR."
  ;; If there is more than one, they won't work right.
  '(highlight-indentation-current-column-face ((t (:inherit nil :background "magenta"))))
  '(highlight-indentation-face ((t (:inherit nil :background "magenta")))))
+(put 'set-goal-column 'disabled nil)
