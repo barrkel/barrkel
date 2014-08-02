@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. _die
+. _barrkel_utils
 
 temp_dir=
 filter=bunzip2

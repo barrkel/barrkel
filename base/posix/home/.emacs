@@ -8,6 +8,7 @@
   "Fix inputs for mintty"
   (interactive)
 
+  (message "Fixing mintty inputs")
   ;; Define a mintty key modifiers based on mintty's encoding
   ;; Pattern should use %d where the modifier digit goes
     ;; n -> n-1 in binary => 1: shift, 2: meta, 4: control
@@ -58,6 +59,7 @@
 (defun fix-rxvt-inputs ()
   "Fix inputs for rxvt"
   (interactive)
+  (message "Fixing rxvt inputs")
   (define-key input-decode-map "\e[a" (kbd "S-<up>"))
   (define-key input-decode-map "\e[b" (kbd "S-<down>"))
   (define-key input-decode-map "\e[7$" (kbd "S-<home>"))
@@ -95,21 +97,44 @@
 ;; screen/rxvt   => TERM=screen.rxvt
 ;; Screen generally passes extended keys through unaltered.
 
-;; screen/rxvt
-(when (string= (getenv "TERM") "screen.rxvt")
+;; ;; screen/rxvt
+;; (when (string= (getenv "TERM") "screen.rxvt")
+;;   (fix-rxvt-inputs)
+;;   (fix-rxvt-screen-inputs))
+;; ;; rxvt
+;; (when (string= (getenv "TERM") "rxvt")
+;;   (fix-rxvt-inputs))
+;;(when (string= (getenv "TERM") "xterm")
+;;  (fix-mintty-inputs))
+;; (when (string= (getenv "TERM") "screen")
+;;   (fix-mintty-inputs)
+;;   (fix-mintty-screen-inputs))
+
+;; mintty
+(defadvice terminal-init-xterm (after fix-xterm-init)
+  "Initialize mintty input map"
+  (fix-mintty-inputs))
+(ad-activate 'terminal-init-xterm)
+
+(message (concat "terminal init section TERM=" (getenv "TERM")))
+(defadvice terminal-init-rxvt (after fix-rxvt-init)
+  "Initialize rxvt input map"
+  (fix-rxvt-inputs))
+(ad-activate 'terminal-init-rxvt)
+
+(defun terminal-init-screen.rxvt ()
+  (message "terminal-init-screen.rxvt")
   (fix-rxvt-inputs)
   (fix-rxvt-screen-inputs))
-;; rxvt
-(when (string= (getenv "TERM") "rxvt")
-  (fix-rxvt-inputs))
-;; mintty
-(when (string= (getenv "TERM") "xterm")
-  (fix-mintty-inputs))
+
 ;; screen/mintty
 ;; actually, screen in mintty
-(when (string= (getenv "TERM") "screen")
+(defadvice terminal-init-screen (after fix-screen-init)
+  "Initialize screen input map"
+  (message "in terminal-init-screen, TERM=%s" (getenv "TERM"))
   (fix-mintty-inputs)
   (fix-mintty-screen-inputs))
+(ad-activate 'terminal-init-screen)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MISC INIT
@@ -204,6 +229,9 @@
                '("melpa" . "http://melpa.milkbox.net/packages/"))
   (package-initialize))
 
+;; my custom libraries
+(add-to-list 'load-path "~/.emacs.d/init/")
+
 ;; plugins; everything in plugins, and subdirectories
 (add-to-list 'load-path "~/.emacs.d/plugins/")
 (let ((default-directory "~/.emacs.d/plugins/"))
@@ -227,6 +255,7 @@
 (require 'expand-region)
 (global-set-key (kbd "M-h") 'er/expand-region)
 (global-set-key (kbd "M-H") 'er/contract-region)
+(setq expand-region-fast-keys-enabled nil)
 
 (require 'auto-mark)
 (auto-mark-mode)
@@ -286,6 +315,10 @@
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (global-set-key (kbd "M-x") 'helm-M-x)
 
+;; helm is locking up for me if I type too quickly...
+(setq-default helm-input-idle-delay 0.3)
+
+(setq helm-ff-auto-update-initial-value nil)
 
 ;;----------------------------------------
 ;; robe
@@ -392,6 +425,15 @@
   (set-face 'ediff-current-diff-Ancestor "black" "yellow"))
 (eval-after-load "ediff" '(setup-ediff-faces))
 
+(defun setup-which-func-faces ()
+  (set-face 'which-func "white" "magenta"))
+(eval-after-load "which-func" '(setup-which-func-faces))
+
+(defun setup-nxml-faces ()
+  ;; todo
+  (define-key nxml-mode-map (kbd "M-h") nil))
+(eval-after-load "nxml" '(setup-nxml-faces))
+
 (set-face 'match "black" "blue")
 
 (set-face 'linum "magenta")
@@ -461,6 +503,9 @@
 ;; move mark begin to be like C-k b in Joe
 (global-set-key (kbd "C-c b") 'set-mark-command)
 (global-set-key (kbd "C-c SPC") 'set-mark-command)
+(global-set-key (kbd "C-x SPC") 'set-mark-command)
+(global-set-key (kbd "C-c C-SPC") 'set-mark-command)
+(global-set-key (kbd "C-x C-SPC") 'set-mark-command)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -489,8 +534,12 @@
 (add-hook 'coffee-mode-hook
           (lambda ()
             (visual-line-mode)
+            (highlight-indentation-current-column-mode)
             (subword-mode)
-            (set-tab-style nil 2)))
+            (set-tab-style nil 2)
+            (define-key coffee-mode-map (kbd "M-,") 'coffee-indent-shift-left)
+            (define-key coffee-mode-map (kbd "M-.") 'coffee-indent-shift-right)))
+
 
 ;; Conf
 (add-to-list 'auto-mode-alist '("my.cnf" . conf-mode))
@@ -564,6 +613,7 @@
             (robe-mode)
             (visual-line-mode)
             (define-key enh-ruby-mode-map (kbd "RET") 'newline-and-indent)
+            (define-key enh-ruby-mode-map (kbd "C-j") nil)
             ;; hopefully the bits below will work
             (er/enable-mode-expansions 'enh-ruby-mode 'er/add-ruby-mode-expansions)
             (eval-after-load "enh-ruby-mode" '(require 'ruby-mode-expansions))
@@ -589,6 +639,13 @@
             (visual-line-mode)
             (set-tab-style nil 4)))
 
+;; Text
+(add-hook 'text-mode-hook
+          (lambda ()
+            (setq indent-tabs-mode nil)
+            (setq tab-stop-list (number-sequence 2 200 2))
+            (setq indent-line-function 'insert-tab)))
+
 ;; YAML
 (autoload 'yaml-mode "yaml-mode" nil t)
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
@@ -597,6 +654,11 @@
           (lambda ()
             (visual-line-mode)
             (set-tab-style nil 2)))
+
+;; XML
+(add-hook 'nxml-mode-hook
+          (lambda ()
+            (define-key nxml-mode-map (kbd "M-h") nil)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; END MODE CONFIG
@@ -645,6 +707,9 @@ buffer instead of replacing the text in region."
 ;; clipboard reconfiguration
 (global-set-key (kbd "C-y") 'delete-line-command)
 (global-set-key (kbd "C-v") 'yank)
+;; prevent helm from stealing our stuff
+(define-key helm-map (kbd "C-v") nil)
+(define-key helm-map (kbd "M-v") nil)
 (global-set-key (kbd "M-v") 'yank-pop)
 (global-set-key (kbd "M-S-<insert>") 'kill-ring-save)
 (global-set-key (kbd "M-<insert>") 'yank) ;; mintty
@@ -659,12 +724,21 @@ buffer instead of replacing the text in region."
 
 ;; TODO: put these in minor modes
 
+(global-set-key (kbd "M-W") 'fixup-whitespace)
+
+(defun compile-make-parent ()
+  "Compile using make-parent shell script on path"
+  (interactive)
+  (compile "make-parent"))
+(global-set-key (kbd "<f9>") 'compile-make-parent)
+
 ;; my custom macros bound to keys past C-j, by convention
 (global-unset-key (kbd "C-j"))
 
 (global-set-key (kbd "RET") 'newline-and-indent)
 (global-set-key (kbd "C-x /") 'generalized-shell-command)
 (global-set-key (kbd "C-x C-_") 'generalized-shell-command) ;; C-x C-/
+(global-set-key (kbd "C-x |") 'generalized-shell-command)
 (global-set-key (kbd "C-c /") 'generalized-shell-command)
 (global-set-key (kbd "C-c C-_") 'comment-or-uncomment-region) ;; C-c C-/
 
@@ -720,8 +794,11 @@ buffer instead of replacing the text in region."
 (global-set-key (kbd "C-s") 'isearch-forward-regexp)
 (global-set-key (kbd "C-r") 'isearch-backward-regexp)
 
+;; sync-edit thing
+(global-set-key (kbd "M-i") 'iedit-mode)
+(global-set-key (kbd "M-I") 'iedit-restrict-function)
+
 ;; semantic navigation with completion
-(global-set-key (kbd "M-i") 'imenu)
 (setq imenu-max-item-length 120)
 
 (defun duplicate-line-or-region ()
@@ -779,11 +856,10 @@ With prefix ARG, silently save all file-visiting buffers, then kill."
            (advice-name (concat command-name "-keep-region")))
     `(progn
        (defadvice ,command (around ,(intern advice-name))
-         (let (deactivate-mark)
+         (let ((deactivate-mark nil)
+               (transient-mark-mode transient-mark-mode))
            (save-excursion
-             ad-do-it)
-           (exchange-point-and-mark)
-           (exchange-point-and-mark)))
+             ad-do-it)))
        (ad-activate (quote ,command)))))
 
 (keep-region replace-string)
@@ -797,29 +873,47 @@ The CHAR is replaced and the point is put before CHAR."
   (forward-char -1))
 ;; note: bound to M-z
 
+(defun get-current-line-indent ()
+  (let (result start)
+    (save-excursion
+      (beginning-of-line)
+      (setq start (point))
+      (forward-to-indentation 0)
+      (setq result (buffer-substring start (point))))
+    result))
+
+(defun insert-block-pair (left right)
+  (let ((indent (get-current-line-indent)))
+    (insert left)
+    (newline)
+    (insert indent)
+    (save-excursion
+      (newline)
+      (insert indent)
+      (insert right)))
+  (indent-for-tab-command))
+
 (defun insert-braces-macro ()
   (interactive)
-  (insert "{")
-  (newline) (indent-according-to-mode)
-  (save-excursion
-    (newline)
-    (insert "}")
-    (indent-according-to-mode)))
+  (insert-block-pair "{" "}"))
+(defun insert-parens-macro ()
+  (interactive)
+  (insert-block-pair "(" ")"))
+(defun insert-brackets-macro ()
+  (interactive)
+  (insert-block-pair "[" "]"))
 
-
-;;(defun insert-braces-macro ()
-;;  (interactive)
-;;  (insert "{")
-;;  (newline)
-;;  (indent-relative t)
-;;  (insert "}")
-;;  (forward-line -1)
-;;  (end-of-line)
-;;  (newline)
-;;  (indent-relative t)
-;;  (indent-relative nil))
 
 (global-set-key (kbd "C-j b r") 'insert-braces-macro)
+(global-set-key (kbd "C-j b {") 'insert-braces-macro)
+(global-set-key (kbd "C-j b (") 'insert-parens-macro)
+(global-set-key (kbd "C-j b [") 'insert-brackets-macro)
+
+(defun dumb-newline ()
+  (interactive)
+  (let ((indent (get-current-line-indent)))
+    (newline)
+    (insert indent)))
 
 (defvar dumb-indent-string "	"
   "The indent string to use in dumb-indenting mode")
@@ -837,6 +931,9 @@ The CHAR is replaced and the point is put before CHAR."
     (insert prior-indent)))
 
 (global-set-key (kbd "C-j RET") 'dumb-indent-return)
+
+
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load using completions from .listing file found in a parent directory
@@ -907,6 +1004,43 @@ The CHAR is replaced and the point is put before CHAR."
             (file-name-directory listing-file)
             found-file)))))))
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; eclim support
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun bjk-setup-eclim ()
+  "Attempt to set up eclim"
+  (interactive)
+  (require 'eclimd)
+  (global-eclim-mode 1)
+  (setq eclim-eclipse-dirs '("~/apps/eclipse"))
+  
+  (require 'company-emacs-eclim)
+  (company-emacs-eclim-setup)
+  (global-company-mode t)
+  (local-set-key (kbd "C-@") 'company-complete)
+  (local-set-key (kbd "M-.") 'eclim-java-find-declaration)
+
+  ;; ;; regular auto-complete initialization
+  ;; (require 'auto-complete-config)
+  ;; (ac-config-default)
+
+  ;; ;; add the emacs-eclim source
+  ;; (require 'ac-emacs-eclim-source)
+  ;; (ac-emacs-eclim-config)
+  ;; (auto-complete-mode t)
+
+  (setq eclim-use-yasnippet nil)
+  (setq eclimd-default-workspace "~/workspace")
+  (setq eclim-executable "~/apps/eclipse/eclim"))
+
+(defun recompile-all-the-things ()
+  "Recompile all out of date .el files in ~/.emacs.d"
+  (interactive)
+  (byte-recompile-directory (expand-file-name "~/.emacs.d") 0))
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; HIGHLIGHTING
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -917,19 +1051,41 @@ The CHAR is replaced and the point is put before CHAR."
       (buffer-substring (mark) (point))
     (thing-at-point 'symbol)))
 
+(defun get-point-regex ()
+  "Get 'interesting' text at point as a regex, with word boundaries if symbol"
+  (if mark-active
+      (regexp-quote (buffer-substring (mark) (point)))
+    (concat "\\<" (regexp-quote (thing-at-point 'symbol)) "\\>")))
+
 (defvar current-highlight-word nil
   "Current word for toggle-word-highlight if any")
 (make-variable-buffer-local 'current-highlight-word)
 (defun toggle-word-highlight ()
   "Toggle highlight of word-at-point"
   (interactive)
-  (let ((new-word (regexp-quote (get-point-text))))
+  (let ((new-word (get-point-regex)))
     (unhighlight-regexp current-highlight-word)
     (if (equal new-word current-highlight-word)
         (setq-local current-highlight-word nil)
       (highlight-regexp new-word)
       (setq-local current-highlight-word new-word))))
 (global-set-key (kbd "M-m") 'toggle-word-highlight)
+
+
+;; Highlight lines containing just whitespace
+(defvar highlight-whitespace-active nil
+  "Non-nil if whitespace highlight active")
+(defun toggle-highlight-whitespace ()
+  "Highlight lines containing just whitespace"
+  (interactive)
+  (if highlight-whitespace-active
+      (progn
+        (unhighlight-regexp "[[:space:]]+$")
+        (setq highlight-whitespace-active nil))
+    (highlight-regexp "[[:space:]]+$" 'hi-pink)
+    (setq highlight-whitespace-active t)))
+
+(global-set-key (kbd "C-M-w") 'toggle-highlight-whitespace)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; PROJECT / FILE / BUFFER NAVIGATION
@@ -954,7 +1110,7 @@ The CHAR is replaced and the point is put before CHAR."
 (global-set-key (kbd "ESC S-<f12>") 'helm-semantic-or-imenu)
 
 (global-set-key (kbd "M-C") 'ace-jump-word-mode)
-(global-set-key (kbd "M-L") 'ace-jump-line-mode)
+(global-set-key (kbd "M-L") 'ace-jump-char-mode)
 (global-set-key (kbd "M-U") 'undo-tree-visualize)
 
 (defun other-window-back ()
@@ -1061,3 +1217,43 @@ The CHAR is replaced and the point is put before CHAR."
   (interactive)
   (byte-recompile-directory (expand-file-name "~/.emacs.d") 0))
 
+(put 'upcase-region 'disabled nil)
+(put 'downcase-region 'disabled nil)
+
+(turn-off-auto-fill)
+(auto-fill-mode -1)
+(remove-hook 'text-mode-hook #'turn-on-auto-fill)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; howdoi
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(global-set-key (kbd "<f1> <f1>") 'howdoi-query)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; my custom key binding mode
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;(defvar barrkel-keys-minor-mode-map (make-keymap) "barrkel-keys-minor-mode keymap")
+;;(define-key barrkel-keys-minor-mode-map (kbd "RET") 'dumb-indent-return)
+;;(define-minor-mode barrkel-keys-minor-mode
+;;  "A minor mode for barrkel key bindings"
+;;  t " BKey" 'barrkel-keys-minor-mode-map)
+;;(barrkel-keys-minor-mode 0)
+
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(enh-ruby-deep-indent-paren nil))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(highlight-indentation-current-column-face ((t (:inherit nil :background "magenta"))))
+ '(highlight-indentation-face ((t (:inherit nil :background "magenta")))))
+(put 'set-goal-column 'disabled nil)

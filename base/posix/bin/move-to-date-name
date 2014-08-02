@@ -1,0 +1,69 @@
+#!/bin/bash
+
+. _barrkel_utils
+
+prefix=0
+
+function do_rename # src date
+{
+    local i
+    local dest
+    local ext
+    
+    src="$1"
+    date="$2"
+    ext="${src##*.}"
+    
+    if (( prefix )); then
+        name="$(basename "$src")"
+        base="$(dirname "$src")/$date"
+        dest="$base"_"$name.$ext"
+
+        if [ -f "$dest" ]; then
+            let i=1
+            while true; do
+                dest="$(printf '%s-%.3d_%s.%s' "$base" "$i" "$name" "$ext")"
+                test -f "$dest" || break
+                let ++i
+            done
+        fi
+    else
+        base="$(dirname "$src")/$date"
+        dest="$base.$ext"
+        
+        if [ -f "$dest" ]; then
+            let i=1
+            while true; do
+                dest="$(printf '%s-%.3d.%s' "$base" "$i" "$ext")"
+                test -f "$dest" || break
+                let ++i
+            done
+        fi
+    fi
+    
+    mv -i -- "$1" "$dest" || die "Couldn't move '$1' to '$dest'."
+}
+
+function usage
+{
+    echo "usage: $(basename $0) [-p] <file>..."
+    echo "Renames files by date."
+    echo "  -p Insert date as prefix"
+    exit 1
+}
+
+test -n "$1" || usage
+
+while [ -n "$1" ]; do
+    case "$1" in
+        -p)
+            prefix=1
+            ;;
+        *)
+            test -f "$1" || usage
+            do_rename "$1" "$(get-photo-date -t -q "$1")"
+            ;;
+    esac
+    
+    shift
+done

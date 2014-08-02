@@ -1,6 +1,47 @@
+! Key S C CS A AS
 keycode  66 = Control_L NoSymbol Control_L
+keycode  94 = backslash bar
 
-!
+! KeyRelease event, serial 32, synthetic NO, window 0x1e00001,
+!     root 0x2a1, subw 0x0, time 13137913, (63,337), root:(1402,377),
+!     state 0x10, keycode 51 (keysym 0x5c, backslash), same_screen YES,
+!     XLookupString gives 1 bytes: (5c) "\"
+!     XFilterEvent returns: False
+! 
+! KeyPress event, serial 32, synthetic NO, window 0x1e00001,
+!     root 0x2a1, subw 0x0, time 13138809, (63,337), root:(1402,377),
+!     state 0x10, keycode 62 (keysym 0xffe2, Shift_R), same_screen YES,
+!     XLookupString gives 0 bytes: 
+!     XmbLookupString gives 0 bytes: 
+!     XFilterEvent returns: False
+! 
+! KeyPress event, serial 32, synthetic NO, window 0x1e00001,
+!     root 0x2a1, subw 0x0, time 13138937, (63,337), root:(1402,377),
+!     state 0x11, keycode 51 (keysym 0x7c, bar), same_screen YES,
+!     XLookupString gives 1 bytes: (7c) "|"
+!     XmbLookupString gives 1 bytes: (7c) "|"
+!     XFilterEvent returns: False
+! 
+! KeyRelease event, serial 32, synthetic NO, window 0x1e00001,
+!     root 0x2a1, subw 0x0, time 13000634, (102,-10), root:(1441,30),
+!     state 0x11, keycode 94 (keysym 0x3e, greater), same_screen YES,
+!     XKeysymToKeycode returns keycode: 26
+!     XLookupString gives 1 bytes: (3e) ">"
+!     XFilterEvent returns: False
+!                         
+! KeyRelease event, serial 32, synthetic NO, window 0x1e00001,
+!     root 0x2a1, subw 0x0, time 13000954, (102,-10), root:(1441,30),
+!     state 0x11, keycode 62 (keysym 0xffe2, Shift_R), same_screen YES,
+!     XLookupString gives 0 bytes:
+!     XFilterEvent returns: False
+!                         
+! KeyPress event, serial 32, synthetic NO, window 0x1e00001,
+!     root 0x2a1, subw 0x0, time 13001418, (102,-10), root:(1441,30),
+!     state 0x10, keycode 94 (keysym 0x3c, less), same_screen YES,
+!     XLookupString gives 1 bytes: (3c) "<"
+!     XmbLookupString gives 1 bytes: (3c) "<"
+!     XFilterEvent returns: False
+
 ! Swap Caps_Lock and Control_L
 !
 ! remove Lock = Caps_Lock

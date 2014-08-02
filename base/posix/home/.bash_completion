@@ -1,0 +1,9 @@
+# -*- mode: shell-script-mode -*-
+
+# load custom completions
+if [ -d ~/.bash_completion.d ]; then
+    for x in ~/.bash_completion.d/*; do
+        . "$x"
+    done
+fi
+

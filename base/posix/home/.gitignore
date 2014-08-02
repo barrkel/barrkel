@@ -1,5 +1,6 @@
 *~
 \#*\#
+.\#*
 .emacs.desktop*
 .dir-locals.el
 .listing
@@ -31,7 +32,6 @@ TAGS
 # Logs and databases #
 ######################
 *.log
-*.sql
 *.sqlite
 
 # OS generated files #

@@ -48,8 +48,8 @@ Rxvt*color6:rgb:00/FA/94
 Rxvt*color7:rgb:C0/C0/C0
 
 ! bold colors can generally afford to be dimmer than non-bold
-! Rxvt*color8: (bold black - should match background otherwise you get a real black background only for bold)
-Rxvt*color8:rgb:00/00/20
+! Rxvt*color8: gray for the moment
+Rxvt*color8:rgb:55/40/59
 ! bold red
 Rxvt*color9:red
 ! bold green

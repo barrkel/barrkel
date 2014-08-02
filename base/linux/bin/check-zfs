@@ -1,0 +1,25 @@
+#!/bin/bash
+
+zpool_log=/var/log/zpool-status.log
+
+curr_state=/var/log/zpool-status-current.log
+
+[[ -f "$curr_state" ]] || {
+    zpool status > "$curr_state"
+    exit
+}
+
+now="$(date +'%Y-%m-%d_%H-%M')"
+new_state_file="/var/tmp/zpool-status-$now.log"
+zpool status > "$new_state_file"
+
+diff -q "$curr_state" "$new_state_file" && {
+    # no change
+    rm "$new_state_file"
+    exit
+}
+
+echo "$now: status changed:" >> "$zpool_log"
+cat "$new_state_file" >> "$zpool_log"
+gmail-as-saibotorama barry.j.kelly@gmail.com "zfs status change" "$(<$new_state_file)"
+mv -f "$new_state_file" "$curr_state"

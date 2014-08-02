@@ -1,1 +1,1 @@
-.*\.\(mpg\|avi\|asf\|mov\|mpa\|mpe\|mpeg\|ram\|rm\|wmv\|mp4\|flv\)$
+.*\.(mpg|avi|asf|mov|mpa|mpe|mpeg|ram|rm|wmv|mp4|flv|mkv|3gp|m4v)$

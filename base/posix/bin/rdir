@@ -95,7 +95,11 @@ for d in "$@"; do
             
         /*)
             got_arg=1
-            do_rdir "$d"
+            (
+                ((want_dirs)) && array_add args -type d
+                ((want_files)) && array_add args -type f
+                do_rdir "$d"
+            )
             ;;
             
         *)

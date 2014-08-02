@@ -24,6 +24,10 @@ pathlist_ensure_prepending PATH ~/bin
 pathlist_append PATH /opt/bin
 export PATH
 
+test -n "$LESSOPEN" || {
+    test -x /usr/bin/lesspipe && . "$(/usr/bin/lesspipe)"
+}
+
 #append_if_missing PKG_CONFIG_PATH /usr/lib/pkgconfig
 
 
