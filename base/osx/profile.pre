@@ -1,0 +1,9 @@
+#!/bin/bash
+
+test -d '/opt/local/bin' && {
+    # Ports
+    echo 'pathlist_prepend PATH /opt/local/bin'
+    echo 'pathlist_prepend PATH /opt/local/sbin'
+    # Ports GNU binaries
+    echo 'pathlist_prepend PATH /opt/local/libexec/gnubin'
+} >> "$1"

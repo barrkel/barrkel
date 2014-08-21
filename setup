@@ -101,6 +101,9 @@ function ensure_mkdir # directory...
 
 function ensure_sanity
 {
+    # Verify gnu sed
+    sed --version >/dev/null 2>&1 || die "This script requires GNU sed on path as 'sed'"
+
     test -f "$barrkel/config/$hostname" || die "Please create host config file '$barrkel/config/$hostname'"
     ensure_mkdir "$barrkel/host/$hostname/"{bin,home,home.d}
 
@@ -119,7 +122,7 @@ function verify_no_change
     }
     
     cd "$cache" || die "Couldn't chdir to '$cache'"
-    find -type f | while read -r line; do
+    find . -type f | while read -r line; do
         # don't mind if file is missing
         echo "Cache: checking $line"
         test -f "$HOME/$line" || {
@@ -271,6 +274,16 @@ function build_staging
     build_initial_profile
     local atom i
 
+    # Add hook-in opportunity for initial profile
+    # Go from less specific to more specific for hooks.
+    for ((i=${#atoms[@]} - 1; i >= 0; --i)) {
+        atom="${atoms[i]}"
+        test -x "$atom/profile.pre" && {
+            echo "Running profile pre-hook '$atom/profile.pre'"
+            "$atom/profile.pre" "$staging/.bash_profile"
+        }
+    }
+
     # atoms go from more specific to less specific
     # but when building path, prepend in order from less specific to more specific
     for ((i=${#atoms[@]} - 1; i >= 0; --i)) {
@@ -279,7 +292,6 @@ function build_staging
         test -d "$atom/bin" && echo "pathlist_prepend PATH $atom/bin" >> "$staging/.bash_profile"
     }
     for atom in "${atoms[@]}"; do
-
         # symlinks
         test -d "$atom/home" && symlink_files "$atom/home" "$staging"
     done
@@ -322,6 +334,13 @@ function apply_staging
     cp -rP "$staging" "$barrkel/cache"
 }
 
+function tweak_paths
+{
+    # Add ports GNU coreutils to path
+    test -d /opt/local/libexec/gnubin &&
+        PATH=/opt/local/libexec/gnubin:"$PATH"
+}
+
 gather_vars "$@"
 
 (( no_prompt )) || {
@@ -329,6 +348,8 @@ gather_vars "$@"
     echo "Press Enter to continue, or run this script as '$(basename $0) -q' to avoid this prompt"
     read
 }
+
+tweak_paths
 
 ensure_sanity
 
