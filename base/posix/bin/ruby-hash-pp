@@ -1,3 +1,4 @@
 #!/bin/bash
 
-echo "console.log($(cat "$@" | sed -r 's|=>|:|g;s|nil|null|g;s|(\W):(\w+\W)|\1\2|g'))" | js
+echo "console.log($(cat "$@" | sed -r 's|=>|:|g;s|nil|null|g'))" | nodejs
+#echo "console.log($(cat "$@" | sed -r 's|=>|:|g;s|nil|null|g;s|(\W):(\w+\W)|\1\2|g'))" | nodejs

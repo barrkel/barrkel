@@ -571,6 +571,10 @@
 ;; Haml
 (require 'haml-mode-autoloads)
 (add-to-list 'auto-mode-alist '("\\.hamlc\\'" . haml-mode)) ;; CoffeeScript haml
+;; (add-hook 'haml-mode-hook
+;;           (lambda ()
+;;             (define-key haml-mode-map (kbd "M-,") 'coffee-indent-shift-left)
+;;             (define-key haml-mode-map (kbd "M-.") 'coffee-indent-shift-right)))
 
 ;; Java
 (add-hook 'java-mode-hook
@@ -1105,7 +1109,6 @@ The CHAR is replaced and the point is put before CHAR."
 (global-set-key (kbd "ESC <f12>") 'helm-resume)
 (global-set-key (kbd "M-<f12>") 'helm-resume)
 
-(global-set-key (kbd "M-i") 'helm-semantic-or-imenu)
 (global-set-key (kbd "M-S-<f12>") 'helm-semantic-or-imenu)
 (global-set-key (kbd "ESC S-<f12>") 'helm-semantic-or-imenu)
 
