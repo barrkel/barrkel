@@ -798,6 +798,12 @@ buffer instead of replacing the text in region."
 (global-set-key (kbd "C-s") 'isearch-forward-regexp)
 (global-set-key (kbd "C-r") 'isearch-backward-regexp)
 
+;; recursive grep
+;; this is here primarily to make it easier to use C-u with it
+(global-set-key (kbd "M-s g r") 'rgrep)
+;; better mneumonic for wgrep: editable grep
+(global-set-key (kbd "M-s g e") 'wgrep-change-to-wgrep-mode)
+
 ;; sync-edit thing
 (global-set-key (kbd "M-i") 'iedit-mode)
 (global-set-key (kbd "M-I") 'iedit-restrict-function)
