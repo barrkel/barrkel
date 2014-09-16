@@ -1181,12 +1181,21 @@ The CHAR is replaced and the point is put before CHAR."
 
 
 (defun helm-occur-1 (initial-value)
-  "Preconfigured helm for Occur with initial input."
-  (setq helm-multi-occur-buffer-list (list (buffer-name (current-buffer))))
+  "Preconfigured helm for Occur with initial input (helm-occur with mods)."
+  (interactive)
   (helm-occur-init-source)
+  (let ((bufs (list (buffer-name (current-buffer)))))
+    (helm-attrset 'moccur-buffers bufs helm-source-occur)
+    (helm-set-local-variable 'helm-multi-occur-buffer-list bufs)
+    (helm-set-local-variable
+     'helm-multi-occur-buffer-tick
+     (cl-loop for b in bufs
+              collect (buffer-chars-modified-tick (get-buffer b)))))
   (helm :sources 'helm-source-occur
         :buffer "*helm occur*"
         :history 'helm-grep-history
+        :preselect (and (memq 'helm-source-occur helm-sources-using-default-as-input)
+                        (format "%s:%d:" (buffer-name) (line-number-at-pos (point))))
         :truncate-lines t
         :input initial-value))
 (defun bk-helm-occur ()
