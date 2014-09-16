@@ -883,6 +883,11 @@ The CHAR is replaced and the point is put before CHAR."
   (forward-char -1))
 ;; note: bound to M-z
 
+(defadvice compile-goto-error (after center-screen-after-goto activate)
+  "Centers screen after compilation error goto"
+  (recenter))
+
+
 (defun get-current-line-indent ()
   (let (result start)
     (save-excursion
