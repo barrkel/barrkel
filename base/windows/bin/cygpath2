@@ -1,0 +1,22 @@
+#!/bin/bash
+
+. _barrkel_utils
+
+cygpath -f - "$@"
+exit
+
+# cygpath has a memory leak that breaks operation on large files (1.42.4.1 at least).
+
+t=$(mktemp)
+
+cat > $t
+
+split -l 200000 $t $t
+
+for f in $t?*; do
+    test -f "$f" || break
+    cygpath -f - "$@" < $f
+done
+
+rm $t
+exists_file "$t"?* && rm "$t"?*
