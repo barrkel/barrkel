@@ -6,6 +6,8 @@
 .listing
 .listing.sh
 TAGS
+# Marker for rspec-mode
+.no-rspec
 
 # Compiled source #
 ###################
@@ -50,5 +52,6 @@ Thumbs.db
 *.suo
 *.ncb
 *.user
+
 
 
