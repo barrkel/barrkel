@@ -494,18 +494,11 @@
       (setq c-default-style a-style)
     (setq c-default-style "bsd")))
 
-;; map completion to C-<space>
-(global-set-key (kbd "C-@") 'indent-for-tab-command)
 (global-set-key (kbd "M-`") 'hippie-expand)
 (global-set-key (kbd "M-?") 'hippie-expand) ;; M-S-/
 (global-set-key (kbd "TAB") 'indent-for-tab-command)
-;;(global-set-key (kbd "TAB") 'self-insert-command) ;; should be smarter
 ;; move mark begin to be like C-k b in Joe
 (global-set-key (kbd "C-c b") 'set-mark-command)
-(global-set-key (kbd "C-c SPC") 'set-mark-command)
-(global-set-key (kbd "C-x SPC") 'set-mark-command)
-(global-set-key (kbd "C-c C-SPC") 'set-mark-command)
-(global-set-key (kbd "C-x C-SPC") 'set-mark-command)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
