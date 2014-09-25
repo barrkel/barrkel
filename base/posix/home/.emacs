@@ -1113,42 +1113,6 @@ The CHAR is replaced and the point is put before CHAR."
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; eclim support
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defun bjk-setup-eclim ()
-  "Attempt to set up eclim"
-  (interactive)
-  (require 'eclimd)
-  (global-eclim-mode 1)
-  (setq eclim-eclipse-dirs '("~/apps/eclipse"))
-  
-  (require 'company-emacs-eclim)
-  (company-emacs-eclim-setup)
-  (global-company-mode t)
-  (local-set-key (kbd "C-@") 'company-complete)
-  (local-set-key (kbd "M-.") 'eclim-java-find-declaration)
-
-  ;; ;; regular auto-complete initialization
-  ;; (require 'auto-complete-config)
-  ;; (ac-config-default)
-
-  ;; ;; add the emacs-eclim source
-  ;; (require 'ac-emacs-eclim-source)
-  ;; (ac-emacs-eclim-config)
-  ;; (auto-complete-mode t)
-
-  (setq eclim-use-yasnippet nil)
-  (setq eclimd-default-workspace "~/workspace")
-  (setq eclim-executable "~/apps/eclipse/eclim"))
-
-(defun recompile-all-the-things ()
-  "Recompile all out of date .el files in ~/.emacs.d"
-  (interactive)
-  (byte-recompile-directory (expand-file-name "~/.emacs.d") 0))
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; HIGHLIGHTING
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
