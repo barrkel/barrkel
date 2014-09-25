@@ -494,18 +494,11 @@
       (setq c-default-style a-style)
     (setq c-default-style "bsd")))
 
-;; map completion to C-<space>
-(global-set-key (kbd "C-@") 'indent-for-tab-command)
 (global-set-key (kbd "M-`") 'hippie-expand)
 (global-set-key (kbd "M-?") 'hippie-expand) ;; M-S-/
 (global-set-key (kbd "TAB") 'indent-for-tab-command)
-;;(global-set-key (kbd "TAB") 'self-insert-command) ;; should be smarter
 ;; move mark begin to be like C-k b in Joe
 (global-set-key (kbd "C-c b") 'set-mark-command)
-(global-set-key (kbd "C-c SPC") 'set-mark-command)
-(global-set-key (kbd "C-x SPC") 'set-mark-command)
-(global-set-key (kbd "C-c C-SPC") 'set-mark-command)
-(global-set-key (kbd "C-x C-SPC") 'set-mark-command)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -608,6 +601,8 @@
 ;; Rspec
 (eval-after-load "rspec-mode"
   '(progn
+     (setenv "PAGER" (executable-find "cat"))
+     (inf-ruby-switch-setup)
      (global-set-key (kbd "M-T") 'rspec-toggle-spec-and-target)))
 
 ;; Ruby
@@ -727,6 +722,12 @@ buffer instead of replacing the text in region."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MISC KEY REBINDINGS / SHORTCUTS
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Multiple cursors
+
+(global-set-key (kbd "M-n") 'mc/mark-next-like-this)
+(global-set-key (kbd "M-N") 'mc/unmark-next-like-this)
+(global-set-key (kbd "C-M-n") 'mc/skip-to-next-like-this)
 
 ;; TODO: put these in minor modes
 

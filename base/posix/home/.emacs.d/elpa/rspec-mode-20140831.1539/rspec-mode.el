@@ -713,6 +713,8 @@ or a cons (FILE . LINE), to run one example."
   (let ((directory (file-name-as-directory (or directory default-directory))))
     (cond ((rspec-root-directory-p directory)
            (error "Could not determine the project root."))
+          ((file-exists-p (expand-file-name ".no-rspec" directory))
+           (rspec-project-root (file-name-directory (directory-file-name directory))))
           ((file-exists-p (expand-file-name "Rakefile" directory)) directory)
           ((file-exists-p (expand-file-name "Gemfile" directory)) directory)
           (t (rspec-project-root (file-name-directory (directory-file-name directory)))))))
