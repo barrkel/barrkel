@@ -601,6 +601,8 @@
 ;; Rspec
 (eval-after-load "rspec-mode"
   '(progn
+     (setenv "PAGER" (executable-find "cat"))
+     (inf-ruby-switch-setup)
      (global-set-key (kbd "M-T") 'rspec-toggle-spec-and-target)))
 
 ;; Ruby
