@@ -723,6 +723,12 @@ buffer instead of replacing the text in region."
 ;; MISC KEY REBINDINGS / SHORTCUTS
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; Multiple cursors
+
+(global-set-key (kbd "M-n") 'mc/mark-next-like-this)
+(global-set-key (kbd "M-N") 'mc/unmark-next-like-this)
+(global-set-key (kbd "C-M-n") 'mc/skip-to-next-like-this)
+
 ;; TODO: put these in minor modes
 
 (global-set-key (kbd "M-W") 'fixup-whitespace)
