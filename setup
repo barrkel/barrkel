@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd "$(dirname "$0")"
+
 # we will be dealing with lots of .files, reduce risk of missing some
 shopt -s dotglob
 
