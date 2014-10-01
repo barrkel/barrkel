@@ -13,6 +13,8 @@ export VISUAL=emacs
 export PAGER=/usr/bin/less
 export MANPAGER='/usr/bin/less -isrR'
 
+unset LESSOPEN
+
 pathlist_ensure_prepending MANPATH /usr/local/man /opt/man /usr/share/man /usr/man
 export MANPATH
 
