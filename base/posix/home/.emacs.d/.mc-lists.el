@@ -7,6 +7,15 @@
         end-of-visual-line
         scroll-down-line
         scroll-up-line
+        coffee-dedent-line-backspace
+        coffee-newline-and-indent
+        delete-line-command
+        duplicate-line-or-region
+        end-of-visual-line
+        fixup-whitespace
+        indent-for-tab-command
+        kill-region
+        kill-visual-line
         ))
 
 (setq mc/cmds-to-run-once

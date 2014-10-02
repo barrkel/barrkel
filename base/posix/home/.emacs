@@ -530,6 +530,8 @@
             (highlight-indentation-current-column-mode)
             (subword-mode)
             (set-tab-style nil 2)
+            (flycheck-mode)
+            (setq flycheck-checker 'coffee-coffeelint)
             (define-key coffee-mode-map (kbd "M-,") 'coffee-indent-shift-left)
             (define-key coffee-mode-map (kbd "M-.") 'coffee-indent-shift-right)))
 
@@ -806,6 +808,8 @@ buffer instead of replacing the text in region."
 (global-set-key (kbd "M-s g r") 'rgrep)
 ;; better mneumonic for wgrep: editable grep
 (global-set-key (kbd "M-s g e") 'wgrep-change-to-wgrep-mode)
+(define-key grep-mode-map (kbd "W") 'wgrep-change-to-wgrep-mode)
+(setq grep-find-template "find . <X> -type f <F> -exec egrep <C> -nH -e <R> {} +")
 
 ;; sync-edit thing
 (global-set-key (kbd "M-i") 'iedit-mode)
@@ -979,7 +983,9 @@ The CHAR is replaced and the point is put before CHAR."
 (defadvice compile-goto-error (after center-screen-after-goto activate)
   "Centers screen after compilation error goto"
   (recenter))
-
+(defadvice next-error (after center-screen-after-next-error activate)
+  "Centers screen after next-error"
+  (recenter))
 
 (defun get-current-line-indent ()
   (let (result start)
