@@ -21,4 +21,5 @@
 
 (setq mc/cmds-to-run-once
       '(
+        ido-find-file
         ))
