@@ -12,3 +12,7 @@
 [alias]
   graph = log --graph --pretty=format:\"%Cgreen%h %Cblue%an %Cgreen%ar %Creset%s\"
 	
+[merge]
+	tool = bcompf
+[mergetool "bcompf"]
+	cmd = bcompf \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\"
