@@ -9,6 +9,7 @@
         scroll-up-line
         coffee-dedent-line-backspace
         coffee-newline-and-indent
+        dabbrev-expand
         delete-line-command
         duplicate-line-or-region
         end-of-visual-line
