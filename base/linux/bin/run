@@ -12,4 +12,4 @@ test -n "$1" || usage
 program="$1"
 shift
 
-"$program" "$@" >/dev/null 2>/dev/null &
+nohup "$program" "$@" >/dev/null 2>/dev/null &

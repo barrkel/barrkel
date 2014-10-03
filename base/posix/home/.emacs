@@ -530,6 +530,8 @@
             (highlight-indentation-current-column-mode)
             (subword-mode)
             (set-tab-style nil 2)
+            (flycheck-mode)
+            (setq flycheck-checker 'coffee-coffeelint)
             (define-key coffee-mode-map (kbd "M-,") 'coffee-indent-shift-left)
             (define-key coffee-mode-map (kbd "M-.") 'coffee-indent-shift-right)))
 
@@ -614,6 +616,7 @@
             (robe-mode)
             (visual-line-mode)
             (define-key enh-ruby-mode-map (kbd "RET") 'newline-and-indent)
+            (define-key enh-ruby-mode-map (kbd "C-M-n") nil)
             (define-key enh-ruby-mode-map (kbd "C-j") nil)
             ;; hopefully the bits below will work
             (er/enable-mode-expansions 'enh-ruby-mode 'er/add-ruby-mode-expansions)
@@ -806,6 +809,8 @@ buffer instead of replacing the text in region."
 (global-set-key (kbd "M-s g r") 'rgrep)
 ;; better mneumonic for wgrep: editable grep
 (global-set-key (kbd "M-s g e") 'wgrep-change-to-wgrep-mode)
+(define-key grep-mode-map (kbd "W") 'wgrep-change-to-wgrep-mode)
+(setq grep-find-template "find . <X> -type f <F> -exec egrep <C> -nH -e <R> {} +")
 
 ;; sync-edit thing
 (global-set-key (kbd "M-i") 'iedit-mode)
@@ -979,7 +984,9 @@ The CHAR is replaced and the point is put before CHAR."
 (defadvice compile-goto-error (after center-screen-after-goto activate)
   "Centers screen after compilation error goto"
   (recenter))
-
+(defadvice next-error (after center-screen-after-next-error activate)
+  "Centers screen after next-error"
+  (recenter))
 
 (defun get-current-line-indent ()
   (let (result start)
@@ -1144,20 +1151,21 @@ The CHAR is replaced and the point is put before CHAR."
 (global-set-key (kbd "M-m") 'toggle-word-highlight)
 
 
-;; Highlight lines containing just whitespace
-(defvar highlight-whitespace-active nil
-  "Non-nil if whitespace highlight active")
-(defun toggle-highlight-whitespace ()
-  "Highlight lines containing just whitespace"
+;; Highlight lines containing stuff we probably don't want to check in
+(defvar highlight-dodgy-active nil
+  "Non-nil if dodgy highlight active")
+(defun toggle-highlight-dodgy ()
+  "Highlight lines containing stuff we shouldn't check in"
   (interactive)
-  (if highlight-whitespace-active
-      (progn
-        (unhighlight-regexp "[[:space:]]+$")
-        (setq highlight-whitespace-active nil))
-    (highlight-regexp "[[:space:]]+$" 'hi-pink)
-    (setq highlight-whitespace-active t)))
+  (let ((regex "[[:space:]]+$\\|debugger\\|console.log.*\\|binding.pry.*"))
+    (if highlight-dodgy-active
+        (progn
+          (unhighlight-regexp regex)
+          (setq highlight-dodgy-active nil))
+      (highlight-regexp regex 'hi-pink)
+      (setq highlight-dodgy-active t))))
 
-(global-set-key (kbd "C-M-w") 'toggle-highlight-whitespace)
+(global-set-key (kbd "C-M-w") 'toggle-highlight-dodgy)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; PROJECT / FILE / BUFFER NAVIGATION
