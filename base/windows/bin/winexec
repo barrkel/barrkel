@@ -106,5 +106,5 @@ test -x "$exe" || die "can't find $EXECUTABLE"
 if [ "$USE_CYGSTART" ]; then
     cygstart -- "$exe" "${args[@]}"
 else
-    "$exe" "${args[@]}"
+    exec "$exe" "${args[@]}"
 fi
