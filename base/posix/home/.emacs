@@ -461,6 +461,8 @@
 
 ;; note: list faces with list-faces-display
 
+
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; TABS
@@ -475,6 +477,7 @@
 (setq-default tab-stop-list (number-sequence 4 200 4))
 (setq-default tab-always-indent 'complete)
 (setq-default c-basic-offset 4)
+;; Actually, I only want BSD style for Java
 (setq-default c-default-style "bsd")
 
 (defun set-tab-style (a-use-tabs a-tab-width &optional a-style)
@@ -500,6 +503,19 @@
 ;; move mark begin to be like C-k b in Joe
 (global-set-key (kbd "C-c b") 'set-mark-command)
 
+;; (defun barrkel-c-tab ()
+;;   "Do something sane with the TAB key in C mode"
+;;   (interactive)
+;;   (cond
+;;    ((use-region-p)
+;;     (message "Using region")
+;;     (c-indent-line-or-region))
+;;    (t
+;;     (insert-tab))))
+
+
+(setq split-height-threshold 150)
+;; (setq split-width-threshold 150) ;; default 160
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MODE CONFIG
@@ -521,6 +537,12 @@
 (add-hook 'c-mode-common-hook
           (lambda ()
             (visual-line-mode)
+            (setq c-default-style "linux")
+            ;; customize more by using these two steps:
+            ;; C-c C-s to discover syntactic context symbol
+            ;; C-c C-o to alter offset, choose syntactic context symbol from list
+            (c-set-offset 'func-decl-cont 0)
+            ;; (local-set-key (kbd "TAB") 'barrkel-c-tab)
             (local-set-key (kbd "C-c o") 'ff-find-other-file)))
 
 ;; CoffeeScript
