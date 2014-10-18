@@ -53,7 +53,7 @@ while [ -n "$1" ]; do
             test -d "$dir" || {
                 (( verbose )) && echo "unrar x $args '$1' '$dir'"
                 mkdir "$dir"
-                unrar x $args "$1" "$dir" > /dev/null
+                unrar $UNRAR_ARGS x $args "$1" "$dir" > /dev/null
             }
             ;;
     esac
