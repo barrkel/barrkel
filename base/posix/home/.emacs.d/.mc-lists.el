@@ -4,6 +4,7 @@
 (setq mc/cmds-to-run-for-all
       '(
         beginning-of-visual-line
+        c-electric-delete-forward
         coffee-dedent-line-backspace
         coffee-newline-and-indent
         dabbrev-expand

@@ -543,6 +543,8 @@
             ;; C-c C-o to alter offset, choose syntactic context symbol from list
             (c-set-offset 'func-decl-cont 0)
             ;; (local-set-key (kbd "TAB") 'barrkel-c-tab)
+            ;; can't stand electric stuff in C mode
+            (local-set-key (kbd "<f1>" 'helm-man-woman))
             (local-set-key (kbd "RET") 'dumb-newline)
             (local-set-key (kbd "C-c o") 'ff-find-other-file)))
 
