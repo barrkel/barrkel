@@ -4,11 +4,16 @@
 (setq mc/cmds-to-run-for-all
       '(
         beginning-of-visual-line
+        c-electric-colon
         c-electric-delete-forward
+        c-electric-paren
+        c-electric-semi&comma
+        c-indent-line-or-region
         coffee-dedent-line-backspace
         coffee-newline-and-indent
         dabbrev-expand
         delete-line-command
+        dumb-newline
         duplicate-line-or-region
         end-of-visual-line
         end-of-visual-line
