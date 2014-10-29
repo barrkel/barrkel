@@ -581,6 +581,11 @@
             (subword-mode)
             (set-tab-style t 4)))
 
+;; csv-mode
+(add-hook 'csv-mode-hook
+          (lambda ()
+            (local-set-key (kbd "RET") 'dumb-newline)))
+
 ;; elisp mode
 (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
 (add-hook 'emacs-lisp-mode-hook
@@ -680,6 +685,7 @@
 ;; Text
 (add-hook 'text-mode-hook
           (lambda ()
+            (local-set-key (kbd "RET") 'dumb-newline)
             (setq indent-tabs-mode nil)
             (setq tab-stop-list (number-sequence 2 200 2))
             (setq indent-line-function 'insert-tab)))
