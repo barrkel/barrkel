@@ -517,6 +517,13 @@
 (setq split-height-threshold 150)
 ;; (setq split-width-threshold 150) ;; default 160
 
+
+(defun helm-woman-at-point (arg)
+  "Run helm-man-woman with text initialized from point"
+  (interactive "P")
+  (when arg (setq helm-man-pages nil))
+  (helm :sources 'helm-source-man-pages :buffer "*Helm woman*" :input (get-point-text)))
+  
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MODE CONFIG
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -543,6 +550,11 @@
             ;; C-c C-o to alter offset, choose syntactic context symbol from list
             (c-set-offset 'func-decl-cont 0)
             ;; (local-set-key (kbd "TAB") 'barrkel-c-tab)
+            ;; can't stand electric stuff in C mode, breaks editing code out of order,
+            ;; breaks editing with multiple cursors, is just generally a bad idea
+            (c-toggle-electric-state -1)
+            (local-set-key (kbd "<f1>") 'helm-woman-at-point)
+            (local-set-key (kbd "RET") 'dumb-newline)
             (local-set-key (kbd "C-c o") 'ff-find-other-file)))
 
 ;; CoffeeScript
@@ -568,6 +580,11 @@
           (lambda ()
             (subword-mode)
             (set-tab-style t 4)))
+
+;; csv-mode
+(add-hook 'csv-mode-hook
+          (lambda ()
+            (local-set-key (kbd "RET") 'dumb-newline)))
 
 ;; elisp mode
 (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
@@ -668,6 +685,7 @@
 ;; Text
 (add-hook 'text-mode-hook
           (lambda ()
+            (local-set-key (kbd "RET") 'dumb-newline)
             (setq indent-tabs-mode nil)
             (setq tab-stop-list (number-sequence 2 200 2))
             (setq indent-line-function 'insert-tab)))

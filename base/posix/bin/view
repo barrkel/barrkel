@@ -40,4 +40,7 @@ while [ -n "$1" ]; do
     shift
 done
 
-expand -t "$tabWidth" "${files[@]}" | nl -b a | fold -s -w 108 | $PAGER
+width=$(tput cols)
+# maximum width for readibility
+(( width > 120 )) && width=120
+expand -t "$tabWidth" "${files[@]}" | nl -b a | fold -s -w $width | $PAGER

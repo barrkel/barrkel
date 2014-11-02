@@ -4,19 +4,25 @@
 (setq mc/cmds-to-run-for-all
       '(
         beginning-of-visual-line
+        c-electric-colon
+        c-electric-delete-forward
+        c-electric-paren
+        c-electric-semi&comma
+        c-indent-line-or-region
         coffee-dedent-line-backspace
         coffee-newline-and-indent
         dabbrev-expand
         delete-line-command
         dired-next-line
         dired-previous-line
+        dumb-newline
         duplicate-line-or-region
-        end-of-visual-line
         end-of-visual-line
         fixup-whitespace
         indent-for-tab-command
         kill-region
         kill-visual-line
+        overwrite-mode
         scroll-down-line
         scroll-up-line
         wdired-downcase-word
@@ -27,4 +33,5 @@
         ido-find-file
         iedit-mode
         wdired-finish-edit
+        wgrep-finish-edit
         ))
