@@ -4,22 +4,27 @@
 (setq mc/cmds-to-run-for-all
       '(
         beginning-of-visual-line
-        end-of-visual-line
-        scroll-down-line
-        scroll-up-line
         coffee-dedent-line-backspace
         coffee-newline-and-indent
         dabbrev-expand
         delete-line-command
+        dired-next-line
+        dired-previous-line
         duplicate-line-or-region
+        end-of-visual-line
         end-of-visual-line
         fixup-whitespace
         indent-for-tab-command
         kill-region
         kill-visual-line
+        scroll-down-line
+        scroll-up-line
+        wdired-downcase-word
         ))
 
 (setq mc/cmds-to-run-once
       '(
         ido-find-file
+        iedit-mode
+        wdired-finish-edit
         ))
