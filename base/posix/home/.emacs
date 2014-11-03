@@ -465,7 +465,7 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; TABS
+;; TABS and INDENTING
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; don't make backspace turn tabs into spaces (who thought that was a good idea?)
@@ -503,15 +503,68 @@
 ;; move mark begin to be like C-k b in Joe
 (global-set-key (kbd "C-c b") 'set-mark-command)
 
-;; (defun barrkel-c-tab ()
-;;   "Do something sane with the TAB key in C mode"
-;;   (interactive)
-;;   (cond
-;;    ((use-region-p)
-;;     (message "Using region")
-;;     (c-indent-line-or-region))
-;;    (t
-;;     (insert-tab))))
+;; stolen from coffee-mode
+(defun barrkel-indent-shift-amount (start end dir)
+  "Compute distance to the closest increment of `tab-width'."
+  (let ((min most-positive-fixnum))
+    (save-excursion
+      (goto-char start)
+      (while (< (point) end)
+        (let ((current (current-indentation)))
+          (when (< current min)
+            (setq min current)))
+        (forward-line))
+      (let ((rem (% min tab-width)))
+        (if (zerop rem)
+            tab-width
+          (cond ((eq dir 'left) rem)
+                ((eq dir 'right) (- tab-width rem))
+                (t 0)))))))
+
+;; stolen from coffee-mode
+(defun barrkel-indent-shift-left (start end &optional count)
+  "Shift lines contained in region START END by COUNT columns to the left.
+If COUNT is not given, indents to the closest increment of
+`tab-width'. If region isn't active, the current line is
+shifted. The shifted region includes the lines in which START and
+END lie. An error is signaled if any lines in the region are
+indented less than COUNT columns."
+  (interactive
+   (if mark-active
+       (list (region-beginning) (region-end) current-prefix-arg)
+     (list (line-beginning-position) (line-end-position) current-prefix-arg)))
+  (let ((amount (if count (prefix-numeric-value count)
+                  (barrkel-indent-shift-amount start end 'left))))
+    (when (> amount 0)
+      (let (deactivate-mark)
+        (save-excursion
+          (goto-char start)
+          ;; Check that all lines can be shifted enough
+          (while (< (point) end)
+            (if (and (< (current-indentation) amount)
+                     (not (looking-at "[ \t]*$")))
+                (error "Can't shift all lines enough"))
+            (forward-line))
+          (indent-rigidly start end (- amount)))))))
+
+(add-to-list 'debug-ignored-errors "^Can't shift all lines enough")
+
+(defun barrkel-indent-shift-right (start end &optional count)
+  "Shift lines contained in region START END by COUNT columns to the right.
+if COUNT is not given, indents to the closest increment of
+`tab-width'. If region isn't active, the current line is
+shifted. The shifted region includes the lines in which START and
+END lie."
+  (interactive
+   (if mark-active
+       (list (region-beginning) (region-end) current-prefix-arg)
+     (list (line-beginning-position) (line-end-position) current-prefix-arg)))
+  (let (deactivate-mark
+        (amount (if count (prefix-numeric-value count)
+                  (barrkel-indent-shift-amount start end 'right))))
+    (indent-rigidly start end amount)))
+
+
 
 
 (setq split-height-threshold 150)
@@ -607,10 +660,10 @@
 ;; Haml
 (require 'haml-mode-autoloads)
 (add-to-list 'auto-mode-alist '("\\.hamlc\\'" . haml-mode)) ;; CoffeeScript haml
-;; (add-hook 'haml-mode-hook
-;;           (lambda ()
-;;             (define-key haml-mode-map (kbd "M-,") 'coffee-indent-shift-left)
-;;             (define-key haml-mode-map (kbd "M-.") 'coffee-indent-shift-right)))
+(add-hook 'haml-mode-hook
+          (lambda ()
+            (define-key haml-mode-map (kbd "M-,") 'barrkel-indent-shift-left)
+            (define-key haml-mode-map (kbd "M-.") 'barrkel-indent-shift-right)))
 
 ;; Java
 (add-hook 'java-mode-hook
@@ -635,6 +688,9 @@
 (autoload 'markdown-mode "markdown-mode" "Major mode for editing Markdown files" t)
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+(add-hook 'markdown-mode-hook
+          (lambda()
+            (local-set-key (kbd "RET") 'dumb-newline)))
 
 ;; Puppet
 (require 'puppet-mode-autoloads)

@@ -11,6 +11,7 @@
         c-indent-line-or-region
         coffee-dedent-line-backspace
         coffee-newline-and-indent
+        company-complete
         dabbrev-expand
         delete-line-command
         dired-next-line
