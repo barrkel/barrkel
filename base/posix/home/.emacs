@@ -62,6 +62,8 @@
   (message "Fixing rxvt inputs")
   (define-key input-decode-map "\e[a" (kbd "S-<up>"))
   (define-key input-decode-map "\e[b" (kbd "S-<down>"))
+  (define-key input-decode-map "\e[1~" (kbd "<home>"))
+  (define-key input-decode-map "\e[4~" (kbd "<end>"))
   (define-key input-decode-map "\e[7$" (kbd "S-<home>"))
   (define-key input-decode-map "\e[7^" (kbd "C-<home>"))
   (define-key input-decode-map "\e[7@" (kbd "C-S-<home>"))
