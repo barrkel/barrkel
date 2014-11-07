@@ -1,0 +1,2 @@
+# -*- mode: sh; -*-
+test -d /usr/gnu/bin && pathlist_ensure_prepending PATH /usr/gnu/bin
