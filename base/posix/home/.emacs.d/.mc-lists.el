@@ -3,6 +3,8 @@
 
 (setq mc/cmds-to-run-for-all
       '(
+        barrkel-indent-shift-left
+        barrkel-indent-shift-right
         beginning-of-visual-line
         c-electric-colon
         c-electric-delete-forward
@@ -11,6 +13,7 @@
         c-indent-line-or-region
         coffee-dedent-line-backspace
         coffee-newline-and-indent
+        comment-or-uncomment-region
         company-complete
         dabbrev-expand
         delete-line-command
@@ -20,6 +23,7 @@
         duplicate-line-or-region
         end-of-visual-line
         fixup-whitespace
+        haml-electric-backspace
         indent-for-tab-command
         kill-region
         kill-visual-line
@@ -33,6 +37,7 @@
       '(
         ido-find-file
         iedit-mode
+        toggle-word-highlight
         wdired-finish-edit
         wgrep-finish-edit
         ))

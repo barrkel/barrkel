@@ -664,6 +664,7 @@ END lie."
 (add-to-list 'auto-mode-alist '("\\.hamlc\\'" . haml-mode)) ;; CoffeeScript haml
 (add-hook 'haml-mode-hook
           (lambda ()
+            (highlight-indentation-current-column-mode)
             (define-key haml-mode-map (kbd "M-,") 'barrkel-indent-shift-left)
             (define-key haml-mode-map (kbd "M-.") 'barrkel-indent-shift-right)))
 
@@ -1217,7 +1218,6 @@ The CHAR is replaced and the point is put before CHAR."
             (file-name-directory listing-file)
             found-file)))))))
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; HIGHLIGHTING
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1367,6 +1367,18 @@ The CHAR is replaced and the point is put before CHAR."
   (helm-occur-1 (get-point-text)))
 (global-set-key (kbd "M-o") 'bk-helm-occur)  
 ;;(global-set-key (kbd "M-O") 'helm-occur)
+
+;; find file using projectile with text from cursor
+(defun bjk-helm-projectile-find-file (&optional arg)
+  (interactive "P")
+  (if (projectile-project-p)
+      (projectile-maybe-invalidate-cache arg))
+  (let ((helm-ff-transformer-show-only-basename nil))
+    (helm :sources 'helm-source-projectile-files-list
+          :buffer "*helm projectile*"
+          :input (get-point-text)
+          :prompt (projectile-prepend-project-name "Find file: "))))
+(global-set-key (kbd "<f11>") 'bjk-helm-projectile-find-file)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; eclim support
