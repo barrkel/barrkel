@@ -1369,8 +1369,10 @@ The CHAR is replaced and the point is put before CHAR."
 ;;(global-set-key (kbd "M-O") 'helm-occur)
 
 ;; find file using projectile with text from cursor
+
 (defun bjk-helm-projectile-find-file (&optional arg)
   (interactive "P")
+  (require 'helm-projectile)
   (if (projectile-project-p)
       (projectile-maybe-invalidate-cache arg))
   (let ((helm-ff-transformer-show-only-basename nil))

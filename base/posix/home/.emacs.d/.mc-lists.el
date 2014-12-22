@@ -25,6 +25,7 @@
         fixup-whitespace
         haml-electric-backspace
         indent-for-tab-command
+        isearch-forward-regexp
         kill-region
         kill-visual-line
         overwrite-mode
@@ -37,6 +38,7 @@
       '(
         ido-find-file
         iedit-mode
+        save-some-buffers
         toggle-word-highlight
         wdired-finish-edit
         wgrep-finish-edit
