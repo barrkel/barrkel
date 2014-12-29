@@ -172,6 +172,10 @@
 ;; (switch-to-buffer (get-buffer-create "empty"))
 ;; (delete-other-windows)
 
+;; use rename to make backup only if there are hard links
+;; if file is hard linked multiple times, modifies the backing file
+(setq backup-by-copying-when-linked t)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MISC MODES
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -499,6 +503,68 @@
       (setq c-default-style a-style)
     (setq c-default-style "bsd")))
 
+
+(defun barrkel-indent-shift-amount (start end dir)
+  "Compute distance to the closest increment of `tab-width'."
+  (let ((min most-positive-fixnum))
+    (save-excursion
+      (goto-char start)
+      (while (< (point) end)
+        (let ((current (current-indentation)))
+          (when (< current min)
+            (setq min current)))
+        (forward-line))
+      (let ((rem (% min tab-width)))
+        (if (zerop rem)
+            tab-width
+          (cond ((eq dir 'left) rem)
+                ((eq dir 'right) (- tab-width rem))
+                (t 0)))))))
+
+(defun barrkel-indent-shift-left (start end &optional count)
+  "Shift lines contained in region START END by COUNT columns to the left.
+If COUNT is not given, indents to the closest increment of
+`tab-width'. If region isn't active, the current line is
+shifted. The shifted region includes the lines in which START and
+END lie. An error is signaled if any lines in the region are
+indented less than COUNT columns."
+  (interactive
+   (if mark-active
+       (list (region-beginning) (region-end) current-prefix-arg)
+     (list (line-beginning-position) (line-end-position) current-prefix-arg)))
+  (let ((amount (if count (prefix-numeric-value count)
+                  (barrkel-indent-shift-amount start end 'left))))
+    (when (> amount 0)
+      (let (deactivate-mark)
+        (save-excursion
+          (goto-char start)
+          ;; Check that all lines can be shifted enough
+          (while (< (point) end)
+            (if (and (< (current-indentation) amount)
+                     (not (looking-at "[ \t]*$")))
+                (error "Can't shift all lines enough"))
+            (forward-line))
+          (indent-rigidly start end (- amount)))))))
+
+(add-to-list 'debug-ignored-errors "^Can't shift all lines enough")
+
+(defun barrkel-indent-shift-right (start end &optional count)
+  "Shift lines contained in region START END by COUNT columns to the right.
+if COUNT is not given, indents to the closest increment of
+`tab-width'. If region isn't active, the current line is
+shifted. The shifted region includes the lines in which START and
+END lie."
+  (interactive
+   (if mark-active
+       (list (region-beginning) (region-end) current-prefix-arg)
+     (list (line-beginning-position) (line-end-position) current-prefix-arg)))
+  (let (deactivate-mark
+        (amount (if count (prefix-numeric-value count)
+                  (barrkel-indent-shift-amount start end 'right))))
+    (indent-rigidly start end amount)))
+
+
+
 (global-set-key (kbd "M-`") 'hippie-expand)
 (global-set-key (kbd "M-?") 'hippie-expand) ;; M-S-/
 (global-set-key (kbd "TAB") 'indent-for-tab-command)
@@ -682,6 +748,11 @@ END lie."
             (subword-mode)
             (visual-line-mode)))
 
+;; Julia
+(add-hook 'julia-mode-hook
+          (lambda ()
+            (setq julia-basic-offset 2)))
+
 ;; Man
 (add-hook 'Man-mode-hook
           (lambda ()
@@ -740,6 +811,12 @@ END lie."
           (lambda ()
             (visual-line-mode)
             (set-tab-style nil 4)))
+
+;; slim templates
+(add-hook 'slim-mode-hook
+          (lambda ()
+            (define-key slim-mode-map (kbd "M-,") 'barrkel-indent-shift-left)
+            (define-key slim-mode-map (kbd "M-.") 'barrkel-indent-shift-right)))
 
 ;; Text
 (add-hook 'text-mode-hook

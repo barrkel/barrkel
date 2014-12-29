@@ -1,0 +1,23 @@
+#!/usr/bin/env ruby
+
+require 'nokogiri'
+
+def usage
+  puts "usage: #{$0} <expr> <input>..."
+  exit 1
+end
+
+usage if ARGV.length < 2
+
+expr = ARGV.shift
+
+ARGV.each do |arg|
+  File.open(arg) do |f|
+    doc = Nokogiri::HTML(f)
+    doc.xpath(expr).each do |value|
+      puts value
+    end
+  end
+end
+
+
