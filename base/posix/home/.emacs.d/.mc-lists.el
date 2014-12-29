@@ -6,6 +6,7 @@
         barrkel-indent-shift-left
         barrkel-indent-shift-right
         beginning-of-visual-line
+        c-electric-brace
         c-electric-colon
         c-electric-delete-forward
         c-electric-paren
