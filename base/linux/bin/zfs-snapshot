@@ -46,7 +46,7 @@ for fs; do
     zfs snapshot "${fs}@${base_name}_$(now)" || die "failed to snapshot $fs"
 
     # delete old snapshots
-    zfs list -t snapshot | grep "${fs}@${base_name}_" | sort -r | \
+    zfs list -t snapshot -o name -s name -r "$fs" | grep "${fs}@${base_name}_" | sort -r | \
         tail -n +"${keep_count}" | awk '{ print $1 }' | 
         while read -r line; do
             zfs destroy "${line}"
