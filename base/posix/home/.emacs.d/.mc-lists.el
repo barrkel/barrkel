@@ -33,6 +33,7 @@
         isearch-backward-regexp
         isearch-forward-regexp
         isearch-printing-char
+        isearch-other-meta-char
         kill-region
         kill-visual-line
         overwrite-mode
