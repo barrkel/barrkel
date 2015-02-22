@@ -1,0 +1,22 @@
+#!/bin/bash
+
+function usage
+{
+    echo "usage: $(basename $0) <time>"
+    echo "Sleep until the specific time occurs"
+    exit 1
+}
+
+test -n "$1" || usage
+
+let time_in_seconds=$(date -d "$1" +%s)
+(( time_in_seconds == 0 )) && usage
+
+difference=$((time_in_seconds - $(date +%s)))
+
+if (( difference < 0 )); then
+    sleep $[86400 + difference]
+else
+	sleep $difference
+fi
+
