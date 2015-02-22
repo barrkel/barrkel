@@ -3,10 +3,10 @@
 
 (setq mc/cmds-to-run-for-all
       '(
-        barrkel-indent-shift-left
-        barrkel-indent-shift-right
         ace-jump-done
         ace-jump-word-mode
+        barrkel-indent-shift-left
+        barrkel-indent-shift-right
         beginning-of-visual-line
         c-electric-brace
         c-electric-colon
@@ -29,9 +29,9 @@
         fixup-whitespace
         haml-electric-backspace
         indent-for-tab-command
-        isearch-forward-regexp
         isearch-abort
         isearch-backward-regexp
+        isearch-forward-regexp
         isearch-printing-char
         kill-region
         kill-visual-line
@@ -39,6 +39,8 @@
         ruby-end-of-block
         scroll-down-line
         scroll-up-line
+        subword-left
+        subword-right
         wdired-downcase-word
         ))
 
