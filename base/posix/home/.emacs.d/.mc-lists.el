@@ -6,6 +6,7 @@
         barrkel-indent-shift-left
         barrkel-indent-shift-right
         beginning-of-visual-line
+        c-electric-brace
         c-electric-colon
         c-electric-delete-forward
         c-electric-paren
@@ -24,20 +25,30 @@
         duplicate-line-or-region
         end-of-buffer
         end-of-visual-line
+        enh-ruby-electric-brace
         fixup-whitespace
         haml-electric-backspace
         indent-for-tab-command
+        isearch-abort
+        isearch-backward-regexp
         isearch-forward-regexp
+        isearch-printing-char
+        isearch-other-meta-char
         kill-region
         kill-visual-line
         overwrite-mode
+        ruby-end-of-block
         scroll-down-line
         scroll-up-line
+        subword-left
+        subword-right
         wdired-downcase-word
         ))
 
 (setq mc/cmds-to-run-once
       '(
+        ace-jump-done
+        ace-jump-word-mode
         ido-find-file
         iedit-mode
         save-some-buffers
