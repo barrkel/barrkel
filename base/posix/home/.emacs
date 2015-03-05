@@ -329,7 +329,7 @@
 ;;----------------------------------------
 ;; robe
 ;;----------------------------------------
-(setq robe-completing-read-func 'helm-completing-read-default)
+(setq robe-completing-read-func 'completing-read)
 
 
 ;; unique file names that would otherwise be duplicates
@@ -724,6 +724,13 @@ END lie."
           (lambda ()
             (visual-line-mode)
             (set-tab-style t 4)))
+
+;; Groovy
+(add-hook 'groovy-mode-hook
+          (lambda ()
+            (set-tab-style t 4)
+            (subword-mode)
+            (visual-line-mode)))
 
 ;; Haml
 (require 'haml-mode-autoloads)

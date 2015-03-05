@@ -5,14 +5,12 @@
       '(
         barrkel-indent-shift-left
         barrkel-indent-shift-right
-        ace-jump-done
-        ace-jump-word-mode
         beginning-of-visual-line
-        c-electric-brace
         c-electric-colon
         c-electric-delete-forward
         c-electric-paren
         c-electric-semi&comma
+        c-electric-slash
         c-indent-line-or-region
         coffee-dedent-line-backspace
         coffee-newline-and-indent
@@ -24,20 +22,15 @@
         dired-previous-line
         dumb-newline
         duplicate-line-or-region
+        end-of-buffer
         end-of-visual-line
-        enh-ruby-electric-brace
         fixup-whitespace
         haml-electric-backspace
         indent-for-tab-command
         isearch-forward-regexp
-        isearch-abort
-        isearch-backward-regexp
-        isearch-printing-char
-        isearch-other-meta-char
         kill-region
         kill-visual-line
         overwrite-mode
-        ruby-end-of-block
         scroll-down-line
         scroll-up-line
         wdired-downcase-word
