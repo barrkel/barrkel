@@ -32,8 +32,8 @@
         isearch-abort
         isearch-backward-regexp
         isearch-forward-regexp
-        isearch-printing-char
         isearch-other-meta-char
+        isearch-printing-char
         kill-region
         kill-visual-line
         overwrite-mode
@@ -51,6 +51,7 @@
         ace-jump-word-mode
         ido-find-file
         iedit-mode
+        previous-buffer
         save-some-buffers
         toggle-word-highlight
         wdired-finish-edit

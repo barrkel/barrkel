@@ -804,7 +804,7 @@ END lie."
                               (if (and transient-mark-mode mark-active) (region-end))))))
 (add-to-list 'auto-mode-alist '("Gemfile" . enh-ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.json.jbuilder\\'" . enh-ruby-mode))
-
+(add-to-list 'auto-mode-alist '("\\.rb\\'" . enh-ruby-mode))
 
 ;; SCSS
 (add-hook 'scss-mode-hook
@@ -1533,6 +1533,7 @@ The CHAR is replaced and the point is put before CHAR."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(enh-ruby-deep-indent-paren nil)
+ '(haskell-mode-hook (quote (turn-on-eldoc-mode turn-on-haskell-doc turn-on-haskell-indent)))
  '(rspec-use-rake-when-possible nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
