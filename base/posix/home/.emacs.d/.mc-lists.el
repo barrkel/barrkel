@@ -10,6 +10,7 @@
         c-electric-colon
         c-electric-delete-forward
         c-electric-paren
+        c-electric-pound
         c-electric-semi&comma
         c-electric-slash
         c-indent-line-or-region
@@ -51,7 +52,6 @@
         ace-jump-word-mode
         ido-find-file
         iedit-mode
-        previous-buffer
         save-some-buffers
         toggle-word-highlight
         wdired-finish-edit

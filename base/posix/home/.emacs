@@ -771,6 +771,7 @@ END lie."
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 (add-hook 'markdown-mode-hook
           (lambda()
+            (define-key markdown-mode-map (kbd "M-n") nil)
             (local-set-key (kbd "RET") 'dumb-newline)))
 
 ;; Puppet
@@ -1455,6 +1456,7 @@ The CHAR is replaced and the point is put before CHAR."
 ;; find file using projectile with text from cursor
 
 (defun bjk-helm-projectile-find-file (&optional arg)
+  "Helm find file based on text at point"
   (interactive "P")
   (require 'helm-projectile)
   (if (projectile-project-p)
