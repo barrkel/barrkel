@@ -43,7 +43,7 @@ fi
 # initialization
 #--------------------------------------------------------------------------------
 eval "$(dircolors -b ~/.dircolors)"
-[[ -z "$SSH_CONNECTION" ]] && (( SHLVL < 2 )) && {
-    stty-sane
+(( SHLVL < 2 )) && {
+    stty-sane -q
     [ -x "$(which fortune 2>/dev/null)" ] && fortune -a
 }
