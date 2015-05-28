@@ -30,6 +30,7 @@
         fixup-whitespace
         haml-electric-backspace
         indent-for-tab-command
+        insert-braces-macro
         isearch-abort
         isearch-backward-regexp
         isearch-forward-regexp
