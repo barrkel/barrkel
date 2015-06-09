@@ -15,6 +15,8 @@
         c-electric-slash
         c-indent-line-or-region
         coffee-dedent-line-backspace
+        coffee-indent-shift-left
+        coffee-indent-shift-right
         coffee-newline-and-indent
         comment-or-uncomment-region
         company-complete
@@ -51,6 +53,7 @@
       '(
         ace-jump-done
         ace-jump-word-mode
+        describe-key
         ido-find-file
         iedit-mode
         save-some-buffers

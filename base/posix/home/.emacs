@@ -1375,6 +1375,9 @@ The CHAR is replaced and the point is put before CHAR."
 (global-set-key (kbd "M-L") 'ace-jump-char-mode)
 (global-set-key (kbd "M-U") 'undo-tree-visualize)
 
+(global-set-key (kbd "C-q") 'kill-this-buffer)
+(global-set-key (kbd "M-Q") 'quoted-insert)
+
 (defun other-window-back ()
   "Reverse of other-window"
   (interactive)
