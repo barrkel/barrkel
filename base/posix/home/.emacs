@@ -431,6 +431,14 @@
   (set-face 'ediff-current-diff-Ancestor "black" "yellow"))
 (eval-after-load "ediff" '(setup-ediff-faces))
 
+(defun setup-avy-faces ()
+  (set-face 'avy-background-face "black" "white")
+  (set-face 'avy-lead-face "black" "yellow" 'bold)
+  (set-face 'avy-lead-face-0 "black" "yellow")
+  (set-face 'avy-lead-face-1 "magenta" "yellow")
+  (set-face 'avy-lead-face-2 "red" "yellow"))
+(eval-after-load "avy" '(setup-avy-faces))
+
 (defun setup-which-func-faces ()
   (set-face 'which-func "white" "magenta"))
 (eval-after-load "which-func" '(setup-which-func-faces))
@@ -502,67 +510,6 @@
   (if a-style
       (setq c-default-style a-style)
     (setq c-default-style "bsd")))
-
-
-(defun barrkel-indent-shift-amount (start end dir)
-  "Compute distance to the closest increment of `tab-width'."
-  (let ((min most-positive-fixnum))
-    (save-excursion
-      (goto-char start)
-      (while (< (point) end)
-        (let ((current (current-indentation)))
-          (when (< current min)
-            (setq min current)))
-        (forward-line))
-      (let ((rem (% min tab-width)))
-        (if (zerop rem)
-            tab-width
-          (cond ((eq dir 'left) rem)
-                ((eq dir 'right) (- tab-width rem))
-                (t 0)))))))
-
-(defun barrkel-indent-shift-left (start end &optional count)
-  "Shift lines contained in region START END by COUNT columns to the left.
-If COUNT is not given, indents to the closest increment of
-`tab-width'. If region isn't active, the current line is
-shifted. The shifted region includes the lines in which START and
-END lie. An error is signaled if any lines in the region are
-indented less than COUNT columns."
-  (interactive
-   (if mark-active
-       (list (region-beginning) (region-end) current-prefix-arg)
-     (list (line-beginning-position) (line-end-position) current-prefix-arg)))
-  (let ((amount (if count (prefix-numeric-value count)
-                  (barrkel-indent-shift-amount start end 'left))))
-    (when (> amount 0)
-      (let (deactivate-mark)
-        (save-excursion
-          (goto-char start)
-          ;; Check that all lines can be shifted enough
-          (while (< (point) end)
-            (if (and (< (current-indentation) amount)
-                     (not (looking-at "[ \t]*$")))
-                (error "Can't shift all lines enough"))
-            (forward-line))
-          (indent-rigidly start end (- amount)))))))
-
-(add-to-list 'debug-ignored-errors "^Can't shift all lines enough")
-
-(defun barrkel-indent-shift-right (start end &optional count)
-  "Shift lines contained in region START END by COUNT columns to the right.
-if COUNT is not given, indents to the closest increment of
-`tab-width'. If region isn't active, the current line is
-shifted. The shifted region includes the lines in which START and
-END lie."
-  (interactive
-   (if mark-active
-       (list (region-beginning) (region-end) current-prefix-arg)
-     (list (line-beginning-position) (line-end-position) current-prefix-arg)))
-  (let (deactivate-mark
-        (amount (if count (prefix-numeric-value count)
-                  (barrkel-indent-shift-amount start end 'right))))
-    (indent-rigidly start end amount)))
-
 
 
 (global-set-key (kbd "M-`") 'hippie-expand)
@@ -1371,8 +1318,13 @@ The CHAR is replaced and the point is put before CHAR."
 (global-set-key (kbd "M-S-<f12>") 'helm-semantic-or-imenu)
 (global-set-key (kbd "ESC S-<f12>") 'helm-semantic-or-imenu)
 
-(global-set-key (kbd "M-C") 'ace-jump-word-mode)
-(global-set-key (kbd "M-L") 'ace-jump-char-mode)
+;; (global-set-key (kbd "M-C") 'ace-jump-word-mode)
+;; (global-set-key (kbd "M-L") 'ace-jump-char-mode)
+(global-set-key (kbd "M-C") 'avy-goto-word-or-subword-1)
+(global-set-key (kbd "M-L") 'avy-goto-char)
+;; (define-key isearch-mode-map (kbd "<tab>") 'avy-isearch)
+(define-key isearch-mode-map (kbd "C-i") 'avy-isearch)
+(define-key isearch-mode-map (kbd "	") 'avy-isearch)
 (global-set-key (kbd "M-U") 'undo-tree-visualize)
 
 (global-set-key (kbd "C-q") 'kill-this-buffer)
