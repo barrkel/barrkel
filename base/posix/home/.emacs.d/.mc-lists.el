@@ -31,6 +31,7 @@
         enh-ruby-electric-brace
         fixup-whitespace
         haml-electric-backspace
+        helm-M-x
         indent-for-tab-command
         insert-braces-macro
         isearch-abort

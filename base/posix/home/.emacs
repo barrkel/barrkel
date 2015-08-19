@@ -271,11 +271,6 @@
 (setq wrap-region-keep-mark t)
 
 ;;----------------------------------------
-;; undo trees
-;;----------------------------------------
-(undo-tree-mode)
-
-;;----------------------------------------
 ;; minibuffer
 ;;----------------------------------------
 
@@ -759,7 +754,9 @@ END lie."
           (lambda ()
             (visual-line-mode)
             (setq scss-compile-at-save nil)
-            (set-tab-style nil 2)))
+            (set-tab-style nil 2)
+            (define-key scss-mode-map (kbd "M-,") 'barrkel-indent-shift-left)
+            (define-key scss-mode-map (kbd "M-.") 'barrkel-indent-shift-right)))
 
 ;; Shell script
 (add-hook 'sh-mode-hook
@@ -885,8 +882,8 @@ buffer instead of replacing the text in region."
 
 ;; C-x z and C-x C-z still background emacs
 ;;(global-set-key (kbd "C-z") 'undo)
-(global-set-key (kbd "C-z") 'undo-tree-undo)
-(global-set-key (kbd "C-M-z") 'undo-tree-redo)
+(global-set-key (kbd "C-z") 'undo)
+(global-set-key (kbd "C-M-z") 'undo)
 
 (global-set-key (kbd "C-c w") 'write-region)
 (global-set-key (kbd "C-c r") 'insert-file)
