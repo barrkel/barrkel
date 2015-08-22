@@ -5,7 +5,8 @@ function usage
     echo "usage: $(basename $0) [-f] [-d <directory>] <directory>... "
     echo "Looks for files in the directories and removes duplicates."
     echo "By default duplicates are put into a 'dups' directory off the current directory."
-    echo "  -f    Removes files rather than putting them in a 'dups' directory."
+    echo "  -D    Delete files rather than putting them in a 'dups' directory."
+    echo "  -L    Link files rather than putting them in a 'dups' directory."
     echo "  -d <directory> Change the target directory to move duplicates to."
     exit 1
 }
@@ -15,8 +16,8 @@ if [ -z "$1" ]; then
 fi
 
 DIR=""
-DELETE="no"
-DUPS_DIR="$(pwd)/dups"
+action="mv"
+dups_dir="$(pwd)/dups"
 
 function die
 {
@@ -24,17 +25,24 @@ function die
     exit 1
 }
 
-function found_duplicate
+function found_duplicate # dup other
 {
     echo "'$1' is duplicate of '$2'."
-    if [ $DELETE = "yes" ]; then
-        rm -f -- "$1" || die "Couldn't remove '$1'."
-    else
-        if [ ! -d "$DUPS_DIR" ]; then
-            mkdir -- "$DUPS_DIR" || die "Couldn't create '$DUPS_DIR'."
-        fi
-        mv -- "$1" "$DUPS_DIR" || die "Couldn't move '$1' to '$DUPS_DIR'."
-    fi
+    case "$action" in
+        rm)
+            rm -f -- "$1" || die "Couldn't remove '$1'."
+            ;;
+
+        mv)
+            mkdir -p "$dups_dir"
+            mv -- "$1" "$dups_dir"
+            ;;
+
+        ln)
+            mv -- "$1" "$1".dup
+            ln "$2" "$1"
+            ;;
+    esac
 }
 
 while [ ! -z "$1" ]; do
@@ -43,14 +51,18 @@ while [ ! -z "$1" ]; do
             usage
             ;;
         
-        -f)
-            DELETE="yes"
+        -D)
+            action="rm"
             ;;
-            
+
+        -L)
+            action="ln"
+            ;;
+
         -d)
             shift
             test -z "$1" && die "'-d' requires an argument, the target directory."
-            DUPS_DIR="$1"
+            dups_dir="$1"
             ;;
             
         *)
@@ -70,26 +82,6 @@ while [ ! -z "$1" ]; do
                     done
                 
                 rm $sizes
-                
-                # Doesn't necessarily find all duplicates. Sorted by size,
-                # there may be a sequence 'a b a', where a == a won't be found.
-                #prev=""
-                #ls -S |
-                #   while read -r f; do
-                #       if [ ! -f "$f" ]; then
-                #           continue
-                #       fi
-                #       
-                #       if [ ! -z "$prev" ]; then
-                #           if diff -- "$f" "$prev" >/dev/null; then
-                #               found_duplicate "$f" "$prev"
-                #           else
-                #               prev="$f"
-                #           fi
-                #       else
-                #           prev="$f"
-                #       fi
-                #   done
             )
             ;;
     esac
