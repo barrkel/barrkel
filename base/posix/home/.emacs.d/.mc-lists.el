@@ -15,6 +15,8 @@
         c-electric-semi&comma
         c-indent-line-or-region
         coffee-dedent-line-backspace
+        coffee-indent-shift-left
+        coffee-indent-shift-right
         coffee-newline-and-indent
         comment-or-uncomment-region
         company-complete
@@ -28,7 +30,9 @@
         enh-ruby-electric-brace
         fixup-whitespace
         haml-electric-backspace
+        helm-M-x
         indent-for-tab-command
+        insert-braces-macro
         isearch-abort
         isearch-backward-regexp
         isearch-forward-regexp
@@ -49,6 +53,8 @@
 
 (setq mc/cmds-to-run-once
       '(
+        ace-jump-done
+        ace-jump-word-mode
         describe-key
         ido-find-file
         iedit-mode

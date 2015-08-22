@@ -271,11 +271,6 @@
 (setq wrap-region-keep-mark t)
 
 ;;----------------------------------------
-;; undo trees
-;;----------------------------------------
-(undo-tree-mode)
-
-;;----------------------------------------
 ;; minibuffer
 ;;----------------------------------------
 
@@ -431,6 +426,14 @@
   (set-face 'ediff-current-diff-Ancestor "black" "yellow"))
 (eval-after-load "ediff" '(setup-ediff-faces))
 
+(defun setup-avy-faces ()
+  (set-face 'avy-background-face "black" "white")
+  (set-face 'avy-lead-face "black" "yellow" 'bold)
+  (set-face 'avy-lead-face-0 "black" "yellow")
+  (set-face 'avy-lead-face-1 "magenta" "yellow")
+  (set-face 'avy-lead-face-2 "red" "yellow"))
+(eval-after-load "avy" '(setup-avy-faces))
+
 (defun setup-which-func-faces ()
   (set-face 'which-func "white" "magenta"))
 (eval-after-load "which-func" '(setup-which-func-faces))
@@ -507,67 +510,6 @@
   (if a-style
       (setq c-default-style a-style)
     (setq c-default-style "bsd")))
-
-
-(defun barrkel-indent-shift-amount (start end dir)
-  "Compute distance to the closest increment of `tab-width'."
-  (let ((min most-positive-fixnum))
-    (save-excursion
-      (goto-char start)
-      (while (< (point) end)
-        (let ((current (current-indentation)))
-          (when (< current min)
-            (setq min current)))
-        (forward-line))
-      (let ((rem (% min tab-width)))
-        (if (zerop rem)
-            tab-width
-          (cond ((eq dir 'left) rem)
-                ((eq dir 'right) (- tab-width rem))
-                (t 0)))))))
-
-(defun barrkel-indent-shift-left (start end &optional count)
-  "Shift lines contained in region START END by COUNT columns to the left.
-If COUNT is not given, indents to the closest increment of
-`tab-width'. If region isn't active, the current line is
-shifted. The shifted region includes the lines in which START and
-END lie. An error is signaled if any lines in the region are
-indented less than COUNT columns."
-  (interactive
-   (if mark-active
-       (list (region-beginning) (region-end) current-prefix-arg)
-     (list (line-beginning-position) (line-end-position) current-prefix-arg)))
-  (let ((amount (if count (prefix-numeric-value count)
-                  (barrkel-indent-shift-amount start end 'left))))
-    (when (> amount 0)
-      (let (deactivate-mark)
-        (save-excursion
-          (goto-char start)
-          ;; Check that all lines can be shifted enough
-          (while (< (point) end)
-            (if (and (< (current-indentation) amount)
-                     (not (looking-at "[ \t]*$")))
-                (error "Can't shift all lines enough"))
-            (forward-line))
-          (indent-rigidly start end (- amount)))))))
-
-(add-to-list 'debug-ignored-errors "^Can't shift all lines enough")
-
-(defun barrkel-indent-shift-right (start end &optional count)
-  "Shift lines contained in region START END by COUNT columns to the right.
-if COUNT is not given, indents to the closest increment of
-`tab-width'. If region isn't active, the current line is
-shifted. The shifted region includes the lines in which START and
-END lie."
-  (interactive
-   (if mark-active
-       (list (region-beginning) (region-end) current-prefix-arg)
-     (list (line-beginning-position) (line-end-position) current-prefix-arg)))
-  (let (deactivate-mark
-        (amount (if count (prefix-numeric-value count)
-                  (barrkel-indent-shift-amount start end 'right))))
-    (indent-rigidly start end amount)))
-
 
 
 (global-set-key (kbd "M-`") 'hippie-expand)
@@ -817,7 +759,9 @@ END lie."
           (lambda ()
             (visual-line-mode)
             (setq scss-compile-at-save nil)
-            (set-tab-style nil 2)))
+            (set-tab-style nil 2)
+            (define-key scss-mode-map (kbd "M-,") 'barrkel-indent-shift-left)
+            (define-key scss-mode-map (kbd "M-.") 'barrkel-indent-shift-right)))
 
 ;; Shell script
 (add-hook 'sh-mode-hook
@@ -943,8 +887,8 @@ buffer instead of replacing the text in region."
 
 ;; C-x z and C-x C-z still background emacs
 ;;(global-set-key (kbd "C-z") 'undo)
-(global-set-key (kbd "C-z") 'undo-tree-undo)
-(global-set-key (kbd "C-M-z") 'undo-tree-redo)
+(global-set-key (kbd "C-z") 'undo)
+(global-set-key (kbd "C-M-z") 'undo)
 
 (global-set-key (kbd "C-c w") 'write-region)
 (global-set-key (kbd "C-c r") 'insert-file)
@@ -1376,9 +1320,17 @@ The CHAR is replaced and the point is put before CHAR."
 (global-set-key (kbd "M-S-<f12>") 'helm-semantic-or-imenu)
 (global-set-key (kbd "ESC S-<f12>") 'helm-semantic-or-imenu)
 
-(global-set-key (kbd "M-C") 'ace-jump-word-mode)
-(global-set-key (kbd "M-L") 'ace-jump-char-mode)
+;; (global-set-key (kbd "M-C") 'ace-jump-word-mode)
+;; (global-set-key (kbd "M-L") 'ace-jump-char-mode)
+(global-set-key (kbd "M-C") 'avy-goto-word-or-subword-1)
+(global-set-key (kbd "M-L") 'avy-goto-char)
+;; (define-key isearch-mode-map (kbd "<tab>") 'avy-isearch)
+(define-key isearch-mode-map (kbd "C-i") 'avy-isearch)
+(define-key isearch-mode-map (kbd "	") 'avy-isearch)
 (global-set-key (kbd "M-U") 'undo-tree-visualize)
+
+(global-set-key (kbd "C-q") 'kill-this-buffer)
+(global-set-key (kbd "M-Q") 'quoted-insert)
 
 (defun other-window-back ()
   "Reverse of other-window"
@@ -1520,6 +1472,61 @@ The CHAR is replaced and the point is put before CHAR."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (global-set-key (kbd "<f1> <f1>") 'howdoi-query)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; gud-gdb
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; key bindings
+(global-set-key (kbd "<S-f5>") 'gud-go)
+(global-set-key (kbd "<C-f5>") 'gud-cont)
+(global-set-key (kbd "<f5>") 'gud-break)
+
+(global-set-key (kbd "<f6>") 'gud-print)
+(global-set-key (kbd "<C-f6>") 'gud-watch)
+
+(global-set-key (kbd "<f7>") 'gud-step)
+(global-set-key (kbd "<S-f7>") 'gud-stepi)
+(global-set-key (kbd "<f8>") 'gud-next)
+(global-set-key (kbd "<S-f8>") 'gud-finish)
+
+
+;; TODO: fix this so it's better
+(defun gdb-setup-windows ()
+  "Layout the window pattern for `gdb-many-windows'."
+  (gdb-get-buffer-create 'gdb-locals-buffer)
+  (gdb-get-buffer-create 'gdb-stack-buffer)
+  (gdb-get-buffer-create 'gdb-breakpoints-buffer)
+  (set-window-dedicated-p (selected-window) nil)
+  (switch-to-buffer gud-comint-buffer)
+  (delete-other-windows)
+  (let ((win0 (selected-window))
+        (win1 (split-window nil ( / ( * (window-height) 3) 4)))
+        (win2 (split-window nil ( / (window-height) 3)))
+        (win3 (split-window-right)))
+    (gdb-set-window-buffer (gdb-locals-buffer-name) nil win3)
+    (select-window win2)
+    (set-window-buffer
+     win2
+     (if gud-last-last-frame
+         (gud-find-file (car gud-last-last-frame))
+       (if gdb-main-file
+           (gud-find-file gdb-main-file)
+         ;; Put buffer list in window if we
+         ;; can't find a source file.
+         (list-buffers-noselect))))
+    (setq gdb-source-window (selected-window))
+    (let ((win4 (split-window-right)))
+      (gdb-set-window-buffer
+       (gdb-get-buffer-create 'gdb-inferior-io) nil win4))
+    (select-window win1)
+    (gdb-set-window-buffer (gdb-stack-buffer-name))
+    (let ((win5 (split-window-right)))
+      (gdb-set-window-buffer (if gdb-show-threads-by-default
+                                 (gdb-threads-buffer-name)
+                               (gdb-breakpoints-buffer-name))
+                             nil win5))
+    (select-window win0)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
