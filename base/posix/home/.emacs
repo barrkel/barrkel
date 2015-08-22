@@ -474,6 +474,11 @@
 ;; TABS and INDENTING
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; Indent-relative has never, not even once, done what I want. Burn it with fire.
+(defun indent-relative ()
+  (indent-tab))
+
+
 ;; don't make backspace turn tabs into spaces (who thought that was a good idea?)
 (setq backward-delete-char-untabify-method nil)
 

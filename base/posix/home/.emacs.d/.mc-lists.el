@@ -42,7 +42,9 @@
         scroll-up-line
         subword-left
         subword-right
+        transpose-words
         wdired-downcase-word
+        wdired-next-line
         ))
 
 (setq mc/cmds-to-run-once
