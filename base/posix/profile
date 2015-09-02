@@ -24,9 +24,6 @@ pathlist_ensure_prepending PATH ~/bin
 pathlist_append PATH /opt/bin
 export PATH
 
-#append_if_missing PKG_CONFIG_PATH /usr/lib/pkgconfig
-
-
 #--------------------------------------------------------------------------------
 # ssh agent
 #--------------------------------------------------------------------------------
@@ -43,7 +40,7 @@ fi
 # initialization
 #--------------------------------------------------------------------------------
 eval "$(dircolors -b ~/.dircolors)"
-[[ -z "$SSH_CONNECTION" ]] && (( SHLVL < 2 )) && {
-    stty-sane
+(( SHLVL < 2 )) && {
+    stty-sane -q
     [ -x "$(which fortune 2>/dev/null)" ] && fortune -a
 }

@@ -1,13 +1,24 @@
 #!/bin/bash
 
-reset
+case "$1" in
+    -q)
+        quick=1
+        shift
+        ;;
+    *)
+        ;;
+esac
+
+
+(( quick )) || reset
 stty sane -ixon start undef stop undef erase '^?' susp '^Z' swtch undef
 
-test -n "$DISPLAY" && {
+if [[ quick==1 && -n "$DISPLAY" ]]; then
     setxkbmap
     xmodmap ~/.Xmodmap
     # numpad not working?
     for ((i=1; i<=31;++i)); do
         xset -led $i
     done
-}
+fi
+

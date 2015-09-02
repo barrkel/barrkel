@@ -3,6 +3,8 @@
 
 (setq mc/cmds-to-run-for-all
       '(
+        ace-jump-done
+        ace-jump-word-mode
         barrkel-indent-shift-left
         barrkel-indent-shift-right
         beginning-of-visual-line
@@ -10,9 +12,7 @@
         c-electric-colon
         c-electric-delete-forward
         c-electric-paren
-        c-electric-pound
         c-electric-semi&comma
-        c-electric-slash
         c-indent-line-or-region
         coffee-dedent-line-backspace
         coffee-indent-shift-left
@@ -26,7 +26,6 @@
         dired-previous-line
         dumb-newline
         duplicate-line-or-region
-        end-of-buffer
         end-of-visual-line
         enh-ruby-electric-brace
         fixup-whitespace
@@ -47,7 +46,9 @@
         scroll-up-line
         subword-left
         subword-right
+        transpose-words
         wdired-downcase-word
+        wdired-next-line
         ))
 
 (setq mc/cmds-to-run-once
