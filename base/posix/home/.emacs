@@ -431,7 +431,8 @@
   (set-face 'avy-lead-face "black" "yellow" 'bold)
   (set-face 'avy-lead-face-0 "black" "yellow")
   (set-face 'avy-lead-face-1 "magenta" "yellow")
-  (set-face 'avy-lead-face-2 "red" "yellow"))
+  (set-face 'avy-lead-face-2 "red" "yellow")
+  (setq avy-keys (append (number-sequence ?a ?z) (number-sequence ?A ?Z))))
 (eval-after-load "avy" '(setup-avy-faces))
 
 (defun setup-which-func-faces ()
