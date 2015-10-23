@@ -13,6 +13,7 @@
         c-electric-delete-forward
         c-electric-paren
         c-electric-semi&comma
+        c-electric-slash
         c-indent-line-or-region
         coffee-dedent-line-backspace
         coffee-indent-shift-left
@@ -39,7 +40,9 @@
         isearch-other-meta-char
         isearch-printing-char
         kill-region
+        kill-this-buffer
         kill-visual-line
+        org-self-insert-command
         overwrite-mode
         ruby-end-of-block
         scroll-down-line

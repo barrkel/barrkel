@@ -718,9 +718,98 @@ END lie."
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 (add-hook 'markdown-mode-hook
-          (lambda()
+          (lambda ()
             (define-key markdown-mode-map (kbd "M-n") nil)
             (local-set-key (kbd "RET") 'dumb-newline)))
+
+;; Org
+(defun setup-org ()
+  ;; our custom version of org-metaright
+  ;; this should be updated whenever the real org-metaright changes
+  ;; chief difference is not defaulting to forward-word; instead windmove-right
+  (defun bk-org-metaright (&optional arg)
+    "Demote a subtree, a list item or move table column to right.
+In front of a drawer or a block keyword, indent it correctly.
+With no specific context, calls the Emacs default `forward-word'.
+See the individual commands for more information."
+    (interactive "P")
+    (cond
+     ((run-hook-with-args-until-success 'org-metaright-hook))
+     ((org-at-table-p) (call-interactively 'org-table-move-column))
+     ((org-at-drawer-p) (call-interactively 'org-indent-drawer))
+     ((org-at-block-p) (call-interactively 'org-indent-block))
+     ((org-with-limited-levels
+       (or (org-at-heading-p)
+           (and (org-region-active-p)
+                (save-excursion
+                  (goto-char (region-beginning))
+                  (org-at-heading-p)))))
+      (when (org-check-for-hidden 'headlines) (org-hidden-tree-error))
+      (call-interactively 'org-do-demote))
+     ;; At an inline task.
+     ((org-at-heading-p)
+      (call-interactively 'org-inlinetask-demote))
+     ((or (org-at-item-p)
+          (and (org-region-active-p)
+               (save-excursion
+                 (goto-char (region-beginning))
+                 (org-at-item-p))))
+      (when (org-check-for-hidden 'items) (org-hidden-tree-error))
+      (call-interactively 'org-indent-item))
+     (t (call-interactively 'windmove-right))))
+
+  ;; similar to bk-org-metaright; should be updated when original changes
+  (defun bk-org-metaleft (&optional arg)
+  "Promote heading or move table column to left.
+Calls `org-do-promote' or `org-table-move-column', depending on context.
+With no specific context, calls the Emacs default `backward-word'.
+See the individual commands for more information."
+  (interactive "P")
+  (cond
+   ((run-hook-with-args-until-success 'org-metaleft-hook))
+   ((org-at-table-p) (org-call-with-arg 'org-table-move-column 'left))
+   ((org-with-limited-levels
+     (or (org-at-heading-p)
+	 (and (org-region-active-p)
+	      (save-excursion
+		(goto-char (region-beginning))
+		(org-at-heading-p)))))
+    (when (org-check-for-hidden 'headlines) (org-hidden-tree-error))
+    (call-interactively 'org-do-promote))
+   ;; At an inline task.
+   ((org-at-heading-p)
+    (call-interactively 'org-inlinetask-promote))
+   ((or (org-at-item-p)
+	(and (org-region-active-p)
+	     (save-excursion
+	       (goto-char (region-beginning))
+	       (org-at-item-p))))
+    (when (org-check-for-hidden 'items) (org-hidden-tree-error))
+    (call-interactively 'org-outdent-item))
+   (t (call-interactively 'windmove-left)))))
+
+(add-hook 'org-mode-hook
+          (lambda ()
+            ;; (define-key global-map (kbd "C-c l") 'org-store-link)
+            ;; (define-key global-map (kbd "C-c a") 'org-agenda)
+            ;; (setq org-log-done t)
+            (setq org-src-fontify-natively t)
+            (org-babel-do-load-languages
+             'org-babel-load-languages
+             '((sql . t)
+               (sh . t)
+               (java . t)
+               (ruby . t)
+               (emacs-lisp . t)
+               (calc . t)))
+            (setq org-log-into-drawer t)
+            (setq org-todo-keywords
+                  '((sequence "TODO(!)" "CURRENT(d!)" "|" "DONE(d!)")))
+            (define-key org-mode-map (kbd "C-y") nil)
+            (define-key org-mode-map (kbd "C-v") 'org-yank)
+            (setup-org)
+            (define-key org-mode-map (kbd "ESC <left>") 'bk-org-metaleft)
+            (define-key org-mode-map (kbd "ESC <right>") 'bk-org-metaright)))
 
 ;; Puppet
 (require 'puppet-mode-autoloads)
@@ -740,9 +829,11 @@ END lie."
           (lambda ()
             (robe-mode)
             (visual-line-mode)
+            (yas-minor-mode)
             (define-key enh-ruby-mode-map (kbd "RET") 'newline-and-indent)
             (define-key enh-ruby-mode-map (kbd "C-M-n") nil)
             (define-key enh-ruby-mode-map (kbd "C-j") nil)
+            (define-key enh-ruby-mode-map (kbd "C-c /") nil)
             ;; hopefully the bits below will work
             (er/enable-mode-expansions 'enh-ruby-mode 'er/add-ruby-mode-expansions)
             (eval-after-load "enh-ruby-mode" '(require 'ruby-mode-expansions))
@@ -791,6 +882,9 @@ END lie."
 (add-hook 'yaml-mode-hook
           (lambda ()
             (visual-line-mode)
+            (highlight-indentation-current-column-mode)
+            (define-key haml-mode-map (kbd "M-,") 'barrkel-indent-shift-left)
+            (define-key haml-mode-map (kbd "M-.") 'barrkel-indent-shift-right)
             (set-tab-style nil 2)))
 
 ;; XML
@@ -1549,6 +1643,8 @@ The CHAR is replaced and the point is put before CHAR."
  ;; If there is more than one, they won't work right.
  '(enh-ruby-deep-indent-paren nil)
  '(haskell-mode-hook (quote (turn-on-eldoc-mode turn-on-haskell-doc turn-on-haskell-indent)))
+ '(helm-buffer-max-length nil)
+ '(org-support-shift-select t)
  '(rspec-use-rake-when-possible nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
