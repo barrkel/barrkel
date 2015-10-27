@@ -52,6 +52,7 @@
         transpose-words
         wdired-downcase-word
         wdired-next-line
+        yas-expand
         ))
 
 (setq mc/cmds-to-run-once
