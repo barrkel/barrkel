@@ -3,6 +3,8 @@
 
 (setq mc/cmds-to-run-for-all
       '(
+        ace-jump-done
+        ace-jump-word-mode
         barrkel-indent-shift-left
         barrkel-indent-shift-right
         beginning-of-visual-line
@@ -10,11 +12,12 @@
         c-electric-colon
         c-electric-delete-forward
         c-electric-paren
-        c-electric-pound
         c-electric-semi&comma
         c-electric-slash
         c-indent-line-or-region
         coffee-dedent-line-backspace
+        coffee-indent-shift-left
+        coffee-indent-shift-right
         coffee-newline-and-indent
         comment-or-uncomment-region
         company-complete
@@ -24,32 +27,39 @@
         dired-previous-line
         dumb-newline
         duplicate-line-or-region
-        end-of-buffer
         end-of-visual-line
         enh-ruby-electric-brace
         fixup-whitespace
         haml-electric-backspace
+        helm-M-x
         indent-for-tab-command
+        insert-braces-macro
         isearch-abort
         isearch-backward-regexp
         isearch-forward-regexp
         isearch-other-meta-char
         isearch-printing-char
         kill-region
+        kill-this-buffer
         kill-visual-line
+        org-self-insert-command
         overwrite-mode
         ruby-end-of-block
         scroll-down-line
         scroll-up-line
         subword-left
         subword-right
+        transpose-words
         wdired-downcase-word
+        wdired-next-line
+        yas-expand
         ))
 
 (setq mc/cmds-to-run-once
       '(
         ace-jump-done
         ace-jump-word-mode
+        describe-key
         ido-find-file
         iedit-mode
         save-some-buffers

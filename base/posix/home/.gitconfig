@@ -11,6 +11,8 @@
 	default = tracking
 [alias]
   graph = log --graph --pretty=format:\"%Cgreen%h %Cblue%an %Cgreen%ar %Creset%s\"
+  ad = add --ignore-removal
+  a = add --ignore-removal
 	
 [merge]
 	tool = bcompf
