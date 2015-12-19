@@ -81,53 +81,53 @@ STICKY 01;34 # dir with the sticky bit set (+t) and not other-writable
 # (and any comments you want to add after a '#')
 # If you use DOS-style suffixes, you may want to uncomment the following:
 #.cmd 01;32 # executables (bright green)
-.exe 01;32
-#.com 01;32
-#.btm 01;32
-.bat 01;32
-.tar 01;31 # archives or compressed (bright red)
-.tgz 01;31
-.arj 01;31
-.taz 01;31
-.lzh 01;31
-.zip 01;31
-.z 01;31
-.Z 01;31
-.gz 01;31
-.bz2 01;31
-.deb 01;31
-.rpm 01;31
-.jar 01;31
+.exe 0;32
+#.com 0;32
+#.btm 0;32
+.bat 0;32
+.tar 0;31 # archives or compressed (bright red)
+.tgz 0;31
+.arj 0;31
+.taz 0;31
+.lzh 0;31
+.zip 0;31
+.z 0;31
+.Z 0;31
+.gz 0;31
+.bz2 0;31
+.deb 0;31
+.rpm 0;31
+.jar 0;31
 # image formats
-.jpg 01;35
-.jpeg 01;35
-.gif 01;35
-.bmp 01;35
-.pbm 01;35
-.pgm 01;35
-.ppm 01;35
-.tga 01;35
-.xbm 01;35
-.xpm 01;35
-.tif 01;35
-.tiff 01;35
-.png 01;35
-.mov 01;35
-.mpg 01;35
-.mpeg 01;35
-.avi 01;35
-.fli 01;35
-.gl 01;35
-.dl 01;35
-.xcf 01;35
-.xwd 01;35
+.jpg 0;35
+.jpeg 0;35
+.gif 0;35
+.bmp 0;35
+.pbm 0;35
+.pgm 0;35
+.ppm 0;35
+.tga 0;35
+.xbm 0;35
+.xpm 0;35
+.tif 0;35
+.tiff 0;35
+.png 0;35
+.mov 0;35
+.mpg 0;35
+.mpeg 0;35
+.avi 0;35
+.fli 0;35
+.gl 0;35
+.dl 0;35
+.xcf 0;35
+.xwd 0;35
 # audio formats
-.flac 01;35
-.mp3 01;35
-.mpc 01;35
-.ogg 01;35
-.wav 01;35
+.flac 0;35
+.mp3 0;35
+.mpc 0;35
+.ogg 0;35
+.wav 0;35
 
 # This is for files with execute permission:
-EXEC 01;32
+EXEC 0;32
 
