@@ -35,3 +35,4 @@ Title=Barry's Bash
 SwitchShortcuts=no
 AltFnShortcuts=no
 Term=xterm
+ScrollMod=shift

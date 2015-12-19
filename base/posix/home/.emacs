@@ -460,6 +460,7 @@
   (set-face 'helm-selection "black" "blue")
   (set-face 'helm-match "black" "yellow"))
 (eval-after-load "helm-match-plugin" '(setup-helm-faces))
+(eval-after-load "helm" '(setup-helm-faces))
 
 (defun setup-magit-faces ()
   (loop for face in '(magit-blame-culprit magit-blame-header magit-blame-sha1
@@ -667,7 +668,6 @@ END lie."
 
 
 ;; Go
-(require 'go-mode-load)
 (add-hook 'go-mode-hook
           (lambda ()
             (visual-line-mode)
@@ -681,7 +681,6 @@ END lie."
             (visual-line-mode)))
 
 ;; Haml
-(require 'haml-mode-autoloads)
 (add-to-list 'auto-mode-alist '("\\.hamlc\\'" . haml-mode)) ;; CoffeeScript haml
 (add-hook 'haml-mode-hook
           (lambda ()
@@ -812,7 +811,6 @@ See the individual commands for more information."
             (define-key org-mode-map (kbd "ESC <right>") 'bk-org-metaright)))
 
 ;; Puppet
-(require 'puppet-mode-autoloads)
 
 ;; Rspec
 (eval-after-load "rspec-mode"
@@ -883,8 +881,8 @@ See the individual commands for more information."
           (lambda ()
             (visual-line-mode)
             (highlight-indentation-current-column-mode)
-            (define-key haml-mode-map (kbd "M-,") 'barrkel-indent-shift-left)
-            (define-key haml-mode-map (kbd "M-.") 'barrkel-indent-shift-right)
+            (define-key yaml-mode-map (kbd "M-,") 'barrkel-indent-shift-left)
+            (define-key yaml-mode-map (kbd "M-.") 'barrkel-indent-shift-right)
             (set-tab-style nil 2)))
 
 ;; XML
