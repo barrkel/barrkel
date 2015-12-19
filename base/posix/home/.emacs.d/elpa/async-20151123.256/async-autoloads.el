@@ -3,7 +3,7 @@
 ;;; Code:
 (add-to-list 'load-path (or (file-name-directory #$) (car load-path)))
 
-;;;### (autoloads nil "async" "async.el" (22107 7464 987293 500000))
+;;;### (autoloads nil "async" "async.el" (22126 19982 248286 700000))
 ;;; Generated autoloads from async.el
 
 (autoload 'async-start-process "async" "\
@@ -68,8 +68,8 @@ returns nil.  It can still be useful, however, as an argument to
 
 ;;;***
 
-;;;### (autoloads nil "async-bytecomp" "async-bytecomp.el" (22107
-;;;;;;  7464 981792 800000))
+;;;### (autoloads nil "async-bytecomp" "async-bytecomp.el" (22126
+;;;;;;  19982 215284 800000))
 ;;; Generated autoloads from async-bytecomp.el
 
 (autoload 'async-byte-recompile-directory "async-bytecomp" "\
@@ -96,8 +96,8 @@ Async compilation of packages can be controlled by
 
 ;;;***
 
-;;;### (autoloads nil "dired-async" "dired-async.el" (22107 7464
-;;;;;;  964790 600000))
+;;;### (autoloads nil "dired-async" "dired-async.el" (22126 19982
+;;;;;;  138280 400000))
 ;;; Generated autoloads from dired-async.el
 
 (defvar dired-async-mode nil "\
@@ -116,8 +116,8 @@ Do dired actions asynchronously.
 
 ;;;***
 
-;;;### (autoloads nil nil ("async-pkg.el" "smtpmail-async.el") (22107
-;;;;;;  7464 995794 600000))
+;;;### (autoloads nil nil ("async-pkg.el" "smtpmail-async.el") (22126
+;;;;;;  19982 365293 400000))
 
 ;;;***
 

@@ -3,8 +3,8 @@
 ;;; Code:
 (add-to-list 'load-path (or (file-name-directory #$) (car load-path)))
 
-;;;### (autoloads nil "enh-ruby-mode" "enh-ruby-mode.el" (22107 7429
-;;;;;;  689811 300000))
+;;;### (autoloads nil "enh-ruby-mode" "enh-ruby-mode.el" (22131 37621
+;;;;;;  331331 200000))
 ;;; Generated autoloads from enh-ruby-mode.el
 
 (autoload 'enh-ruby-mode "enh-ruby-mode" "\
@@ -16,8 +16,8 @@ Enhanced Major mode for editing Ruby code.
 
 ;;;***
 
-;;;### (autoloads nil nil ("enh-ruby-mode-pkg.el") (22107 7429 728816
-;;;;;;  200000))
+;;;### (autoloads nil nil ("enh-ruby-mode-pkg.el") (22131 37621 502341
+;;;;;;  0))
 
 ;;;***
 
