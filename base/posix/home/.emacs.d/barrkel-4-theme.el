@@ -55,6 +55,8 @@
                 ;; , on its own is unquote inside a backtick quote; ,@ is a list splicing unquote
                 ,@(cond ((eq window-system 'w32)
                          '(:foundry "outline" :family "Dina TTF"))
+                        ((eq window-system 'x)
+                         '(:foundry "windows" :family "Dina"))
                         (t
                          '(:foundry "default" :family "default")))))))
  `(cursor
@@ -146,7 +148,7 @@
  `(helm-source-header ((t (:inherit mode-line))))
  `(helm-selection ((t (:background ,color-bright-blue :foreground ,color-bright-white))))
  `(helm-selection-line ((t (:background ,color-bright-blue :foreground ,color-bright-white))))
- `(helm-candidate-number ((t (:foreground ,color-blue))))
+ `(helm-candidate-number ((t (:foreground ,color-blue) (:background nil))))
 
  ;; whitespace
  `(whitespace-space ((t (:foreground ,color-bright-black))))

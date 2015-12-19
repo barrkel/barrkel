@@ -856,16 +856,12 @@ buffer instead of replacing the text in region."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ansi-color-faces-vector
-   [default default default italic underline success warning error])
- '(ansi-color-names-vector
-   ["#242424" "#e5786d" "#95e454" "#cae682" "#8ac6f2" "#333366" "#ccaa8f" "#f6f3e8"])
+ '(ansi-color-faces-vector [default default default italic underline success warning error])
+ '(ansi-color-names-vector ["#242424" "#e5786d" "#95e454" "#cae682" "#8ac6f2" "#333366" "#ccaa8f" "#f6f3e8"])
  '(blink-cursor-mode t)
- '(cursor-type (quote (bar . 2)))
+ '(cursor-type (quote (bar . 2)) t)
  '(custom-enabled-themes (quote (barrkel-4)))
- '(custom-safe-themes
-   (quote
-    ("0eb184018c261ef65137d1702d06c85245b6eeb766afb9cde849b791231a72fc" "5058350cbf03a20e415885d81b5cb10251fe4326fd5a5001084e82f8093315f9" default))))
+ '(custom-safe-themes (quote ("fc52dc3ab3051f8a5bc9c6132a6c1dbcebb5f07833440fdbcbe493219139dbbb" "30d561733016afa605fb78c54d0fc62938568e9e7f16c3216fc9ef1d947211ab" "6cfdb2a70cb178ef0b4c9678de3c666d46aa17b161f01991804f377bc75bd172" "a03caded6d5f870becc601b74a0ff58bc40c7cd103dac4e9a5dde0fd5780b8ab" "8cbe7417e320d75c4d65884ee367245ca8752ac95c274820a90f980fab5bcb0d" "44b8400877316c55bf3759964cfcdb9a89440bc4064b75c354ed158321d91532" "0eb184018c261ef65137d1702d06c85245b6eeb766afb9cde849b791231a72fc" "5058350cbf03a20e415885d81b5cb10251fe4326fd5a5001084e82f8093315f9" default))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
