@@ -282,6 +282,8 @@ Rxvt*saveLines:30000
 !	      Specifies	the terminal type name to be set in the TERM environ-
 !	      ment variable; option -tn.
 Rxvt*termName:rxvt
+URxvt*termName:rxvt-unicode-256color
+
 
 !       linespace: number
 !	      Specifies number of lines (pixel height) to insert between  each
@@ -427,4 +429,7 @@ Rxvt*lineSpace:1
 !  cutchars:           string
 !  answerbackString:   string
 !  keysym.sym:         keysym
+
+URxvt*iso14755:False
+
 

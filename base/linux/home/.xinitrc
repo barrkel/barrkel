@@ -1,2 +1,3 @@
 xmodmap ~/.Xmodmap
-xscreensaver -no-splash &
+xset fp+ ~/.fonts
+xrdb ~/.Xdefaults

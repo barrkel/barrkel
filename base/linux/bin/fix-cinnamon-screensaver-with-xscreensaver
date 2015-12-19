@@ -1,0 +1,10 @@
+#!/bin/bash
+
+sudo killall cinnamon-screensaver gnome-screensaver xscreensaver
+sudo mv /usr/bin/cinnamon-screensaver{,.real}
+sudo mv /usr/bin/cinnamon-screensaver-command{,.real}
+sudo ln -sf /usr/bin/{xscreensaver,cinnamon-screensaver}
+sudo ln -sf /usr/bin/{xscreensaver-command,cinnamon-screensaver-command}
+xscreensaver -no-splash &
+xscreensaver-command -demo &
+xscreensaver-command -activate
