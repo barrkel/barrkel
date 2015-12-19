@@ -11,12 +11,12 @@ Rxvt*geometry:120x43
 !       background: colour
 !	      Use  the	specified  colour  as  the  window's background colour
 !	      [default White]; option -bg.
-Rxvt*background:rgb:00/00/20
+Rxvt*background:rgb:1A/20/22
 
 !       foreground: colour
 !	      Use the specified	colour	as  the  window's  foreground	colour
 !	      [default Black]; option -fg.
-Rxvt*foreground:rgb:C0/C0/C0
+Rxvt*foreground:rgb:BA/BD/B6
 
 !       colorn: colour
 !	      Use  the specified colour for the colour value n, where 0-7 cor-
@@ -28,47 +28,45 @@ Rxvt*foreground:rgb:C0/C0/C0
 !	      ORS AND GRAPHICS section.
 
 !black
-Rxvt*color0:rgb:00/00/20
+Rxvt*color0:rgb:1A/20/22
 ! red
-!Rxvt*color1:rgb:FF/50/50
-Rxvt*color1:rgb:FF/42/5F
+Rxvt*color1:rgb:FF/64/64
 ! green
-Rxvt*color2:rgb:72/A0/32
+Rxvt*color2:rgb:4E/9A/06
 ! blue
-Rxvt*color4:skyblue
+Rxvt*color4:rgb:72/9F/CF
 
 ! yellow
-Rxvt*color3:rgb:B0/B0/00
-!rgb:77/FA/00
-! magenta - a dark slate gray
-Rxvt*color5:rgb:55/40/59
+Rxvt*color3:rgb:F5/79/00
+! magenta
+Rxvt*color5:rgb:AD/7F/A8
 ! cyan
-Rxvt*color6:rgb:00/FA/94
+Rxvt*color6:rgb:88/8A/85
 ! white
-Rxvt*color7:rgb:C0/C0/C0
+Rxvt*color7:rgb:BA/BD/B6
 
 ! bold colors can generally afford to be dimmer than non-bold
-! Rxvt*color8: gray for the moment
-Rxvt*color8:rgb:55/40/59
+! bold black
+Rxvt*color8:rgb:2E/34/36
 ! bold red
-Rxvt*color9:red
+Rxvt*color9:rgb:EF/29/29
 ! bold green
-Rxvt*color10:rgb:00/74/30
+Rxvt*color10:rgb:73/D2/16
 ! bold blue
-Rxvt*color12:skyblue
+Rxvt*color12:rgb:20/4A/87
 ! bold yellow
-Rxvt*color11:rgb:77/FA/00
+Rxvt*color11:rgb:FC/E9/4F
 ! bold magenta
-Rxvt*color13:rgb:55/40/59
+Rxvt*color13:rgb:1D/32/4B
 ! bold cyan
-Rxvt*color14:rgb:20/C0/A0
+Rxvt*color14:rgb:55/57/53
 ! bold white
-Rxvt*color15:rgb:D0/D0/D0
+Rxvt*color15:rgb:EE/EE/EC
 
 !       colorBD: colour
 !	      Use  the	specified  colour  to display bold characters when the
 !	      foreground colour is the default.
-Rxvt*colorBD:rgb:C0/C0/C0
+!Rxvt*colorBD:rgb:C0/C0/C0
 
 !       colorUL: colour
 !	      Use the specified colour to display underlined  characters  when
@@ -431,5 +429,146 @@ Rxvt*lineSpace:1
 !  keysym.sym:         keysym
 
 URxvt*iso14755:False
+
+! rxvt-unicode (urxvt) v9.19 - released: 2013-10-27
+! options: perl,xft,styles,combining,blink,iso14755,unicode3,encodings=eu+vn+jp+jp-ext+kr+zh+zh-ext,fade,transparent,tint,pixbuf,XIM,frills,selectionscrolling,wheel,slipwheel,smart-resize,cursorBlink,pointerBlank,scrollbars=plain+rxvt+NeXT+xterm
+! Usage: urxvt [options] [-e command args]
+
+! where resources (long-options) include:
+!   termName:                       string
+!   geometry:                       geometry
+!   chdir:                          string
+!   reverseVideo:                   boolean
+!   loginShell:                     boolean
+!   jumpScroll:                     boolean
+!   skipScroll:                     boolean
+!   pastableTabs:                   boolean
+!   scrollstyle:                    mode
+!   scrollBar:                      boolean
+!   scrollBar_right:                boolean
+!   scrollBar_floating:             boolean
+!   scrollBar_align:                mode
+!   thickness:                      number
+!   scrollTtyOutput:                boolean
+!   scrollTtyKeypress:              boolean
+!   scrollWithBuffer:               boolean
+!   inheritPixmap:                  boolean
+!   transparent:                    boolean
+!   tintColor:                      color
+!   shading:                        number
+!   blurRadius:                     HxV
+!   fading:                         number
+!   fadeColor:                      color
+!   utmpInhibit:                    boolean
+!   urgentOnBell:                   boolean
+!   visualBell:                     boolean
+!   mapAlert:                       boolean
+!   meta8:                          boolean
+!   mouseWheelScrollPage:           boolean
+!   tripleclickwords:               boolean
+!   insecure:                       boolean
+!   cursorUnderline:                boolean
+!   cursorBlink:                    boolean
+!   pointerBlank:                   boolean
+!   background:                     color
+!   foreground:                     color
+!   color0:                         color
+!   color1:                         color
+!   color2:                         color
+!   color3:                         color
+!   color4:                         color
+!   color5:                         color
+!   color6:                         color
+!   color7:                         color
+!   color8:                         color
+!   color9:                         color
+!   color10:                        color
+!   color11:                        color
+!   color12:                        color
+!   color13:                        color
+!   color14:                        color
+!   color15:                        color
+!   colorBD:                        color
+!   colorIT:                        color
+!   colorUL:                        color
+!   colorRV:                        color
+!   underlineColor:                 color
+!   scrollColor:                    color
+!   troughColor:                    color
+!   highlightColor:                 color
+!   highlightTextColor:             color
+!   cursorColor:                    color
+!   cursorColor2:                   color
+!   pointerColor:                   color
+!   pointerColor2:                  color
+!   borderColor:                    color
+!   path:                           search path
+!   backgroundPixmap:               file[;geom]
+!   iconFile:                       file
+!   font:                           fontname
+!   boldFont:                       fontname
+!   italicFont:                     fontname
+!   boldItalicFont:                 fontname
+!   intensityStyles:                boolean
+! If true, then bold => use bold color for bold font; false disables
+URxvt*intensityStyles: false
+
+!   inputMethod:                    name
+!   preeditType:                    style
+!   imLocale:                       string
+!   imFont:                         fontname
+!   title:                          string
+!   iconName:                       string
+!   saveLines:                      number
+!   buffered:                       boolean
+!   depth:                          number
+!   visual:                         number
+!   transient-for:                  windowid
+!   override-redirect:              boolean
+!   hold:                           boolean
+!   externalBorder:                 number
+!   internalBorder:                 number
+!   borderLess:                     boolean
+!   lineSpace:                      number
+!   letterSpace:                    number
+!   skipBuiltinGlyphs:              boolean
+!   pointerBlankDelay:              number
+!   backspacekey:                   string
+!   deletekey:                      string
+!   print-pipe:                     string
+!   modifier:                       modifier
+!   cutchars:                       string
+!   answerbackString:               string
+!   secondaryScreen:                boolean
+!   secondaryScroll:                boolean
+!   perl-lib:                       string
+!   perl-eval:                      perl-eval
+!   perl-ext-common:                string
+!   perl-ext:                       string
+!   iso14755:                       boolean
+!   iso14755_52:                    boolean
+!   xrm:                            string
+!   keysym.sym:                     keysym
+!   background.border:              boolean
+!   background.expr:                string
+!   background.interval:            seconds
+!   bell-command:                   string
+!   matcher.button:                 string
+!   matcher.launcher:               string
+!   matcher.launcher.*:             string
+!   matcher.pattern.*:              string
+!   matcher.rend.*:                 string
+!   remote-clipboard.fetch:         string
+!   remote-clipboard.store:         string
+!   searchable-scrollback:          string
+!   selection-autotransform.*:      string
+!   selection-pastebin.cmd:         string
+!   selection-pastebin.url:         string
+!   selection.pattern-0:            string
+!   tab-bg:                         colour
+!   tab-fg:                         colour
+!   tabbar-bg:                      colour
+!   tabbar-fg:                      colour
+!   url-launcher:                   string
 
 
