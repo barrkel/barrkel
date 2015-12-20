@@ -1,0 +1,92 @@
+#!/bin/bash
+
+# black     COLOR_BLACK       0     0, 0, 0
+# red       COLOR_RED         1     max,0,0
+# green     COLOR_GREEN       2     0,max,0
+# yellow    COLOR_YELLOW      3     max,max,0
+# blue      COLOR_BLUE        4     0,0,max
+# magenta   COLOR_MAGENTA     5     max,0,max
+# cyan      COLOR_CYAN        6     0,max,max
+# white     COLOR_WHITE       7     max,max,max
+
+function print_color # num
+{
+    case $1 in
+        0)
+            printf " black "
+            ;;
+        1)
+            printf " red "
+            ;;
+        2)
+            printf " green "
+            ;;
+        3)
+            printf " yellow "
+            ;;
+        4)
+            printf " blue "
+            ;;
+        5)
+            printf " magenta "
+            ;;
+        6)
+            printf " cyan "
+            ;;
+        7)
+            printf " white "
+            ;;
+        8)
+            printf " B.black "
+            ;;
+        9)
+            printf " B.red "
+            ;;
+        10)
+            printf " B.green "
+            ;;
+        11)
+            printf " B.yellow "
+            ;;
+        12)
+            printf " B.blue "
+            ;;
+        13)
+            printf " B.magenta "
+            ;;
+        14)
+            printf " B.cyan "
+            ;;
+        15)
+            printf " B.white "
+            ;;
+        *)
+            printf " ???????? "
+            ;;
+    esac
+}
+
+for bg in {0..15}; do
+    printf '%10s ' $(print_color $bg)
+    for fg in {0..15}; do
+        tput setaf $fg
+        tput setab $bg
+        print_color $fg
+        tput op
+    done
+    echo
+done
+tput bold
+for bg in {0..15}; do
+    printf '%10s ' $(print_color $bg)
+    for fg in {0..15}; do
+        tput setaf $fg
+        tput setab $bg
+        print_color $fg
+        tput op
+    done
+    echo
+done
+tput sgr0
+echo
+
