@@ -148,7 +148,7 @@
  `(helm-source-header ((t (:inherit mode-line))))
  `(helm-selection ((t (:background ,color-bright-blue :foreground ,color-bright-white))))
  `(helm-selection-line ((t (:background ,color-bright-blue :foreground ,color-bright-white))))
- `(helm-candidate-number ((t (:foreground ,color-blue) (:background nil))))
+ `(helm-candidate-number ((t (:foreground ,color-blue :background nil))))
 
  ;; whitespace
  `(whitespace-space ((t (:foreground ,color-bright-black))))
