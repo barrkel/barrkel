@@ -357,14 +357,6 @@
 (define-key global-map (kbd "M-N") 'mc/unmark-next-like-this)
 (define-key global-map (kbd "C-M-n") 'mc/skip-to-next-like-this)
 
-;; projectile
-(eval-after-load "projectile"
-  '(progn
-     (define-key projectile-mode-map (kbd "<f12>") 'projectile-find-file)
-     (define-key projectile-mode-map (kbd "S-<f12>") 'projectile-switch-to-buffer)
-     (define-key projectile-mode-map (kbd "<f22>") 'projectile-switch-to-buffer))) ; screen
-
-
 ;; projectile has appallingly bad performance on remote filesystems because it uses a dynamic
 ;; modeline; projectile-project-name searches the file system tree on every modeline update, but
 ;; guess what - the project a file belongs to almost never changes, certainly not as often as the
@@ -388,7 +380,13 @@
      (defadvice projectile-project-name (around bk/projectile-project-name activate)
        (if (not bk/projectile-project-name-cache)
            (setq bk/projectile-project-name-cache ad-do-it))
-       (setq ad-return-value bk/projectile-project-name-cache))))
+       (setq ad-return-value bk/projectile-project-name-cache))
+
+     (setq projectile-completion-system 'helm-comp-read)
+
+     (define-key projectile-mode-map (kbd "<f12>") 'projectile-find-file)
+     (define-key projectile-mode-map (kbd "S-<f12>") 'projectile-switch-to-buffer)
+     (define-key projectile-mode-map (kbd "<f22>") 'projectile-switch-to-buffer)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -509,6 +507,7 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(autoload 'helm-occur-init-source "helm")
 (defun helm-occur-1 (initial-value)
   "Preconfigured helm for Occur with initial input (helm-occur with mods)."
   (interactive)
