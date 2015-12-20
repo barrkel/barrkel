@@ -10,6 +10,12 @@
 (package-initialize)
 (setq package-enable-at-startup nil)
 
+;; occasionally required, e.g. when upgrading emacs
+(defun recompile-all-the-things ()
+  "Recompile all out of date .el files in ~/.emacs.d"
+  (interactive)
+  (byte-recompile-directory (expand-file-name "~/.emacs.d") 0))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; HELPERS USED IN MODES
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
