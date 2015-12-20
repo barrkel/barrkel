@@ -150,6 +150,12 @@
  `(helm-selection-line ((t (:background ,color-bright-blue :foreground ,color-bright-white))))
  `(helm-candidate-number ((t (:foreground ,color-blue :background nil))))
 
+ ;; magit
+ `(magit-blame-heading ((t (:foreground ,color-yellow :background ,color-bright-black :weight normal))))
+
+ ;; ruby
+ `(enh-ruby-op-face ((t (:foreground ,color-bright-white :background nil))))
+
  ;; whitespace
  `(whitespace-space ((t (:foreground ,color-bright-black))))
  `(whitespace-newline ((t (:foreground ,color-bright-black))))

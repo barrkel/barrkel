@@ -202,7 +202,7 @@
   '(progn
      (setenv "PAGER" (executable-find "cat"))
      (setq rspec-use-rake-when-possible nil)
-     (inf-ruby-switch-setup)
+     ;; (inf-ruby-switch-setup)
      (define-key global-map (kbd "M-T") 'rspec-toggle-spec-and-target)))
 
 ;; ruby
@@ -216,6 +216,8 @@
             (define-key enh-ruby-mode-map (kbd "C-M-n") nil)
             (define-key enh-ruby-mode-map (kbd "C-j") nil)
             (define-key enh-ruby-mode-map (kbd "C-c /") nil)
+
+            (autoload 'er/enable-mode-expansions "expand-region")
 
             ;; for long lines, prefer to wrap with one level of indentation, rather than open paren
             (setq enh-ruby-deep-indent-paren nil)
@@ -371,7 +373,10 @@
 (add-hook 'find-file-hook
           (lambda ()
             (if (locate-dominating-file default-directory ".git")
-                (projectile-mode))))
+                (progn
+                  (projectile-mode)
+                  ;; piggy-back magit on this hook
+                  (require 'magit)))))
 (eval-after-load "projectile"
   '(progn
      (defvar-local bk/projectile-project-name-cache nil
@@ -396,7 +401,7 @@
 ;; skip special buffers when cycling through with C-PgUp/PgDn
 
 (setq special-buffer-blacklist '("\*Compile-Log\*" "\*helm.*" "\*Backtrace\*"
-                                 "\*Messages\*"))
+                                 "\*Messages\*" "\*magit.*"))
 (autoload '-any-p "dash")
 (defun next-code-buffer ()
   (interactive)
@@ -870,7 +875,7 @@ buffer instead of replacing the text in region."
  '(custom-enabled-themes (quote (barrkel-4)))
  '(custom-safe-themes
    (quote
-    ("39cbe3e685e02f94596641613d5906e974b4ef293dead2b3c0e3652a98c5f04a" "fc52dc3ab3051f8a5bc9c6132a6c1dbcebb5f07833440fdbcbe493219139dbbb" "30d561733016afa605fb78c54d0fc62938568e9e7f16c3216fc9ef1d947211ab" "6cfdb2a70cb178ef0b4c9678de3c666d46aa17b161f01991804f377bc75bd172" "a03caded6d5f870becc601b74a0ff58bc40c7cd103dac4e9a5dde0fd5780b8ab" "8cbe7417e320d75c4d65884ee367245ca8752ac95c274820a90f980fab5bcb0d" "44b8400877316c55bf3759964cfcdb9a89440bc4064b75c354ed158321d91532" "0eb184018c261ef65137d1702d06c85245b6eeb766afb9cde849b791231a72fc" "5058350cbf03a20e415885d81b5cb10251fe4326fd5a5001084e82f8093315f9" default))))
+    ("a34632a2444279476577b0b87669a89bf78154e97769cbd66b90f25874004e18" default))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
