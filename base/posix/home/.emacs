@@ -356,6 +356,11 @@
       helm-scroll-amount 8
       helm-ff-file-name-history-use-recentf t)))
 
+;; helm-projectile
+(eval-after-load
+    '(progn
+       (define-key global-map (kbd "<f11>") 'helm-projectile-find-file-dwim)))
+
 ;; iedit; iedit-mode defines a bunch of key bindings while active; C-h b to see them
 (define-key global-map (kbd "M-i") 'iedit-mode)
 
@@ -566,21 +571,6 @@
       (helm-git-grep-1 (buffer-substring (mark) (point)))
     (helm-git-grep)))
 (define-key global-map (kbd "M-G") 'git-grep-selected-text)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(autoload 'projectile-project-p "helm-projectile")
-(defun bk/helm-projectile-find-file (&optional arg)
-  "Helm find file based on text at point"
-  (interactive "P")
-  (if (projectile-project-p)
-      (projectile-maybe-invalidate-cache arg))
-  (let ((helm-ff-transformer-show-only-basename nil))
-    (helm :sources 'helm-source-projectile-files-list
-          :buffer "*helm projectile*"
-          :input (get-point-text)
-          :prompt (projectile-prepend-project-name "Find file: "))))
-(define-key global-map (kbd "<f11>") 'bk/helm-projectile-find-file)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -796,6 +786,7 @@ buffer instead of replacing the text in region."
       (setq cursor-type '(bar . 2))
       (blink-cursor-mode t)
       (setq frame-title-format "Barry's Emacs")
+      (setq mouse-wheel-progressive-speed nil)
       ;; console emacs has no fringe and margin mode interferes with linum; only use in UI
       (require 'diff-hl)
       (global-diff-hl-mode)))
