@@ -336,12 +336,11 @@
      ;;
      ;; That's right: exactly the kind of operation you don't want to delay (e.g. M-x function list)
      ;; needs to respond slower than expensive background greps etc!
-     ;;
-     ;; Here I'm ignoring the docs and setting a more aggresive (i.e. shorter delay on non-delayed
-     ;; sources. We'll see if we get duplicates in practice.
+
+     ;; Duplicates do turn up in practice. So we need to suffer laggy input on non-delayed inputs.
      (setq helm-idle-delay 0.25)
      ;; even for non-delayed sources, helm is laggy when typing quickly
-     (setq helm-input-idle-delay 0.1)
+     (setq helm-input-idle-delay 0.25)
 
      (when (executable-find "curl")
        (setq helm-google-suggest-use-curl-p t))
