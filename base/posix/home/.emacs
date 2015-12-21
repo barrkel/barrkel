@@ -359,6 +359,11 @@
 ;; iedit; iedit-mode defines a bunch of key bindings while active; C-h b to see them
 (define-key global-map (kbd "M-i") 'iedit-mode)
 
+;; magit
+(add-hook 'magit-mode-hook
+          (lambda ()
+            (define-key global-map (kbd "M-M") 'magit-status)))
+
 ;; multiple-cursors
 (define-key global-map (kbd "M-n") 'mc/mark-next-like-this)
 (define-key global-map (kbd "M-N") 'mc/unmark-next-like-this)
