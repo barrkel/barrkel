@@ -32,6 +32,7 @@
         fixup-whitespace
         haml-electric-backspace
         helm-M-x
+        helm-show-kill-ring
         indent-for-tab-command
         insert-braces-macro
         isearch-abort
@@ -47,6 +48,7 @@
         ruby-end-of-block
         scroll-down-line
         scroll-up-line
+        string-inflection-all-cycle
         subword-left
         subword-right
         transpose-words

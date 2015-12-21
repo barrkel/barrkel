@@ -827,7 +827,7 @@ buffer instead of replacing the text in region."
 (define-key global-map (kbd "M-?") 'hippie-expand)
 (define-key global-map (kbd "M-W") 'fixup-whitespace)
 (define-key global-map (kbd "C-c w") 'write-region)
-(define-key global-map (kbd "C-c i") 'string-inflection-cycle)
+(define-key global-map (kbd "C-c i") 'string-inflection-all-cycle)
 (define-key global-map (kbd "M-<delete>") 'kill-word)
 (define-key global-map (kbd "M-W") 'fixup-whitespace)
 (define-key global-map (kbd "M-A") 'align-regexp)
