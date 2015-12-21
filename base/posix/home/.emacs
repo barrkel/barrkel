@@ -787,8 +787,14 @@ buffer instead of replacing the text in region."
       `(read-only t point-entered minibuffer-avoid-prompt face minibuffer-prompt))
 
 ;; GUI emacs
-(setq cursor-type '(bar . 2))
-(blink-cursor-mode t)
+(if window-system
+    (progn
+      (setq cursor-type '(bar . 2))
+      (blink-cursor-mode t)
+      (setq frame-title-format "Barry's Emacs")
+      ;; console emacs has no fringe and margin mode interferes with linum; only use in UI
+      (require 'diff-hl)
+      (global-diff-hl-mode)))
 
 ;; semantic navigation
 (setq imenu-max-item-length 120)
