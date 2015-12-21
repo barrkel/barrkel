@@ -17,6 +17,12 @@
   (byte-recompile-directory (expand-file-name "~/.emacs.d") 0))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; AUTOLOADS
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(autoload 'smartrep-define-key "smartrep")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; HELPERS USED IN MODES
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -202,7 +208,7 @@
   '(progn
      (setenv "PAGER" (executable-find "cat"))
      (setq rspec-use-rake-when-possible nil)
-     ;; (inf-ruby-switch-setup)
+     (inf-ruby-switch-setup)
      (define-key global-map (kbd "M-T") 'rspec-toggle-spec-and-target)))
 
 ;; ruby
@@ -426,6 +432,15 @@
 
 ;; better buffer list with bulk ops
 (define-key global-map (kbd "C-x C-b") 'ibuffer)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; SMARTREP
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; move-text with C-c m -> p n
+(smartrep-define-key global-map "C-c m"
+  '(("n" . move-text-down)
+    ("p" . move-text-up)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MACROS
@@ -744,7 +759,7 @@ buffer instead of replacing the text in region."
 (defalias 'yes-or-no-p 'y-or-n-p)
 
 ;; prefer magit
-(delete 'Git vc-handled-backends)
+;;(delete 'Git vc-handled-backends)
 
 ;; pull in changes from other programs when files change on disk
 (global-auto-revert-mode)
@@ -806,6 +821,7 @@ buffer instead of replacing the text in region."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define-key global-map (kbd "C-z") 'undo) ; C-x C-z still backgrounds
+(define-key global-map (kbd "M-z") 'zop-to-char)
 (define-key global-map (kbd "M-?") 'hippie-expand)
 (define-key global-map (kbd "M-W") 'fixup-whitespace)
 (define-key global-map (kbd "C-c w") 'write-region)
