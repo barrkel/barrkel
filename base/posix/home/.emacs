@@ -357,22 +357,19 @@
       helm-ff-file-name-history-use-recentf t)))
 
 ;; helm-projectile
-(eval-after-load
+(eval-after-load "helm-projectile"
     '(progn
        (define-key global-map (kbd "<f11>") 'helm-projectile-find-file-dwim)))
 
 ;; iedit; iedit-mode defines a bunch of key bindings while active; C-h b to see them
 (define-key global-map (kbd "M-i") 'iedit-mode)
 
-;; magit
-(add-hook 'magit-mode-hook
-          (lambda ()
-            (define-key global-map (kbd "M-M") 'magit-status)))
-
 ;; multiple-cursors
 (define-key global-map (kbd "M-n") 'mc/mark-next-like-this)
 (define-key global-map (kbd "M-N") 'mc/unmark-next-like-this)
 (define-key global-map (kbd "C-M-n") 'mc/skip-to-next-like-this)
+
+;; projectile
 
 ;; projectile has appallingly bad performance on remote filesystems because it uses a dynamic
 ;; modeline; projectile-project-name searches the file system tree on every modeline update, but
@@ -391,7 +388,7 @@
                 (progn
                   (projectile-mode)
                   ;; piggy-back magit on this hook
-                  (require 'magit)))))
+                  (define-key global-map (kbd "M-M") 'magit-status)))))
 (eval-after-load "projectile"
   '(progn
      (defvar-local bk/projectile-project-name-cache nil
@@ -408,6 +405,10 @@
      (define-key projectile-mode-map (kbd "S-<f12>") 'projectile-switch-to-buffer)
      (define-key projectile-mode-map (kbd "<f22>") 'projectile-switch-to-buffer)))
 
+;; whitespace
+(global-whitespace-mode)
+(setq whitespace-style '(face tabs trailing lines space-before-tab newline indentation
+                              empty space-after-tab tab-mark))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; BUFFER SWITCHING
