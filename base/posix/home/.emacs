@@ -211,7 +211,9 @@
      (inf-ruby-switch-setup)
      (define-key global-map (kbd "M-T") 'rspec-toggle-spec-and-target)))
 
-;; ruby
+;; ruby & enh-ruby-mode
+(eval-after-load "enh-ruby-mode" '(require 'ruby-mode-expansions))
+(autoload 'er/enable-mode-expansions "expand-region")
 (add-hook 'ruby-mode-hook
           (lambda ()
             (visual-line-mode)))
@@ -223,12 +225,9 @@
             (define-key enh-ruby-mode-map (kbd "C-j") nil)
             (define-key enh-ruby-mode-map (kbd "C-c /") nil)
 
-            (autoload 'er/enable-mode-expansions "expand-region")
-
             ;; for long lines, prefer to wrap with one level of indentation, rather than open paren
             (setq enh-ruby-deep-indent-paren nil)
             (er/enable-mode-expansions 'enh-ruby-mode 'er/add-ruby-mode-expansions)
-            (eval-after-load "enh-ruby-mode" '(require 'ruby-mode-expansions))
             (defun ruby-replace-symbol-map-syntax ()
               (interactive)
               (replace-regexp ":\\([^:']+\\) =>" "\\1:" nil
