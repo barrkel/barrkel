@@ -1,6 +1,6 @@
 ;;; rxvt.el --- define function key sequences and standard colors for rxvt
 
-;; Copyright (C) 2002-2013 Free Software Foundation, Inc. 
+;; Copyright (C) 2002-2013 Free Software Foundation, Inc.
 
 ;; Customized by Barry Kelly for use with screen, to enable F11, F12, and fix random other issues,
 ;; including the complete lack of support for C-S- prefix on all the extended keys.
@@ -235,79 +235,79 @@
 This function registers the number of colors returned by `display-color-cells'
 for the currently selected frame."
   (let* ((ncolors (display-color-cells))
-	 (colors rxvt-standard-colors)
-	 (color (car colors)))
+         (colors rxvt-standard-colors)
+         (color (car colors)))
     (if (> ncolors 0)
-	;; Clear the 8 default tty colors registered by startup.el
-	(tty-color-clear))
+        ;; Clear the 8 default tty colors registered by startup.el
+        (tty-color-clear))
     ;; Only register as many colors as are supported by the display.
     (while (and (> ncolors 0) colors)
       (tty-color-define (car color) (cadr color)
-			(mapcar 'rxvt-rgb-convert-to-16bit
-				(car (cddr color))))
+                        (mapcar 'rxvt-rgb-convert-to-16bit
+                                (car (cddr color))))
       (setq colors (cdr colors)
-	    color (car colors)
-	    ncolors (1- ncolors)))
+            color (car colors)
+            ncolors (1- ncolors)))
     (when (> ncolors 0)
       (cond
-       ((= ncolors 240)			; 256-color rxvt
-	;; 216 non-gray colors first
-	(let ((r 0) (g 0) (b 0))
-	  (while (> ncolors 24)
-	    ;; This and other formulas taken from 256colres.pl and
-	    ;; 88colres.pl in the xterm distribution.
-	    (tty-color-define (format "color-%d" (- 256 ncolors))
-			      (- 256 ncolors)
-			      (mapcar 'rxvt-rgb-convert-to-16bit
-				      (list (round (* r 42.5))
-					    (round (* g 42.5))
-					    (round (* b 42.5)))))
-	    (setq b (1+ b))
-	    (if (> b 5)
-		(setq g (1+ g)
-		      b 0))
-	    (if (> g 5)
-		(setq r (1+ r)
-		      g 0))
-	    (setq ncolors (1- ncolors))))
-	;; Now the 24 gray colors
-	(while (> ncolors 0)
-	  (setq color (rxvt-rgb-convert-to-16bit (+ 8 (* (- 24 ncolors) 10))))
-	  (tty-color-define (format "color-%d" (- 256 ncolors))
-			    (- 256 ncolors)
-			    (list color color color))
-	  (setq ncolors (1- ncolors))))
+       ((= ncolors 240) ; 256-color rxvt
+        ;; 216 non-gray colors first
+        (let ((r 0) (g 0) (b 0))
+          (while (> ncolors 24)
+            ;; This and other formulas taken from 256colres.pl and
+            ;; 88colres.pl in the xterm distribution.
+            (tty-color-define (format "color-%d" (- 256 ncolors))
+                              (- 256 ncolors)
+                              (mapcar 'rxvt-rgb-convert-to-16bit
+                                      (list (round (* r 42.5))
+                                            (round (* g 42.5))
+                                            (round (* b 42.5)))))
+            (setq b (1+ b))
+            (if (> b 5)
+                (setq g (1+ g)
+                      b 0))
+            (if (> g 5)
+                (setq r (1+ r)
+                      g 0))
+            (setq ncolors (1- ncolors))))
+        ;; Now the 24 gray colors
+        (while (> ncolors 0)
+          (setq color (rxvt-rgb-convert-to-16bit (+ 8 (* (- 24 ncolors) 10))))
+          (tty-color-define (format "color-%d" (- 256 ncolors))
+                            (- 256 ncolors)
+                            (list color color color))
+          (setq ncolors (1- ncolors))))
 
        ((= ncolors 72) ; rxvt-unicode
-	;; 64 non-gray colors
-	(let ((levels '(0 139 205 255))
-	      (r 0) (g 0) (b 0))
-	  (while (> ncolors 8)
-	    (tty-color-define (format "color-%d" (- 88 ncolors))
-			      (- 88 ncolors)
-			      (mapcar 'rxvt-rgb-convert-to-16bit
-				      (list (nth r levels)
-					    (nth g levels)
-					    (nth b levels))))
-	    (setq b (1+ b))
-	    (if (> b 3)
-		(setq g (1+ g)
-		      b 0))
-	    (if (> g 3)
-		(setq r (1+ r)
-		      g 0))
-	    (setq ncolors (1- ncolors))))
-	;; Now the 8 gray colors
-	(while (> ncolors 0)
-	  (setq color (rxvt-rgb-convert-to-16bit
-		       (floor
-			(if (= ncolors 8)
-			    46.36363636
-			  (+ (* (- 8 ncolors) 23.18181818) 69.54545454)))))
-	  (tty-color-define (format "color-%d" (- 88 ncolors))
-			    (- 88 ncolors)
-			    (list color color color))
-	  (setq ncolors (1- ncolors))))
+        ;; 64 non-gray colors
+        (let ((levels '(0 139 205 255))
+              (r 0) (g 0) (b 0))
+          (while (> ncolors 8)
+            (tty-color-define (format "color-%d" (- 88 ncolors))
+                              (- 88 ncolors)
+                              (mapcar 'rxvt-rgb-convert-to-16bit
+                                      (list (nth r levels)
+                                            (nth g levels)
+                                            (nth b levels))))
+            (setq b (1+ b))
+            (if (> b 3)
+                (setq g (1+ g)
+                      b 0))
+            (if (> g 3)
+                (setq r (1+ r)
+                      g 0))
+            (setq ncolors (1- ncolors))))
+        ;; Now the 8 gray colors
+        (while (> ncolors 0)
+          (setq color (rxvt-rgb-convert-to-16bit
+                       (floor
+                        (if (= ncolors 8)
+                            46.36363636
+                          (+ (* (- 8 ncolors) 23.18181818) 69.54545454)))))
+          (tty-color-define (format "color-%d" (- 88 ncolors))
+                            (- 88 ncolors)
+                            (list color color color))
+          (setq ncolors (1- ncolors))))
        (t (error "Unsupported number of rxvt colors (%d)" (+ 16 ncolors)))))
     ;; Modifying color mappings means realized faces don't use the
     ;; right colors, so clear them.
@@ -319,10 +319,10 @@ for the currently selected frame."
 (defun rxvt-set-background-mode ()
   "Set background mode as appropriate for the default rxvt colors."
   (let ((fgbg (getenv "COLORFGBG"))
-	bg rgb)
+        bg rgb)
     (set-terminal-parameter nil 'background-mode 'light)
     (when (and fgbg
-	       (string-match ".*;\\([0-9][0-9]?\\)\\'" fgbg))
+               (string-match ".*;\\([0-9][0-9]?\\)\\'" fgbg))
       (setq bg (string-to-number (substring fgbg (match-beginning 1))))
       ;; The next line assumes that rxvt-standard-colors are ordered
       ;; by the color index in the ascending order!
@@ -330,9 +330,9 @@ for the currently selected frame."
       ;; See the commentary in frame-set-background-mode about the
       ;; computation below.
       (if (< (apply '+ rgb)
-	     ;; The following line assumes that white is the 15th
-	     ;; color in rxvt-standard-colors.
-	     (* (apply '+ (car (cddr (nth 15 rxvt-standard-colors)))) 0.6))
-	  (set-terminal-parameter nil 'background-mode 'dark)))))
+             ;; The following line assumes that white is the 15th
+             ;; color in rxvt-standard-colors.
+             (* (apply '+ (car (cddr (nth 15 rxvt-standard-colors)))) 0.6))
+          (set-terminal-parameter nil 'background-mode 'dark)))))
 
 ;;; rxvt.el ends here
