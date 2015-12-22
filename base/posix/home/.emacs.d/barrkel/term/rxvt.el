@@ -207,22 +207,22 @@
 (defvar rxvt-standard-colors
   ;; The names of the colors in the comments taken from the rxvt.1 man
   ;; page; the corresponding RGB values--from rgb.txt.
-  '(("black"          0 (  0   0   0))	; black
-    ("red"            1 (205   0   0))	; red3
-    ("green"          2 (  0 205   0))	; green3
-    ("yellow"         3 (205 205   0))	; yellow3
-    ("blue"           4 (  0   0 205))	; blue3
-    ("magenta"        5 (205   0 205))	; magenta3
-    ("cyan"           6 (  0 205 205))	; cyan3
-    ("white"          7 (229 229 229))	; gray90
-    ("brightblack"    8 ( 77  77  77))	; gray30
-    ("brightred"      9 (255   0   0))	; red
-    ("brightgreen"   10 (  0 255   0))	; green
-    ("brightyellow"  11 (255 255   0))	; yellow
-    ("brightblue"    12 (  0   0 255))	; blue
-    ("brightmagenta" 13 (255   0 255))	; magenta
-    ("brightcyan"    14 (  0 255 255))	; cyan
-    ("brightwhite"   15 (255 255 255)))	; white
+  '(("black"          0 (  0   0   0)) ; black
+    ("red"            1 (205   0   0)) ; red3
+    ("green"          2 (  0 205   0)) ; green3
+    ("yellow"         3 (205 205   0)) ; yellow3
+    ("blue"           4 (  0   0 205)) ; blue3
+    ("magenta"        5 (205   0 205)) ; magenta3
+    ("cyan"           6 (  0 205 205)) ; cyan3
+    ("white"          7 (229 229 229)) ; gray90
+    ("brightblack"    8 ( 77  77  77)) ; gray30
+    ("brightred"      9 (255   0   0)) ; red
+    ("brightgreen"   10 (  0 255   0)) ; green
+    ("brightyellow"  11 (255 255   0)) ; yellow
+    ("brightblue"    12 (  0   0 255)) ; blue
+    ("brightmagenta" 13 (255   0 255)) ; magenta
+    ("brightcyan"    14 (  0 255 255)) ; cyan
+    ("brightwhite"   15 (255 255 255))) ; white
   "Names of 16 standard rxvt colors, their numbers, and RGB values.")
 
 (defun rxvt-rgb-convert-to-16bit (prim)
