@@ -407,7 +407,7 @@
 ;; whitespace
 (global-whitespace-mode)
 (setq whitespace-style '(face tabs trailing lines space-before-tab newline indentation
-                              empty space-after-tab tab-mark))
+                              space-after-tab tab-mark))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; BUFFER SWITCHING
