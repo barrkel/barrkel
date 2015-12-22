@@ -753,8 +753,8 @@ buffer instead of replacing the text in region."
 ;; wordy prompts
 (defalias 'yes-or-no-p 'y-or-n-p)
 
-;; prefer magit
-;;(delete 'Git vc-handled-backends)
+;; prefer magit; vc has a big modeline entry and it's not helpful
+(delete 'Git vc-handled-backends)
 
 ;; pull in changes from other programs when files change on disk
 (global-auto-revert-mode)
