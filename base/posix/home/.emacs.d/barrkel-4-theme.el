@@ -70,7 +70,7 @@
  `(minibuffer-prompt
    ((t (:foreground ,color-blue))))
  `(highlight
-   ((t (:foreground ,color-bright-yellow))))
+   ((t (:background ,color-bright-yellow))))
  `(region
    ((t (:background ,color-bright-blue))))
  `(shadow
