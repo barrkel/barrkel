@@ -45,6 +45,7 @@
         kill-visual-line
         org-self-insert-command
         overwrite-mode
+        replace-regexp
         ruby-end-of-block
         scroll-down-line
         scroll-up-line
