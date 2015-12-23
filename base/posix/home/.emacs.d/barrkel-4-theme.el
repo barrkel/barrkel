@@ -155,6 +155,10 @@
 
  ;; ruby
  `(enh-ruby-op-face ((t (:foreground ,color-bright-white :background nil))))
+ `(enh-ruby-regexp-delimiter-face ((t (:foreground ,color-bright-white :background nil))))
+ `(enh-ruby-heredoc-delimiter-face ((t (:foreground ,color-bright-white :background nil))))
+ `(enh-ruby-regexp-face ((t (:foreground ,color-yellow :background nil))))
+ `(enh-ruby-string-delimiter-face ((t (:foreground ,color-green :background nil))))
 
  ;; whitespace
  `(whitespace-space ((t (:foreground ,color-bright-black))))

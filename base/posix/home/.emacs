@@ -110,6 +110,7 @@
             (set-tab-style nil 2)
             (flycheck-mode)
             (setq flycheck-checker 'coffee-coffeelint)
+            (setq fill-column 120)
             (define-key coffee-mode-map (kbd "M-,") 'coffee-indent-shift-left)
             (define-key coffee-mode-map (kbd "M-.") 'coffee-indent-shift-right)))
 
@@ -359,6 +360,9 @@
 (eval-after-load "helm-projectile"
     '(progn
        (define-key global-map (kbd "<f11>") 'helm-projectile-find-file-dwim)))
+
+;; highlight-indent-guides-mode
+(define-key global-map (kbd "C-c SPC") 'highlight-indent-guides-mode)
 
 ;; iedit; iedit-mode defines a bunch of key bindings while active; C-h b to see them
 (define-key global-map (kbd "M-i") 'iedit-mode)

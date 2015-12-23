@@ -62,7 +62,42 @@
     (define-key map "\e[19~" [f8])
     (define-key map "\e[20~" [f9])
     (define-key map "\e[21~" [f10])
+    ;; added over and above S-f1, S-f2
+    (define-key map "\e[23~" [f11])
+    (define-key map "\e[24~" [f11])
     (define-key map "\e[29~" [print])
+
+    ;; Alt+
+    (define-key map "\e\e[A" [M-up])
+    (define-key map "\e\e[B" [M-down])
+    (define-key map "\e\e[C" [M-right])
+    (define-key map "\e\e[D" [M-left])
+    (define-key map "\e\e[1~" [M-home])
+    (define-key map "\e\e[2~" [M-insert])
+    (define-key map "\e\e[3~" [M-delete])
+    (define-key map "\e\e[4~" [M-end])
+    (define-key map "\e\e[5~" [M-prior])
+    (define-key map "\e\e[6~" [M-next])
+    (define-key map "\e\e[7~" [M-home])
+    (define-key map "\e\e[8~" [M-end])
+    (define-key map "\e\e[11~" [M-f1])
+    (define-key map "\e\e[12~" [M-f2])
+    (define-key map "\e\e[13~" [M-f3])
+    (define-key map "\e\e[14~" [M-f4])
+    (define-key map "\e\eOP" [M-f1])
+    (define-key map "\e\eOQ" [M-f2])
+    (define-key map "\e\eOR" [M-f3])
+    (define-key map "\e\eOS" [M-f4])
+    (define-key map "\e\e[15~" [M-f5])
+    (define-key map "\e\e[17~" [M-f6])
+    (define-key map "\e\e[18~" [M-f7])
+    (define-key map "\e\e[19~" [M-f8])
+    (define-key map "\e\e[20~" [M-f9])
+    (define-key map "\e\e[21~" [M-f10])
+    (define-key map "\e\e[23~" [M-f11])
+    (define-key map "\e\e[24~" [M-f11])
+    (define-key map "\e\e[29~" [M-print])
+
 
     (define-key map "\e[11^" [C-f1])
     (define-key map "\e[12^" [C-f2])
@@ -78,6 +113,22 @@
     (define-key map "\e[23^" [C-f11])
     (define-key map "\e[24^" [C-f12])
 
+    ;; Alt+
+    (define-key map "\e\e[11^" [C-M-f1])
+    (define-key map "\e\e[12^" [C-M-f2])
+    (define-key map "\e\e[13^" [C-M-f3])
+    (define-key map "\e\e[14^" [C-M-f4])
+    (define-key map "\e\e[15^" [C-M-f5])
+    (define-key map "\e\e[17^" [C-M-f6])
+    (define-key map "\e\e[18^" [C-M-f7])
+    (define-key map "\e\e[19^" [C-M-f8])
+    (define-key map "\e\e[20^" [C-M-f9])
+    (define-key map "\e\e[21^" [C-M-f10])
+    ;; Not defining f11 is one thing, but then leaving out C-f11?
+    (define-key map "\e\e[23^" [C-M-f11])
+    (define-key map "\e\e[24^" [C-M-f12])
+
+
     ;; prefer two whole extra keys over having shift on f1 and f2
     ;; (define-key map "\e[23~" [S-f1])
     ;; (define-key map "\e[24~" [S-f2])
@@ -91,6 +142,18 @@
     (define-key map "\e[34~" [S-f10])
     (define-key map "\e[23$" [S-f11])
     (define-key map "\e[24$" [S-f12])
+
+    ;; Alt+
+    (define-key map "\e\e[25~" [M-S-f3])
+    (define-key map "\e\e[26~" [M-S-f4])
+    (define-key map "\e\e[28~" [M-S-f5])
+    (define-key map "\e\e[29~" [M-S-f6])
+    (define-key map "\e\e[31~" [M-S-f7])
+    (define-key map "\e\e[32~" [M-S-f8])
+    (define-key map "\e\e[33~" [M-S-f9])
+    (define-key map "\e\e[34~" [M-S-f10])
+    (define-key map "\e\e[23$" [M-S-f11])
+    (define-key map "\e\e[24$" [M-S-f12])
 
     ;; These are C-f11, C-f12
     ;; (define-key map "\e[23^" [C-S-f1])
@@ -106,6 +169,18 @@
     (define-key map "\e[23@" [C-S-f11])
     (define-key map "\e[24@" [C-S-f12])
 
+    ;; Alt+
+    (define-key map "\e\e[25^" [C-M-S-f3])
+    (define-key map "\e\e[26^" [C-M-S-f4])
+    (define-key map "\e\e[28^" [C-M-S-f5])
+    (define-key map "\e\e[29^" [C-M-S-f6])
+    (define-key map "\e\e[31^" [C-M-S-f7])
+    (define-key map "\e\e[32^" [C-M-S-f8])
+    (define-key map "\e\e[33^" [C-M-S-f9])
+    (define-key map "\e\e[34^" [C-M-S-f10])
+    (define-key map "\e\e[23@" [C-M-S-f11])
+    (define-key map "\e\e[24@" [C-M-S-f12])
+
     (define-key map "\e[2^" [C-insert])
     (define-key map "\e[3^" [C-delete])
     (define-key map "\e[5^" [C-prior])
@@ -116,6 +191,18 @@
     (define-key map "\eOc" [C-right])
     (define-key map "\eOa" [C-up])
     (define-key map "\eOb" [C-down])
+
+    ;; Alt+
+    (define-key map "\e\e[2^" [C-M-insert])
+    (define-key map "\e\e[3^" [C-M-delete])
+    (define-key map "\e\e[5^" [C-M-prior])
+    (define-key map "\e\e[6^" [C-M-next])
+    (define-key map "\e\e[7^" [C-M-home])
+    (define-key map "\e\e[8^" [C-M-end])
+    (define-key map "\e\eOd" [C-M-left])
+    (define-key map "\e\eOc" [C-M-right])
+    (define-key map "\e\eOa" [C-M-up])
+    (define-key map "\e\eOb" [C-M-down])
 
     (define-key map "\e[2;2~" [S-insert])
     (define-key map "\e[3$" [S-delete])
@@ -128,6 +215,18 @@
     (define-key map "\e[a" [S-up])
     (define-key map "\e[b" [S-down])
 
+    ;; Alt+
+    (define-key map "\e\e[2;2~" [M-S-insert])
+    (define-key map "\e\e[3$" [M-S-delete])
+    (define-key map "\e\e[5$" [M-S-prior])
+    (define-key map "\e\e[6$" [M-S-next])
+    (define-key map "\e\e[7$" [M-S-home])
+    (define-key map "\e\e[8$" [M-S-end])
+    (define-key map "\e\e[d" [M-S-left])
+    (define-key map "\e\e[c" [M-S-right])
+    (define-key map "\e\e[a" [M-S-up])
+    (define-key map "\e\e[b" [M-S-down])
+
     ;; inexplicably missing
     (define-key map "\e[2@" [C-S-insert])
     (define-key map "\e[3@" [C-S-delete])
@@ -135,6 +234,14 @@
     (define-key map "\e[6@" [C-S-next])
     (define-key map "\e[7@" [C-S-home])
     (define-key map "\e[8@" [C-S-end])
+
+    ;; Alt+
+    (define-key map "\e\e[2@" [C-M-S-insert])
+    (define-key map "\e\e[3@" [C-M-S-delete])
+    (define-key map "\e\e[5@" [C-M-S-prior])
+    (define-key map "\e\e[6@" [C-M-S-next])
+    (define-key map "\e\e[7@" [C-M-S-home])
+    (define-key map "\e\e[8@" [C-M-S-end])
     map)
   "Function key overrides for rxvt.")
 
