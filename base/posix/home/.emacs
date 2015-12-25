@@ -75,6 +75,7 @@
 ;; - tab settings via set-tab-style
 ;; - subword-mode - camelCase languages
 ;; - highlight-indent-guides-mode - indent-based languages
+;; - whitespace-mode - show weird whitespace mixing
 ;; - flycheck-mode - if we have a linter
 ;; - toggle electric state - keys that randomly start doing weird indenting
 ;; - dumb-newline - bind to RET for smartass modes
@@ -92,6 +93,7 @@
           (lambda ()
             (subword-mode)
             (visual-line-mode)
+            (whitespace-mode)
             (set-tab-style t 4 "linux")
             ;; customize more by using these two steps:
             ;; C-c C-s to discover syntactic context symbol
@@ -105,6 +107,7 @@
 (add-hook 'coffee-mode-hook
           (lambda ()
             (subword-mode)
+            (whitespace-mode)
             (visual-line-mode)
             (highlight-indent-guides-mode)
             (set-tab-style nil 2)
@@ -159,6 +162,7 @@
 (add-to-list 'auto-mode-alist '("\\.hamlc\\'" . haml-mode)) ;; coffeescript haml
 (add-hook 'haml-mode-hook
           (lambda ()
+            (whitespace-mode)
             (highlight-indent-guides-mode)))
 
 ;; help
@@ -176,12 +180,14 @@
           (lambda()
             (set-tab-style t 4)
             (subword-mode)
+            (whitespace-mode)
             (visual-line-mode)))
 
 ;; javascript
 (add-hook 'js-mode-hook
           (lambda ()
             (set-tab-style nil 2)
+            (whitespace-mode)
             (subword-mode)
             (visual-line-mode)))
 
@@ -198,6 +204,7 @@
 ;; markdown
 (add-hook 'markdown-mode-hook
           (lambda ()
+            (whitespace-mode)
             (define-key markdown-mode-map (kbd "M-n") nil)
             (local-set-key (kbd "RET") 'dumb-newline)))
 
@@ -221,6 +228,7 @@
 (add-hook 'enh-ruby-mode-hook
           (lambda ()
             (visual-line-mode)
+            (whitespace-mode)
             (define-key enh-ruby-mode-map (kbd "RET") 'newline-and-indent)
             (define-key enh-ruby-mode-map (kbd "C-M-n") nil)
             (define-key enh-ruby-mode-map (kbd "C-j") nil)
@@ -242,6 +250,7 @@
 (add-hook 'scss-mode-hook
           (lambda ()
             (visual-line-mode)
+            (whitespace-mode)
             (setq scss-compile-at-save nil)
             (set-tab-style nil 2)))
 
@@ -265,6 +274,7 @@
 (add-hook 'yaml-mode-hook
           (lambda ()
             (visual-line-mode)
+            (whitespace-mode)
             (highlight-indent-guides-mode)
             (set-tab-style nil 2)))
 
@@ -362,7 +372,7 @@
        (define-key global-map (kbd "<f11>") 'helm-projectile-find-file-dwim)))
 
 ;; highlight-indent-guides-mode
-(define-key global-map (kbd "C-c SPC") 'highlight-indent-guides-mode)
+(define-key global-map (kbd "C-c TAB") 'highlight-indent-guides-mode)
 
 ;; iedit; iedit-mode defines a bunch of key bindings while active; C-h b to see them
 (define-key global-map (kbd "M-i") 'iedit-mode)
@@ -409,7 +419,9 @@
      (define-key projectile-mode-map (kbd "<f22>") 'projectile-switch-to-buffer)))
 
 ;; whitespace
-(global-whitespace-mode)
+;; global whitespace mode can't be easily undone; in particular display faces remain even when
+;; whitespace is disabled for a buffer; thus we enable whitespace per mode, as desired
+(define-key global-map (kbd "C-c SPC") 'whitespace-mode)
 (setq whitespace-style '(face tabs trailing lines space-before-tab newline indentation
                               space-after-tab tab-mark))
 
