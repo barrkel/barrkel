@@ -1,3 +1,7 @@
 #!/bin/bash
 
-cygstart "$(which scratch.exe)" "$(cygpath -w ~/notes)"
+if [ -d "$1" ]; then
+    cygstart "$(which scratch.exe)" "$(cygpath -w "$1")"
+else
+    cygstart "$(which scratch.exe)" "$(cygpath -w ~/notes)"
+fi
