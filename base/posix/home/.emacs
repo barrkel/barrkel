@@ -236,7 +236,7 @@
 
             ;; for long lines, prefer to wrap with one level of indentation, rather than open paren
             (setq enh-ruby-deep-indent-paren nil)
-            (er/enable-mode-expansions 'enh-ruby-mode 'er/add-ruby-mode-expansions)
+            (er/enable-mode-expansions 'enh-ruby-mode 'er/add-enh-ruby-mode-expansions)
             (defun ruby-replace-symbol-map-syntax ()
               (interactive)
               (replace-regexp ":\\([^:']+\\) =>" "\\1:" nil
