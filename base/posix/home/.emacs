@@ -768,8 +768,10 @@ buffer instead of replacing the text in region."
 ;; wordy prompts
 (defalias 'yes-or-no-p 'y-or-n-p)
 
-;; prefer magit; vc has a big modeline entry and it's not helpful
-(delete 'Git vc-handled-backends)
+;; default back-end is really verbose, including whole branch
+(defadvice vc-mode-line (after strip-backend () activate)
+  (when (stringp vc-mode)
+    (setq vc-mode "")))
 
 ;; pull in changes from other programs when files change on disk
 (global-auto-revert-mode)
