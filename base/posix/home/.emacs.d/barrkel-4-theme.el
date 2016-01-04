@@ -162,6 +162,7 @@
 
  ;; whitespace
  `(whitespace-space ((t (:foreground ,color-bright-black))))
+ `(whitespace-tab ((t (:foreground ,color-bright-black))))
  `(whitespace-newline ((t (:foreground ,color-bright-black))))
  )
 

@@ -366,11 +366,6 @@
       helm-scroll-amount 8
       helm-ff-file-name-history-use-recentf t)))
 
-;; helm-projectile
-(eval-after-load "helm-projectile"
-    '(progn
-       (define-key global-map (kbd "<f11>") 'helm-projectile-find-file-dwim)))
-
 ;; highlight-indent-guides-mode
 (define-key global-map (kbd "C-c TAB") 'highlight-indent-guides-mode)
 
@@ -400,6 +395,7 @@
             (if (locate-dominating-file default-directory ".git")
                 (progn
                   (projectile-mode)
+                  (define-key global-map (kbd "<f11>") 'helm-projectile-find-file-dwim)
                   ;; piggy-back magit on this hook
                   (define-key global-map (kbd "M-M") 'magit-status)))))
 (eval-after-load "projectile"
@@ -422,7 +418,7 @@
 ;; global whitespace mode can't be easily undone; in particular display faces remain even when
 ;; whitespace is disabled for a buffer; thus we enable whitespace per mode, as desired
 (define-key global-map (kbd "C-c SPC") 'whitespace-mode)
-(setq whitespace-style '(face tabs trailing lines space-before-tab newline indentation
+(setq whitespace-style '(face tabs trailing lines space-before-tab newline
                               space-after-tab tab-mark))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -910,7 +906,7 @@ buffer instead of replacing the text in region."
  '(custom-enabled-themes (quote (barrkel-4)))
  '(custom-safe-themes
    (quote
-    ("5ce3e905fd35e6d40f22ebd87587df16508b9ef6f9c3a77bc53d7da6af8bd4d2" "0aa27926a7cc99f237ebda37c6340f1f1c9eb45df88c4391538fba1f8a66f8bb" "a34632a2444279476577b0b87669a89bf78154e97769cbd66b90f25874004e18" default))))
+    ("30f083d649543e3568a1547aaf903e10a59a2b45d0363e070b67acc2df8d4eb4" "5ce3e905fd35e6d40f22ebd87587df16508b9ef6f9c3a77bc53d7da6af8bd4d2" "0aa27926a7cc99f237ebda37c6340f1f1c9eb45df88c4391538fba1f8a66f8bb" "a34632a2444279476577b0b87669a89bf78154e97769cbd66b90f25874004e18" default))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
