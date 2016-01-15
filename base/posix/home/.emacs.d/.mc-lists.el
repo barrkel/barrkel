@@ -62,6 +62,7 @@
         wdired-downcase-word
         wdired-next-line
         yas-expand
+        zop-to-char
         ))
 
 (setq mc/cmds-to-run-once
