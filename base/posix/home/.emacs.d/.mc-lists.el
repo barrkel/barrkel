@@ -46,6 +46,12 @@
         kill-visual-line
         org-self-insert-command
         overwrite-mode
+        picture-backward-column
+        picture-clear-column
+        picture-forward-column
+        picture-move-down
+        picture-move-up
+        picture-self-insert
         replace-regexp
         ruby-end-of-block
         scroll-down-line
@@ -57,6 +63,7 @@
         wdired-downcase-word
         wdired-next-line
         yas-expand
+        zop-to-char
         ))
 
 (setq mc/cmds-to-run-once

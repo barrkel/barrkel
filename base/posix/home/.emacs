@@ -220,8 +220,11 @@
      (define-key global-map (kbd "M-T") 'rspec-toggle-spec-and-target)))
 
 ;; ruby & enh-ruby-mode
-(eval-after-load "enh-ruby-mode" '(require 'ruby-mode-expansions))
-(autoload 'er/enable-mode-expansions "expand-region")
+(eval-after-load "enh-ruby-mode"
+  '(progn
+     (require 'ruby-mode-expansions)
+     (require 'expand-region)
+     (er/enable-mode-expansions 'enh-ruby-mode 'er/add-enh-ruby-mode-expansions)))
 (add-hook 'ruby-mode-hook
           (lambda ()
             (visual-line-mode)))
@@ -236,7 +239,7 @@
 
             ;; for long lines, prefer to wrap with one level of indentation, rather than open paren
             (setq enh-ruby-deep-indent-paren nil)
-            (er/enable-mode-expansions 'enh-ruby-mode 'er/add-enh-ruby-mode-expansions)
+
             (defun ruby-replace-symbol-map-syntax ()
               (interactive)
               (replace-regexp ":\\([^:']+\\) =>" "\\1:" nil
@@ -270,6 +273,16 @@
             (setq tab-stop-list (number-sequence 2 200 2))
             (setq indent-line-function 'insert-tab)))
 
+;; web-mode
+(add-hook 'web-mode-hook
+          (lambda ()
+            (define-key web-mode-map (kbd "RET") 'newline-and-indent)))
+
+;; xml
+(add-hook 'nxml-mode-hook
+          (lambda ()
+            (define-key nxml-mode-map (kbd "M-h") nil)))
+
 ;; yaml
 (add-hook 'yaml-mode-hook
           (lambda ()
@@ -277,11 +290,6 @@
             (whitespace-mode)
             (highlight-indent-guides-mode)
             (set-tab-style nil 2)))
-
-;; xml
-(add-hook 'nxml-mode-hook
-          (lambda ()
-            (define-key nxml-mode-map (kbd "M-h") nil)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MINOR MODES
@@ -366,11 +374,6 @@
       helm-scroll-amount 8
       helm-ff-file-name-history-use-recentf t)))
 
-;; helm-projectile
-(eval-after-load "helm-projectile"
-    '(progn
-       (define-key global-map (kbd "<f11>") 'helm-projectile-find-file-dwim)))
-
 ;; highlight-indent-guides-mode
 (define-key global-map (kbd "C-c TAB") 'highlight-indent-guides-mode)
 
@@ -400,6 +403,7 @@
             (if (locate-dominating-file default-directory ".git")
                 (progn
                   (projectile-mode)
+                  (define-key global-map (kbd "<f11>") 'helm-projectile-find-file-dwim)
                   ;; piggy-back magit on this hook
                   (define-key global-map (kbd "M-M") 'magit-status)))))
 (eval-after-load "projectile"
@@ -422,7 +426,7 @@
 ;; global whitespace mode can't be easily undone; in particular display faces remain even when
 ;; whitespace is disabled for a buffer; thus we enable whitespace per mode, as desired
 (define-key global-map (kbd "C-c SPC") 'whitespace-mode)
-(setq whitespace-style '(face tabs trailing lines space-before-tab newline indentation
+(setq whitespace-style '(face tabs trailing lines space-before-tab newline
                               space-after-tab tab-mark))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -768,8 +772,10 @@ buffer instead of replacing the text in region."
 ;; wordy prompts
 (defalias 'yes-or-no-p 'y-or-n-p)
 
-;; prefer magit; vc has a big modeline entry and it's not helpful
-(delete 'Git vc-handled-backends)
+;; default back-end is really verbose, including whole branch
+(defadvice vc-mode-line (after strip-backend () activate)
+  (when (stringp vc-mode)
+    (setq vc-mode "")))
 
 ;; pull in changes from other programs when files change on disk
 (global-auto-revert-mode)
@@ -908,11 +914,13 @@ buffer instead of replacing the text in region."
  '(custom-enabled-themes (quote (barrkel-4)))
  '(custom-safe-themes
    (quote
-    ("5ce3e905fd35e6d40f22ebd87587df16508b9ef6f9c3a77bc53d7da6af8bd4d2" default))))
+    ("30f083d649543e3568a1547aaf903e10a59a2b45d0363e070b67acc2df8d4eb4" default)))
+ '(parens-require-spaces nil))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(match ((t (:background "#73d216" :foreground "black"))))
+ '(wgrep-done-face ((t (:foreground "LightSkyBlue")))))
