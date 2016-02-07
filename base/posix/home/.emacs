@@ -908,7 +908,7 @@ buffer instead of replacing the text in region."
  '(custom-enabled-themes (quote (barrkel-4)))
  '(custom-safe-themes
    (quote
-    ("5ce3e905fd35e6d40f22ebd87587df16508b9ef6f9c3a77bc53d7da6af8bd4d2" "0aa27926a7cc99f237ebda37c6340f1f1c9eb45df88c4391538fba1f8a66f8bb" "a34632a2444279476577b0b87669a89bf78154e97769cbd66b90f25874004e18" default))))
+    ("5ce3e905fd35e6d40f22ebd87587df16508b9ef6f9c3a77bc53d7da6af8bd4d2" default))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
