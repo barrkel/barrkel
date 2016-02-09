@@ -5,6 +5,7 @@
       '(
         ace-jump-done
         ace-jump-word-mode
+        backward-sexp
         barrkel-indent-shift-left
         barrkel-indent-shift-right
         beginning-of-visual-line
@@ -30,6 +31,7 @@
         end-of-visual-line
         enh-ruby-electric-brace
         fixup-whitespace
+        forward-sexp
         haml-electric-backspace
         helm-M-x
         helm-show-kill-ring
@@ -55,6 +57,7 @@
         ruby-end-of-block
         scroll-down-line
         scroll-up-line
+        sgml-slash
         string-inflection-all-cycle
         subword-left
         subword-right
@@ -62,7 +65,6 @@
         wdired-downcase-word
         wdired-next-line
         yas-expand
-        zop-to-char
         ))
 
 (setq mc/cmds-to-run-once
@@ -72,8 +74,10 @@
         describe-key
         ido-find-file
         iedit-mode
+        mouse-set-region
         save-some-buffers
         toggle-word-highlight
         wdired-finish-edit
         wgrep-finish-edit
+        yaml-electric-backspace
         ))

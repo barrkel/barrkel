@@ -93,7 +93,7 @@
           (lambda ()
             (subword-mode)
             (visual-line-mode)
-            (whitespace-mode)
+            ;;(whitespace-mode)
             (set-tab-style t 4 "linux")
             ;; customize more by using these two steps:
             ;; C-c C-s to discover syntactic context symbol
@@ -180,7 +180,7 @@
           (lambda()
             (set-tab-style t 4)
             (subword-mode)
-            (whitespace-mode)
+            ;;(whitespace-mode)
             (visual-line-mode)))
 
 ;; javascript
@@ -209,7 +209,9 @@
             (local-set-key (kbd "RET") 'dumb-newline)))
 
 ;; puppet
-
+(add-hook 'puppet-mode-hook
+          (lambda ()
+            (local-set-key (kbd "RET") 'dumb-newline)))
 
 ;; rspec
 (eval-after-load "rspec-mode"
@@ -501,6 +503,7 @@
 (define-key global-map (kbd "C-j b {") 'insert-braces-macro)
 (define-key global-map (kbd "C-j b (") 'insert-parens-macro)
 (define-key global-map (kbd "C-j b [") 'insert-brackets-macro)
+(define-key global-map (kbd "C-j C-j") 'newline-and-indent)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; RANDOM ELISP BINDINGS
@@ -850,7 +853,6 @@ buffer instead of replacing the text in region."
 (define-key global-map (kbd "C-c w") 'write-region)
 (define-key global-map (kbd "C-c i") 'string-inflection-all-cycle)
 (define-key global-map (kbd "M-<delete>") 'kill-word)
-(define-key global-map (kbd "M-W") 'fixup-whitespace)
 (define-key global-map (kbd "M-A") 'align-regexp)
 
 ;; outsource job of finding something to compile to a shell script
