@@ -20,6 +20,7 @@
         coffee-indent-shift-left
         coffee-indent-shift-right
         coffee-newline-and-indent
+        comment-dwim
         comment-or-uncomment-region
         company-complete
         dabbrev-expand
