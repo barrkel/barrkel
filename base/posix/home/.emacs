@@ -208,6 +208,12 @@
             (define-key markdown-mode-map (kbd "M-n") nil)
             (local-set-key (kbd "RET") 'dumb-newline)))
 
+;; org
+(add-hook 'org-mode-hook
+          (lambda ()
+            (setq org-reveal-root "file:///home/barrykelly/.barrkel/opt/reveal.js-3.2.0/")
+            (setq org-reveal-location "file:///home/barrykelly/.barrkel/opt/reveal.js-3.2.0/")))
+
 ;; puppet
 (add-hook 'puppet-mode-hook
           (lambda ()
@@ -916,7 +922,7 @@ buffer instead of replacing the text in region."
  '(custom-enabled-themes (quote (barrkel-4)))
  '(custom-safe-themes
    (quote
-    ("30f083d649543e3568a1547aaf903e10a59a2b45d0363e070b67acc2df8d4eb4" default)))
+    ("c7e0422d3b032d66fd1666da6099182689a815d078f03c3db4c3288e66ba6a26" "b18119d24b0b4cd9998b2ba21654ada087b7c5f7a7d2fcbdc15102c305375c65" "3afe4800dfb9d048efe2f759894424b91b0a773b0abb63973fb33cd056f96d34" "30f083d649543e3568a1547aaf903e10a59a2b45d0363e070b67acc2df8d4eb4" default)))
  '(parens-require-spaces nil))
 
 (custom-set-faces

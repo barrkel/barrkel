@@ -24,6 +24,7 @@
         comment-or-uncomment-region
         company-complete
         dabbrev-expand
+        delete-horizontal-space
         delete-line-command
         dired-next-line
         dired-previous-line
@@ -46,6 +47,8 @@
         kill-region
         kill-this-buffer
         kill-visual-line
+        org-delete-char
+        org-end-of-line
         org-self-insert-command
         overwrite-mode
         picture-backward-column
@@ -65,6 +68,7 @@
         transpose-words
         wdired-downcase-word
         wdired-next-line
+        yaml-electric-backspace
         yas-expand
         ))
 
@@ -76,9 +80,9 @@
         ido-find-file
         iedit-mode
         mouse-set-region
+        rspec-verify-single
         save-some-buffers
         toggle-word-highlight
         wdired-finish-edit
         wgrep-finish-edit
-        yaml-electric-backspace
         ))
