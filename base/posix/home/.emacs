@@ -503,12 +503,16 @@
 (defun insert-brackets-macro ()
   (interactive)
   (insert-block-pair "[" "]"))
+(defun insert-do-macro ()
+  (interactive)
+  (insert-block-pair "do" "end"))
 
 (define-key global-map (kbd "C-j") nil)
 (define-key global-map (kbd "C-j b r") 'insert-braces-macro)
 (define-key global-map (kbd "C-j b {") 'insert-braces-macro)
 (define-key global-map (kbd "C-j b (") 'insert-parens-macro)
 (define-key global-map (kbd "C-j b [") 'insert-brackets-macro)
+(define-key global-map (kbd "C-j b d") 'insert-do-macro)
 (define-key global-map (kbd "C-j C-j") 'newline-and-indent)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -923,6 +927,7 @@ buffer instead of replacing the text in region."
  '(custom-safe-themes
    (quote
     ("c7e0422d3b032d66fd1666da6099182689a815d078f03c3db4c3288e66ba6a26" "b18119d24b0b4cd9998b2ba21654ada087b7c5f7a7d2fcbdc15102c305375c65" "3afe4800dfb9d048efe2f759894424b91b0a773b0abb63973fb33cd056f96d34" "30f083d649543e3568a1547aaf903e10a59a2b45d0363e070b67acc2df8d4eb4" default)))
+ '(magit-push-current-set-remote-if-missing nil)
  '(parens-require-spaces nil))
 
 (custom-set-faces

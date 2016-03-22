@@ -1,4 +1,4 @@
 xmodmap ~/.Xmodmap
 xset fp+ ~/.fonts
-xrdb ~/.Xdefaults
-pgrep syndaemon || syndaemon -i 0.5 -KRd
+xrdb ~/.Xdefaults > /dev/null 2>&1
+pgrep syndaemon >/dev/null || syndaemon -i 0.5 -KRd
