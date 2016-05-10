@@ -41,6 +41,7 @@
         insert-braces-macro
         isearch-abort
         isearch-backward-regexp
+        isearch-exit
         isearch-forward-regexp
         isearch-other-meta-char
         isearch-printing-char
@@ -80,6 +81,7 @@
         ido-find-file
         iedit-mode
         mouse-set-region
+        rspec-toggle-spec-and-target
         rspec-verify-single
         save-some-buffers
         toggle-word-highlight
