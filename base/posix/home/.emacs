@@ -927,6 +927,10 @@ buffer instead of replacing the text in region."
 (define-key global-map (kbd "C-q") 'kill-this-buffer)
 (define-key global-map (kbd "M-Q") 'quoted-insert)
 
+;; number manipulation
+(define-key global-map (kbd "C-c +") 'evil-numbers/inc-at-pt)
+(define-key global-map (kbd "C-c -") 'evil-numbers/dec-at-pt)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; CUSTOM SETTINGS
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
