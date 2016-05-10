@@ -7,3 +7,4 @@ tramp
 *.elc
 recentf
 elpa/archives/gnu/archive-contents.signed
+.org-id-locations
