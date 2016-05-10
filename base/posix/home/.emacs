@@ -106,6 +106,7 @@
 ;; coffeescript
 (add-hook 'coffee-mode-hook
           (lambda ()
+            (yafolding-mode)
             (subword-mode)
             (whitespace-mode)
             (visual-line-mode)
@@ -178,6 +179,7 @@
 ;; java
 (add-hook 'java-mode-hook
           (lambda()
+            (yafolding-mode)
             (set-tab-style t 4)
             (subword-mode)
             ;;(whitespace-mode)
@@ -225,6 +227,7 @@
      (setenv "PAGER" (executable-find "cat"))
      (setq rspec-use-rake-when-possible nil)
      (inf-ruby-switch-setup)
+     (yafolding-mode)
      (define-key global-map (kbd "M-T") 'rspec-toggle-spec-and-target)))
 
 ;; ruby & enh-ruby-mode
@@ -235,9 +238,11 @@
      (er/enable-mode-expansions 'enh-ruby-mode 'er/add-enh-ruby-mode-expansions)))
 (add-hook 'ruby-mode-hook
           (lambda ()
+            (yafolding-mode)
             (visual-line-mode)))
 (add-hook 'enh-ruby-mode-hook
           (lambda ()
+            (yafolding-mode)
             (visual-line-mode)
             (whitespace-mode)
             (define-key enh-ruby-mode-map (kbd "RET") 'newline-and-indent)
@@ -294,6 +299,7 @@
 ;; yaml
 (add-hook 'yaml-mode-hook
           (lambda ()
+            (yafolding-mode)
             (visual-line-mode)
             (whitespace-mode)
             (highlight-indent-guides-mode)
