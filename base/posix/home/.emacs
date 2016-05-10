@@ -211,10 +211,23 @@
             (local-set-key (kbd "RET") 'dumb-newline)))
 
 ;; org
+(defun my-org-confirm-babel-evaluate (lang body)
+  (not (string= lang "sql")))
 (add-hook 'org-mode-hook
           (lambda ()
+            (require 'ox-reveal)
+            (require 'ob-sql)
+            (require 'ob-sqlite)
             (setq org-reveal-root "file:///home/barrykelly/.barrkel/opt/reveal.js-3.2.0/")
-            (setq org-reveal-location "file:///home/barrykelly/.barrkel/opt/reveal.js-3.2.0/")))
+            (setq org-reveal-location "file:///home/barrykelly/.barrkel/opt/reveal.js-3.2.0/")
+            (local-set-key (kbd "C-y") 'delete-line-command)
+            (local-set-key (kbd "C-v") 'org-yank)
+            (local-set-key (kbd "M-h") nil)
+            (local-set-key (kbd "C-j") nil)
+            (org-babel-do-load-languages
+             'org-babel-do-load-languages '((sqlite t)))
+            (setq org-confirm-babel-evaluate 'my-org-confirm-babel-evaluate)
+            (setq org-support-shift-select t)))
 
 ;; puppet
 (add-hook 'puppet-mode-hook
