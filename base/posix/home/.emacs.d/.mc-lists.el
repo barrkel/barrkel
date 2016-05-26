@@ -32,6 +32,8 @@
         duplicate-line-or-region
         end-of-visual-line
         enh-ruby-electric-brace
+        evil-numbers/dec-at-pt
+        evil-numbers/inc-at-pt
         fixup-whitespace
         forward-sexp
         haml-electric-backspace
@@ -58,6 +60,7 @@
         picture-move-down
         picture-move-up
         picture-self-insert
+        repeat
         replace-regexp
         ruby-end-of-block
         scroll-down-line
