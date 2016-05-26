@@ -74,7 +74,7 @@
 ;; Things to consider configuring per mode:
 ;; - tab settings via set-tab-style
 ;; - subword-mode - camelCase languages
-;; - highlight-indent-guides-mode - indent-based languages
+;; - highlight-indentation-current-column-mode - indent-based languages
 ;; - whitespace-mode - show weird whitespace mixing
 ;; - flycheck-mode - if we have a linter
 ;; - toggle electric state - keys that randomly start doing weird indenting
@@ -110,7 +110,7 @@
             (subword-mode)
             (whitespace-mode)
             (visual-line-mode)
-            (highlight-indent-guides-mode)
+            (highlight-indentation-current-column-mode)
             (set-tab-style nil 2)
             (flycheck-mode)
             (setq flycheck-checker 'coffee-coffeelint)
@@ -164,7 +164,7 @@
 (add-hook 'haml-mode-hook
           (lambda ()
             (whitespace-mode)
-            (highlight-indent-guides-mode)))
+            (highlight-indentation-current-column-mode)))
 
 ;; help
 (add-hook 'help-mode-hook
@@ -315,7 +315,7 @@
             (yafolding-mode)
             (visual-line-mode)
             (whitespace-mode)
-            (highlight-indent-guides-mode)
+            (highlight-indentation-current-column-mode)
             (set-tab-style nil 2)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -401,8 +401,8 @@
       helm-scroll-amount 8
       helm-ff-file-name-history-use-recentf t)))
 
-;; highlight-indent-guides-mode
-(define-key global-map (kbd "C-c TAB") 'highlight-indent-guides-mode)
+;; highlight-indentation-current-column-mode
+(define-key global-map (kbd "C-c TAB") 'highlight-indentation-current-column-mode)
 
 ;; iedit; iedit-mode defines a bunch of key bindings while active; C-h b to see them
 (define-key global-map (kbd "M-i") 'iedit-mode)
