@@ -9,4 +9,4 @@ function usage
 
 test -n "$1" || usage
 
-wget-firefox -r -l 1 -np -k -E -p -H "$1"
+wget-firefox -r -np -nc -p "$@"

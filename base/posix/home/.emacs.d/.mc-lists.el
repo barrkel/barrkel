@@ -49,14 +49,15 @@
         ruby-end-of-block
         scroll-down-line
         scroll-up-line
+        slim-electric-backspace
         string-inflection-all-cycle
         subword-left
         subword-right
         transpose-words
         wdired-downcase-word
         wdired-next-line
+        wdired-previous-line
         yas-expand
-        zop-to-char
         ))
 
 (setq mc/cmds-to-run-once
@@ -68,6 +69,7 @@
         iedit-mode
         save-some-buffers
         toggle-word-highlight
+        wdired-change-to-wdired-mode
         wdired-finish-edit
         wgrep-finish-edit
         ))
