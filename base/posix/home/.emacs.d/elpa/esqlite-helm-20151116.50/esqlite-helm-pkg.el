@@ -1,0 +1,1 @@
+(define-package "esqlite-helm" "20151116.50" "Define helm source for sqlite database" '((esqlite "0.2.0") (helm "20131207.845")) :url "https://github.com/mhayashi1120/Emacs-esqlite" :keywords '("data"))

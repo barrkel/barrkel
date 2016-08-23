@@ -1,0 +1,46 @@
+#!/usr/bin/env ruby
+
+def prompt_movement(location)
+  print "Move your mouse to the #{location} of the area you want for your screenshot then hit [enter] "
+  gets
+end
+
+def get_cursor_position
+  /^x:(\d+) y:(\d+)/.match(`xdotool getmouselocation`).captures.map { |pos| get_integer(pos) }
+end
+
+def get_integer(input)
+  begin
+    return Integer(input)
+  rescue
+    raise "D'oh, #{input} isn't an integer!"
+  end
+end
+
+prompt_movement('top left')
+x0, y0 = get_cursor_position
+
+prompt_movement('bottom right')
+x1, y1 = get_cursor_position
+
+height = y1 - y0
+width = x1 - x0
+
+print 'How many seconds do you want to record for? '
+duration = get_integer(gets)
+
+print "What should the output filename be? "
+filename = gets
+
+print "Hit any key to start recording "
+gets
+
+print "Starting recording in..."
+3.downto(1) do |n|
+  print "\n\t#{n}..."
+  sleep 1
+end
+
+print "\nACTION!"
+
+system("byzanz-record -d #{duration} -c -x #{x0} -w #{width} -y #{y0} -h #{height} #{filename}")

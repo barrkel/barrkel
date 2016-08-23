@@ -1,4 +1,5 @@
 #!/bin/bash
 
-echo "console.log($(cat "$@" | sed -r 's|=>|:|g;s|nil|null|g'))" | nodejs
+cat "$@" | sed -r "s|:([a-zA-Z_]+)=>|\1: |g;s|nil|null|g;s|#<([a-zA-Z_]+)[^>]+>|\"#\1\"|g;s|, |\n|g"
+#echo "console.log($(cat "$@" | sed -r 's|:([a-zA-Z_]+)=>|\1:|g;s|nil|null|g;s|#<([a-zA-Z_]+)[^>]+>|\"#\1\"|g'))" | nodejs
 #echo "console.log($(cat "$@" | sed -r 's|=>|:|g;s|nil|null|g;s|(\W):(\w+\W)|\1\2|g'))" | nodejs

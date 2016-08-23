@@ -74,7 +74,7 @@
 ;; Things to consider configuring per mode:
 ;; - tab settings via set-tab-style
 ;; - subword-mode - camelCase languages
-;; - highlight-indent-guides-mode - indent-based languages
+;; - highlight-indentation-current-column-mode - indent-based languages
 ;; - whitespace-mode - show weird whitespace mixing
 ;; - flycheck-mode - if we have a linter
 ;; - toggle electric state - keys that randomly start doing weird indenting
@@ -93,7 +93,7 @@
           (lambda ()
             (subword-mode)
             (visual-line-mode)
-            (whitespace-mode)
+            ;;(whitespace-mode)
             (set-tab-style t 4 "linux")
             ;; customize more by using these two steps:
             ;; C-c C-s to discover syntactic context symbol
@@ -106,10 +106,11 @@
 ;; coffeescript
 (add-hook 'coffee-mode-hook
           (lambda ()
+            (yafolding-mode)
             (subword-mode)
             (whitespace-mode)
             (visual-line-mode)
-            (highlight-indent-guides-mode)
+            (highlight-indentation-current-column-mode)
             (set-tab-style nil 2)
             (flycheck-mode)
             (setq flycheck-checker 'coffee-coffeelint)
@@ -163,7 +164,7 @@
 (add-hook 'haml-mode-hook
           (lambda ()
             (whitespace-mode)
-            (highlight-indent-guides-mode)))
+            (highlight-indentation-current-column-mode)))
 
 ;; help
 (add-hook 'help-mode-hook
@@ -178,9 +179,10 @@
 ;; java
 (add-hook 'java-mode-hook
           (lambda()
+            (yafolding-mode)
             (set-tab-style t 4)
             (subword-mode)
-            (whitespace-mode)
+            ;;(whitespace-mode)
             (visual-line-mode)))
 
 ;; javascript
@@ -208,8 +210,29 @@
             (define-key markdown-mode-map (kbd "M-n") nil)
             (local-set-key (kbd "RET") 'dumb-newline)))
 
-;; puppet
+;; org
+(defun my-org-confirm-babel-evaluate (lang body)
+  (not (string= lang "sql")))
+(add-hook 'org-mode-hook
+          (lambda ()
+            (require 'ox-reveal)
+            (require 'ob-sql)
+            (require 'ob-sqlite)
+            (setq org-reveal-root "file:///home/barrykelly/.barrkel/opt/reveal.js-3.2.0/")
+            (setq org-reveal-location "file:///home/barrykelly/.barrkel/opt/reveal.js-3.2.0/")
+            (local-set-key (kbd "C-y") 'delete-line-command)
+            (local-set-key (kbd "C-v") 'org-yank)
+            (local-set-key (kbd "M-h") nil)
+            (local-set-key (kbd "C-j") nil)
+            (org-babel-do-load-languages
+             'org-babel-do-load-languages '((sqlite t)))
+            (setq org-confirm-babel-evaluate 'my-org-confirm-babel-evaluate)
+            (setq org-support-shift-select t)))
 
+;; puppet
+(add-hook 'puppet-mode-hook
+          (lambda ()
+            (local-set-key (kbd "RET") 'dumb-newline)))
 
 ;; rspec
 (eval-after-load "rspec-mode"
@@ -217,6 +240,7 @@
      (setenv "PAGER" (executable-find "cat"))
      (setq rspec-use-rake-when-possible nil)
      (inf-ruby-switch-setup)
+     (yafolding-mode)
      (define-key global-map (kbd "M-T") 'rspec-toggle-spec-and-target)))
 
 ;; ruby & enh-ruby-mode
@@ -227,9 +251,11 @@
      (er/enable-mode-expansions 'enh-ruby-mode 'er/add-enh-ruby-mode-expansions)))
 (add-hook 'ruby-mode-hook
           (lambda ()
+            (yafolding-mode)
             (visual-line-mode)))
 (add-hook 'enh-ruby-mode-hook
           (lambda ()
+            (yafolding-mode)
             (visual-line-mode)
             (whitespace-mode)
             (define-key enh-ruby-mode-map (kbd "RET") 'newline-and-indent)
@@ -273,18 +299,24 @@
             (setq tab-stop-list (number-sequence 2 200 2))
             (setq indent-line-function 'insert-tab)))
 
-;; yaml
-(add-hook 'yaml-mode-hook
+;; web-mode
+(add-hook 'web-mode-hook
           (lambda ()
-            (visual-line-mode)
-            (whitespace-mode)
-            (highlight-indent-guides-mode)
-            (set-tab-style nil 2)))
+            (define-key web-mode-map (kbd "RET") 'newline-and-indent)))
 
 ;; xml
 (add-hook 'nxml-mode-hook
           (lambda ()
             (define-key nxml-mode-map (kbd "M-h") nil)))
+
+;; yaml
+(add-hook 'yaml-mode-hook
+          (lambda ()
+            (yafolding-mode)
+            (visual-line-mode)
+            (whitespace-mode)
+            (highlight-indentation-current-column-mode)
+            (set-tab-style nil 2)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MINOR MODES
@@ -369,8 +401,8 @@
       helm-scroll-amount 8
       helm-ff-file-name-history-use-recentf t)))
 
-;; highlight-indent-guides-mode
-(define-key global-map (kbd "C-c TAB") 'highlight-indent-guides-mode)
+;; highlight-indentation-current-column-mode
+(define-key global-map (kbd "C-c TAB") 'highlight-indentation-current-column-mode)
 
 ;; iedit; iedit-mode defines a bunch of key bindings while active; C-h b to see them
 (define-key global-map (kbd "M-i") 'iedit-mode)
@@ -490,12 +522,17 @@
 (defun insert-brackets-macro ()
   (interactive)
   (insert-block-pair "[" "]"))
+(defun insert-do-macro ()
+  (interactive)
+  (insert-block-pair "do" "end"))
 
 (define-key global-map (kbd "C-j") nil)
 (define-key global-map (kbd "C-j b r") 'insert-braces-macro)
 (define-key global-map (kbd "C-j b {") 'insert-braces-macro)
 (define-key global-map (kbd "C-j b (") 'insert-parens-macro)
 (define-key global-map (kbd "C-j b [") 'insert-brackets-macro)
+(define-key global-map (kbd "C-j b d") 'insert-do-macro)
+(define-key global-map (kbd "C-j C-j") 'newline-and-indent)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; RANDOM ELISP BINDINGS
@@ -845,7 +882,6 @@ buffer instead of replacing the text in region."
 (define-key global-map (kbd "C-c w") 'write-region)
 (define-key global-map (kbd "C-c i") 'string-inflection-all-cycle)
 (define-key global-map (kbd "M-<delete>") 'kill-word)
-(define-key global-map (kbd "M-W") 'fixup-whitespace)
 (define-key global-map (kbd "M-A") 'align-regexp)
 
 ;; outsource job of finding something to compile to a shell script
@@ -891,6 +927,10 @@ buffer instead of replacing the text in region."
 (define-key global-map (kbd "C-q") 'kill-this-buffer)
 (define-key global-map (kbd "M-Q") 'quoted-insert)
 
+;; number manipulation
+(define-key global-map (kbd "C-c +") 'evil-numbers/inc-at-pt)
+(define-key global-map (kbd "C-c -") 'evil-numbers/dec-at-pt)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; CUSTOM SETTINGS
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -909,11 +949,14 @@ buffer instead of replacing the text in region."
  '(custom-enabled-themes (quote (barrkel-4)))
  '(custom-safe-themes
    (quote
-    ("30f083d649543e3568a1547aaf903e10a59a2b45d0363e070b67acc2df8d4eb4" "5ce3e905fd35e6d40f22ebd87587df16508b9ef6f9c3a77bc53d7da6af8bd4d2" "0aa27926a7cc99f237ebda37c6340f1f1c9eb45df88c4391538fba1f8a66f8bb" "a34632a2444279476577b0b87669a89bf78154e97769cbd66b90f25874004e18" default))))
+    ("c7e0422d3b032d66fd1666da6099182689a815d078f03c3db4c3288e66ba6a26" "b18119d24b0b4cd9998b2ba21654ada087b7c5f7a7d2fcbdc15102c305375c65" "3afe4800dfb9d048efe2f759894424b91b0a773b0abb63973fb33cd056f96d34" "30f083d649543e3568a1547aaf903e10a59a2b45d0363e070b67acc2df8d4eb4" default)))
+ '(magit-push-current-set-remote-if-missing nil)
+ '(parens-require-spaces nil))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(match ((t (:background "#73d216" :foreground "black"))))
+ '(wgrep-done-face ((t (:foreground "LightSkyBlue")))))

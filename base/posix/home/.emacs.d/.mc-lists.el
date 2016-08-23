@@ -5,6 +5,7 @@
       '(
         ace-jump-done
         ace-jump-word-mode
+        backward-sexp
         barrkel-indent-shift-left
         barrkel-indent-shift-right
         beginning-of-visual-line
@@ -19,9 +20,11 @@
         coffee-indent-shift-left
         coffee-indent-shift-right
         coffee-newline-and-indent
+        comment-dwim
         comment-or-uncomment-region
         company-complete
         dabbrev-expand
+        delete-horizontal-space
         delete-line-command
         dired-next-line
         dired-previous-line
@@ -29,7 +32,10 @@
         duplicate-line-or-region
         end-of-visual-line
         enh-ruby-electric-brace
+        evil-numbers/dec-at-pt
+        evil-numbers/inc-at-pt
         fixup-whitespace
+        forward-sexp
         haml-electric-backspace
         helm-M-x
         helm-show-kill-ring
@@ -37,19 +43,30 @@
         insert-braces-macro
         isearch-abort
         isearch-backward-regexp
+        isearch-exit
         isearch-forward-regexp
         isearch-other-meta-char
         isearch-printing-char
         kill-region
         kill-this-buffer
         kill-visual-line
+        org-delete-char
+        org-end-of-line
         org-self-insert-command
         overwrite-mode
+        picture-backward-column
+        picture-clear-column
+        picture-forward-column
+        picture-move-down
+        picture-move-up
+        picture-self-insert
+        repeat
         replace-regexp
         ruby-end-of-block
         scroll-down-line
         scroll-up-line
         slim-electric-backspace
+        sgml-slash
         string-inflection-all-cycle
         subword-left
         subword-right
@@ -57,6 +74,7 @@
         wdired-downcase-word
         wdired-next-line
         wdired-previous-line
+        yaml-electric-backspace
         yas-expand
         ))
 
@@ -67,6 +85,9 @@
         describe-key
         ido-find-file
         iedit-mode
+        mouse-set-region
+        rspec-toggle-spec-and-target
+        rspec-verify-single
         save-some-buffers
         toggle-word-highlight
         wdired-change-to-wdired-mode
