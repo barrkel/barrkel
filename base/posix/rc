@@ -118,5 +118,4 @@ function semacs
 
 # completion
 
-test -e /etc/bash_completion && source /etc/bash_completion
-
+test -e /usr/share/bash-completion/bash_completion && source /usr/share/bash-completion/bash_completion
