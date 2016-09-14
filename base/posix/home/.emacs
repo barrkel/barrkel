@@ -146,6 +146,11 @@
             (auto-fill-mode)
             (setq indent-tabs-mode nil)))
 
+;; git-commit-mode
+(add-hook 'git-commit-mode-hook
+          (lambda ()
+            (define-key git-commit-mode-map (kbd "M-n") nil)))
+
 ;; go
 (add-hook 'go-mode-hook
           (lambda ()
@@ -175,6 +180,20 @@
 (add-hook 'ibuffer-mode-hook
           (lambda ()
             (linum-mode 0)))
+
+;; ispell
+;; (add-hook 'ispell-initialize-spellchecker-hook
+;;           (lambda ()
+;;             ;; hack to get spellchecking on CamelCase words
+;;             (defun ispell-get-word (following)
+;;               (when following
+;;                 (camelCase-forward-word 1))
+;;               (let* ((start (progn (camelCase-backward-word 1)
+;;                                    (point)))
+;;                      (end (progn (camelCase-forward-word 1)
+;;                                  (point))))
+;;                 (list (buffer-substring-no-properties start end)
+;;                       start end)))))
 
 ;; java
 (add-hook 'java-mode-hook

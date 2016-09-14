@@ -30,6 +30,7 @@
         dired-previous-line
         dumb-newline
         duplicate-line-or-region
+        end-of-buffer
         end-of-visual-line
         enh-ruby-electric-brace
         evil-numbers/dec-at-pt
@@ -70,10 +71,12 @@
         subword-left
         subword-right
         transpose-words
+        upcase-region
         wdired-downcase-word
         wdired-next-line
         yaml-electric-backspace
         yas-expand
+        zop-to-char
         ))
 
 (setq mc/cmds-to-run-once
