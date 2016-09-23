@@ -16,6 +16,7 @@
         c-electric-semi&comma
         c-electric-slash
         c-indent-line-or-region
+        coffee-comment-dwim
         coffee-dedent-line-backspace
         coffee-indent-shift-left
         coffee-indent-shift-right

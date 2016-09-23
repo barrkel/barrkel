@@ -572,7 +572,8 @@
       (let ((start (point)))
         (forward-line)
         (copy-region-as-kill start (point))
-        (yank)))))
+        (yank)))
+    (next-line)))
 (define-key global-map (kbd "M-c") 'duplicate-line-or-region)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
