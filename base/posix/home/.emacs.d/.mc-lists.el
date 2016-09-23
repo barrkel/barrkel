@@ -67,6 +67,7 @@
         ruby-end-of-block
         scroll-down-line
         scroll-up-line
+        slim-electric-backspace
         sgml-slash
         string-inflection-all-cycle
         subword-left
@@ -75,6 +76,7 @@
         upcase-region
         wdired-downcase-word
         wdired-next-line
+        wdired-previous-line
         yaml-electric-backspace
         yas-expand
         zop-to-char
@@ -92,6 +94,7 @@
         rspec-verify-single
         save-some-buffers
         toggle-word-highlight
+        wdired-change-to-wdired-mode
         wdired-finish-edit
         wgrep-finish-edit
         ))
