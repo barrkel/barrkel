@@ -915,6 +915,10 @@ buffer instead of replacing the text in region."
 (define-key global-map (kbd "M-<up>") 'windmove-up)
 (define-key global-map (kbd "M-<down>") 'windmove-down)
 
+;; number inc / dec
+(define-key global-map (kbd "C-c +") 'evil-numbers/inc-at-pt)
+(define-key global-map (kbd "C-c -") 'evil-numbers/dec-at-pt)
+
 ;; scrolling without affecting cursor
 (defun scroll-up-line-other-window ()
   "Scroll other window up one line"
