@@ -34,6 +34,7 @@
         end-of-buffer
         end-of-visual-line
         enh-ruby-electric-brace
+        eval-print-last-sexp
         evil-numbers/dec-at-pt
         evil-numbers/inc-at-pt
         fixup-whitespace
@@ -67,8 +68,8 @@
         ruby-end-of-block
         scroll-down-line
         scroll-up-line
-        slim-electric-backspace
         sgml-slash
+        slim-electric-backspace
         string-inflection-all-cycle
         subword-left
         subword-right
