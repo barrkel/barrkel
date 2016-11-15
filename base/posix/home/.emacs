@@ -63,9 +63,14 @@
   (setq julia-basic-offset a-tab-width)
   (setq css-indent-offset a-tab-width) ; css, scss etc.
 
+  ;; Get rid of infuriating argument alignment
+  (c-set-offset 'arglist-intro '+)
+  (c-set-offset 'arglist-cont-nonempty '+)
+
   (if a-style
       (setq c-default-style a-style)
     (setq c-default-style "bsd")))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MAJOR MODES
@@ -217,6 +222,16 @@
           (lambda ()
             (set-tab-style nil 2)))
 
+;; magit
+(add-hook 'git-commit-mode-hook
+          (lambda ()
+            (auto-fill-mode 0)
+            (setq git-commit-summary-max-length 999)))
+(add-hook 'git-commit-setup-hook
+          (lambda ()
+            (turn-off-auto-fill t)
+            (setq git-commit-summary-max-length 999)))
+
 ;; man
 (add-hook 'Man-mode-hook
           (lambda ()
@@ -271,12 +286,14 @@
 (add-hook 'ruby-mode-hook
           (lambda ()
             (yafolding-mode)
+            (set-tab-style nil 2)
             (visual-line-mode)))
 (add-hook 'enh-ruby-mode-hook
           (lambda ()
             (yafolding-mode)
             (visual-line-mode)
             (whitespace-mode)
+            (set-tab-style nil 2)
             (define-key enh-ruby-mode-map (kbd "RET") 'newline-and-indent)
             (define-key enh-ruby-mode-map (kbd "C-M-n") nil)
             (define-key enh-ruby-mode-map (kbd "C-j") nil)
