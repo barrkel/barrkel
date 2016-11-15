@@ -151,11 +151,6 @@
             (auto-fill-mode)
             (setq indent-tabs-mode nil)))
 
-;; git-commit-mode
-(add-hook 'git-commit-mode-hook
-          (lambda ()
-            (define-key git-commit-mode-map (kbd "M-n") nil)))
-
 ;; go
 (add-hook 'go-mode-hook
           (lambda ()
@@ -226,10 +221,12 @@
 (add-hook 'git-commit-mode-hook
           (lambda ()
             (auto-fill-mode 0)
+            (define-key git-commit-mode-map (kbd "M-n") nil)
             (setq git-commit-summary-max-length 999)))
 (add-hook 'git-commit-setup-hook
           (lambda ()
-            (turn-off-auto-fill t)
+            (auto-fill-mode 0)
+            ;; (define-key git-commit-mode-map (kbd "M-n") nil)
             (setq git-commit-summary-max-length 999)))
 
 ;; man
