@@ -79,6 +79,7 @@
         wdired-next-line
         wdired-previous-line
         yaml-electric-backspace
+        yaml-electric-dash-and-dot
         yas-expand
         zop-to-char
         ))
