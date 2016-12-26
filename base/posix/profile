@@ -24,6 +24,11 @@ pathlist_ensure_prepending PATH ~/bin
 pathlist_append PATH /opt/bin
 export PATH
 
+test -d ~/.go && {
+    export GOPATH=~/.go
+    pathlist_append PATH "$GOPATH/bin"
+}
+
 #--------------------------------------------------------------------------------
 # ssh agent
 #--------------------------------------------------------------------------------
