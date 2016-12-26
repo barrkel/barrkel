@@ -63,9 +63,14 @@
   (setq julia-basic-offset a-tab-width)
   (setq css-indent-offset a-tab-width) ; css, scss etc.
 
+  ;; Get rid of infuriating argument alignment
+  (c-set-offset 'arglist-intro '+)
+  (c-set-offset 'arglist-cont-nonempty '+)
+
   (if a-style
       (setq c-default-style a-style)
     (setq c-default-style "bsd")))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MAJOR MODES
@@ -181,6 +186,20 @@
           (lambda ()
             (linum-mode 0)))
 
+;; ispell
+;; (add-hook 'ispell-initialize-spellchecker-hook
+;;           (lambda ()
+;;             ;; hack to get spellchecking on CamelCase words
+;;             (defun ispell-get-word (following)
+;;               (when following
+;;                 (camelCase-forward-word 1))
+;;               (let* ((start (progn (camelCase-backward-word 1)
+;;                                    (point)))
+;;                      (end (progn (camelCase-forward-word 1)
+;;                                  (point))))
+;;                 (list (buffer-substring-no-properties start end)
+;;                       start end)))))
+
 ;; java
 (add-hook 'java-mode-hook
           (lambda()
@@ -202,6 +221,18 @@
 (add-hook 'julia-mode-hook
           (lambda ()
             (set-tab-style nil 2)))
+
+;; magit
+(add-hook 'git-commit-mode-hook
+          (lambda ()
+            (auto-fill-mode 0)
+            (define-key git-commit-mode-map (kbd "M-n") nil)
+            (setq git-commit-summary-max-length 999)))
+(add-hook 'git-commit-setup-hook
+          (lambda ()
+            (auto-fill-mode 0)
+            ;; (define-key git-commit-mode-map (kbd "M-n") nil)
+            (setq git-commit-summary-max-length 999)))
 
 ;; man
 (add-hook 'Man-mode-hook
@@ -257,12 +288,14 @@
 (add-hook 'ruby-mode-hook
           (lambda ()
             (yafolding-mode)
+            (set-tab-style nil 2)
             (visual-line-mode)))
 (add-hook 'enh-ruby-mode-hook
           (lambda ()
             (yafolding-mode)
             (visual-line-mode)
             (whitespace-mode)
+            (set-tab-style nil 2)
             (define-key enh-ruby-mode-map (kbd "RET") 'newline-and-indent)
             (define-key enh-ruby-mode-map (kbd "C-M-n") nil)
             (define-key enh-ruby-mode-map (kbd "C-j") nil)
@@ -558,7 +591,8 @@
       (let ((start (point)))
         (forward-line)
         (copy-region-as-kill start (point))
-        (yank)))))
+        (yank)))
+    (next-line)))
 (define-key global-map (kbd "M-c") 'duplicate-line-or-region)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -899,6 +933,10 @@ buffer instead of replacing the text in region."
 (define-key global-map (kbd "M-<right>") 'windmove-right)
 (define-key global-map (kbd "M-<up>") 'windmove-up)
 (define-key global-map (kbd "M-<down>") 'windmove-down)
+
+;; number inc / dec
+(define-key global-map (kbd "C-c +") 'evil-numbers/inc-at-pt)
+(define-key global-map (kbd "C-c -") 'evil-numbers/dec-at-pt)
 
 ;; scrolling without affecting cursor
 (defun scroll-up-line-other-window ()

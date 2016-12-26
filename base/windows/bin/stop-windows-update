@@ -1,0 +1,8 @@
+#!/bin/bash
+
+while true; do
+    if cygrunsrv -Q wuauserv | grep 'Current State.*Running' >/dev/null 2>&1; then
+        cygrunsrv -E wuauserv
+    fi
+    sleep 10m
+done &

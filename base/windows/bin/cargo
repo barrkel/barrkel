@@ -1,0 +1,12 @@
+#!/bin/bash
+
+test -d "$RUST_HOME" || {
+    echo "Variable \$RUST_HOME not set or is not a directory"
+    exit 1
+}
+
+winexec="$(which winexec)"
+
+export PATH="/c/windows/system32:$RUST_HOME/bin:$RUST_HOME/bin/rustlib/i686-w64-mingw32/gcc/bin:$PATH"
+
+"$winexec" "$RUST_HOME/bin/cargo" "$@"

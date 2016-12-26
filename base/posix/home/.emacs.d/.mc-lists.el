@@ -16,6 +16,7 @@
         c-electric-semi&comma
         c-electric-slash
         c-indent-line-or-region
+        coffee-comment-dwim
         coffee-dedent-line-backspace
         coffee-indent-shift-left
         coffee-indent-shift-right
@@ -30,8 +31,10 @@
         dired-previous-line
         dumb-newline
         duplicate-line-or-region
+        end-of-buffer
         end-of-visual-line
         enh-ruby-electric-brace
+        eval-print-last-sexp
         evil-numbers/dec-at-pt
         evil-numbers/inc-at-pt
         fixup-whitespace
@@ -65,17 +68,20 @@
         ruby-end-of-block
         scroll-down-line
         scroll-up-line
-        slim-electric-backspace
         sgml-slash
+        slim-electric-backspace
         string-inflection-all-cycle
         subword-left
         subword-right
         transpose-words
+        upcase-region
         wdired-downcase-word
         wdired-next-line
         wdired-previous-line
         yaml-electric-backspace
+        yaml-electric-dash-and-dot
         yas-expand
+        zop-to-char
         ))
 
 (setq mc/cmds-to-run-once
