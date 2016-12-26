@@ -6,14 +6,19 @@ screen_name=main
 
 function usage
 {
-    echo "usage: $(basename $0) <machine>"
+    echo "usage: $(basename $0) <machine> [<screen-name=$screen_name>] ..."
     echo "Tries to connect to screen session named '$screen_name' on <machine> and creates if not present."
+    echo "Any remaining arguments are passed to ssh."
     exit 1
 }
 
 test -n "$1" || usage
 target="$1"
 shift
+test -n "$1" && {
+    screen_name="$1"
+    shift
+}
 
 ssh -A "$@" -t "$target" "screen -S $screen_name -dr || screen -S $screen_name"
 
