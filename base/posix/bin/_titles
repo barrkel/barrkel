@@ -15,7 +15,7 @@ test -n "$TERM_TITLE" || {
 function title_set # title
 {
     test -n "$1" || {
-        echo "usage: set-title <title>"
+        echo "usage: title_set <title>"
         echo "Changes terminal title to the given title."
         return 1
     } 
