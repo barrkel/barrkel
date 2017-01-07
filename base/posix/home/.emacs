@@ -312,6 +312,7 @@
 (add-to-list 'auto-mode-alist '("Gemfile" . enh-ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.json.jbuilder\\'" . enh-ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.rb\\'" . enh-ruby-mode))
+(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 
 ;; scss
 (add-hook 'scss-mode-hook
