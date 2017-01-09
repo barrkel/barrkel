@@ -9,7 +9,6 @@ Columns=120
 Rows=75
 ScrollbackLines=30000
 ZoomShortcuts=no
-
 Yellow=245,121,0
 BoldYellow=252,233,79
 Red=255,100,100
@@ -28,7 +27,6 @@ Black=26,32,34
 BoldBlack=46,52,54
 BoldCyan=85,87,83
 Cyan=136,138,133
-
 Transparency=medium
 OpaqueWhenFocused=yes
 CtrlShiftShortcuts=no
@@ -39,3 +37,4 @@ SwitchShortcuts=no
 AltFnShortcuts=no
 Term=xterm-256color
 ScrollMod=shift
+Scrollbar=right
