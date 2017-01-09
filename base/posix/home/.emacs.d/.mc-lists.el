@@ -34,6 +34,7 @@
         end-of-buffer
         end-of-visual-line
         enh-ruby-electric-brace
+        enh-ruby-forward-sexp
         eval-print-last-sexp
         evil-numbers/dec-at-pt
         evil-numbers/inc-at-pt
