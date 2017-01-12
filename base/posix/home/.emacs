@@ -330,6 +330,11 @@
 
 ;; slim templates
 
+;; sql
+(add-hook 'sql-mode
+          (lambda ()
+            (define-key sql-mode-map (kbd "RET") 'dumb-newline)))
+
 ;; text
 (add-hook 'text-mode-hook
           (lambda ()
