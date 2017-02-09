@@ -1001,7 +1001,12 @@ buffer instead of replacing the text in region."
     ("c7e0422d3b032d66fd1666da6099182689a815d078f03c3db4c3288e66ba6a26" "b18119d24b0b4cd9998b2ba21654ada087b7c5f7a7d2fcbdc15102c305375c65" "3afe4800dfb9d048efe2f759894424b91b0a773b0abb63973fb33cd056f96d34" "30f083d649543e3568a1547aaf903e10a59a2b45d0363e070b67acc2df8d4eb4" default)))
  '(dired-listing-switches "-alh")
  '(magit-push-current-set-remote-if-missing nil)
- '(parens-require-spaces nil))
+ '(parens-require-spaces nil)
+ '(safe-local-variable-values
+   (quote
+    ((docker-image-name . debian7-jdk8)
+     (docker-image-name . "cloudera-host")
+     (docker-image-name . "cloudera-path-a")))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

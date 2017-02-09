@@ -70,6 +70,7 @@
         scroll-down-line
         scroll-up-line
         sgml-slash
+        sh-assignment
         slim-electric-backspace
         string-inflection-all-cycle
         subword-left
