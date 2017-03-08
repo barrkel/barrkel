@@ -1004,7 +1004,12 @@ buffer instead of replacing the text in region."
  '(parens-require-spaces nil)
  '(safe-local-variable-values
    (quote
-    ((docker-image-name . debian7-jdk8)
+    ((docker-image-name . "cdh5-duco")
+     (docker-image-name . "impala-builder")
+     (docker-image-name . "hadoop-kitchen-sink")
+     (docker-image-name . "hadoop-single")
+     (docker-image-name . "hadoop-base")
+     (docker-image-name . debian7-jdk8)
      (docker-image-name . "cloudera-host")
      (docker-image-name . "cloudera-path-a")))))
 
