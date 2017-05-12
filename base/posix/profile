@@ -9,6 +9,7 @@ export LANG=C
 export LESS=-iR
 export EDITOR=emacs
 export VISUAL=emacs
+unset HISTFILE
 
 export PAGER=/usr/bin/less
 export MANPAGER='/usr/bin/less -isrR'

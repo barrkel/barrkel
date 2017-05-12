@@ -14,6 +14,8 @@ let time_in_seconds=$(date -d "$1" +%s)
 
 difference=$((time_in_seconds - $(date +%s)))
 
+echo "sleeping for $difference seconds"
+
 if (( difference < 0 )); then
     sleep $[86400 + difference]
 else

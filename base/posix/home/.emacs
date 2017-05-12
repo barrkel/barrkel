@@ -329,6 +329,10 @@
             (set-tab-style nil 4)))
 
 ;; slim templates
+(add-hook 'slim-mode-hook
+          (lambda ()
+            (define-key slim-mode-map (kbd "RET") 'dumb-newline)
+            (set-tab-style nil 2)))
 
 ;; text
 (add-hook 'text-mode-hook
