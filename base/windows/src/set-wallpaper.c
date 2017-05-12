@@ -29,6 +29,7 @@ int main(int argc, char **argv)
 	if (!ret)
 		fail("SPI call failed");
 
+	printf("apparently done.\n");
+
 	return 0;
 }
-	

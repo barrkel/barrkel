@@ -27,6 +27,7 @@
         dabbrev-expand
         delete-horizontal-space
         delete-line-command
+        dired-do-delete
         dired-next-line
         dired-previous-line
         dumb-newline
@@ -34,6 +35,7 @@
         end-of-buffer
         end-of-visual-line
         enh-ruby-electric-brace
+        enh-ruby-forward-sexp
         eval-print-last-sexp
         evil-numbers/dec-at-pt
         evil-numbers/inc-at-pt
@@ -69,6 +71,7 @@
         scroll-down-line
         scroll-up-line
         sgml-slash
+        sh-assignment
         slim-electric-backspace
         string-inflection-all-cycle
         subword-left

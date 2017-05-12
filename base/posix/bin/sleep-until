@@ -19,6 +19,6 @@ echo "sleeping for $difference seconds"
 if (( difference < 0 )); then
     sleep $[86400 + difference]
 else
-	sleep $difference
+    sleep $difference
 fi
 
