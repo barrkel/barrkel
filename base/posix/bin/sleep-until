@@ -17,6 +17,6 @@ difference=$((time_in_seconds - $(date +%s)))
 if (( difference < 0 )); then
     sleep $[86400 + difference]
 else
-	sleep $difference
+    sleep $difference
 fi
 

@@ -37,4 +37,4 @@ SwitchShortcuts=no
 AltFnShortcuts=no
 Term=xterm-256color
 ScrollMod=shift
-Scrollbar=right
+Scrollbar=none
