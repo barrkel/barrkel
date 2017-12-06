@@ -244,6 +244,7 @@
           (lambda ()
             (whitespace-mode)
             (define-key markdown-mode-map (kbd "M-n") nil)
+            (define-key markdown-mode-map (kbd "M-p") nil)
             (local-set-key (kbd "RET") 'dumb-newline)))
 
 ;; org
@@ -406,6 +407,8 @@
 (define-key global-map (kbd "S-<f11>") 'helm-mini)
 (define-key global-map (kbd "M-<f12>") 'helm-resume)
 (define-key global-map (kbd "M-S-<f12>") 'helm-semantic-or-imenu)
+(define-key global-map (kbd "M-p") 'helm-pages)
+
 (eval-after-load "helm"
   '(progn
      (helm-mode)
@@ -819,6 +822,9 @@ buffer instead of replacing the text in region."
 ;; TWEAKS
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; X paste bug
+(setq x-selection-timeout 10)
+
 ;; line numbers
 (global-linum-mode)
 (setq linum-format "%4d ")
@@ -1004,7 +1010,10 @@ buffer instead of replacing the text in region."
  '(parens-require-spaces nil)
  '(safe-local-variable-values
    (quote
-    ((docker-image-name . "cdh5-duco")
+    ((docker-image-name . "duco-encvol")
+     (docker-image-name . "ldap-for-hadoop")
+     (docker-image-name . "hadoop-in-a-box")
+     (docker-image-name . "cdh5-duco")
      (docker-image-name . "impala-builder")
      (docker-image-name . "hadoop-kitchen-sink")
      (docker-image-name . "hadoop-single")

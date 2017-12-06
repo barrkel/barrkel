@@ -54,6 +54,7 @@
         kill-region
         kill-this-buffer
         kill-visual-line
+        nxml-electric-slash
         org-delete-char
         org-end-of-line
         org-self-insert-command
@@ -91,6 +92,7 @@
         ace-jump-done
         ace-jump-word-mode
         describe-key
+        find-file
         ido-find-file
         iedit-mode
         mouse-set-region
