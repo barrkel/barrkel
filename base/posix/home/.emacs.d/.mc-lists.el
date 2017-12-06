@@ -27,6 +27,7 @@
         dabbrev-expand
         delete-horizontal-space
         delete-line-command
+        dired-do-delete
         dired-next-line
         dired-previous-line
         dumb-newline

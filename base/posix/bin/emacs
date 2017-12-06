@@ -1,6 +1,11 @@
 #!/bin/bash
 
 for x in /opt/bin /usr/local/bin /usr/bin; do
+    emacs="$x/emacs-nox"
+    test -x "$emacs" && break
+done
+
+for x in /opt/bin /usr/local/bin /usr/bin; do
     emacs="$x/emacs"
     test -x "$emacs" && break
 done

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+function process # arg
+{
+    local file_time="$(date -r "$1")"
+    local target_dir="$(date -d "$file_time" +'%Y-%m')"
+
+    mkdir -p "$target_dir"
+    mv "$1" "$target_dir/"
+}
+
+for arg; do
+    process "$arg"
+done
+
