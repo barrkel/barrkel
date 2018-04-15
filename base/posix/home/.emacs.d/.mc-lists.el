@@ -68,6 +68,7 @@
         picture-self-insert
         repeat
         replace-regexp
+        revert-buffer
         ruby-end-of-block
         scroll-down-line
         scroll-up-line
@@ -94,6 +95,8 @@
         ace-jump-word-mode
         describe-key
         find-file
+        dired-mark
+        dired-sort-toggle-or-edit
         ido-find-file
         iedit-mode
         mouse-set-region
