@@ -462,6 +462,11 @@
 (define-key global-map (kbd "M-n") 'mc/mark-next-like-this)
 (define-key global-map (kbd "M-N") 'mc/unmark-next-like-this)
 (define-key global-map (kbd "C-M-n") 'mc/skip-to-next-like-this)
+;; disable inserting a | for all the fake cursors, throwing off alignments
+;; the first one in an emacs session will appear, but no more
+(add-hook 'multiple-cursors-mode-hook
+          (lambda ()
+            (defun mc/cursor-is-bar nil)))
 
 ;; projectile
 

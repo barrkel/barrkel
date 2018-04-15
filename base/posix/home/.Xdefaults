@@ -429,6 +429,7 @@ Rxvt*lineSpace:1
 !  keysym.sym:         keysym
 
 URxvt*iso14755:False
+URxvt.perl-ext-common: "default, -searchable-scrollback"
 
 ! rxvt-unicode (urxvt) v9.19 - released: 2013-10-27
 ! options: perl,xft,styles,combining,blink,iso14755,unicode3,encodings=eu+vn+jp+jp-ext+kr+zh+zh-ext,fade,transparent,tint,pixbuf,XIM,frills,selectionscrolling,wheel,slipwheel,smart-resize,cursorBlink,pointerBlank,scrollbars=plain+rxvt+NeXT+xterm
