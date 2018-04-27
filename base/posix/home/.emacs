@@ -1011,10 +1011,9 @@ buffer instead of replacing the text in region."
  '(custom-enabled-themes (quote (barrkel-4)))
  '(custom-safe-themes
    (quote
-    ("c7e0422d3b032d66fd1666da6099182689a815d078f03c3db4c3288e66ba6a26" "b18119d24b0b4cd9998b2ba21654ada087b7c5f7a7d2fcbdc15102c305375c65" "3afe4800dfb9d048efe2f759894424b91b0a773b0abb63973fb33cd056f96d34" "30f083d649543e3568a1547aaf903e10a59a2b45d0363e070b67acc2df8d4eb4" default)))
+    ("558410d7803ff018a67c30659ac7eb48daf1a8f2f88513c57b3e3ebac71aa3fb" "c7e0422d3b032d66fd1666da6099182689a815d078f03c3db4c3288e66ba6a26" "b18119d24b0b4cd9998b2ba21654ada087b7c5f7a7d2fcbdc15102c305375c65" "3afe4800dfb9d048efe2f759894424b91b0a773b0abb63973fb33cd056f96d34" "30f083d649543e3568a1547aaf903e10a59a2b45d0363e070b67acc2df8d4eb4" default)))
  '(dired-listing-switches "-alh")
  '(magit-push-current-set-remote-if-missing nil)
-
  '(package-selected-packages
    (quote
     (powershell zop-to-char yaml-mode yafolding wgrep web-mode volatile-highlights string-inflection smartrep slim-mode scss-mode rspec-mode puppet-mode ox-reveal operate-on-number multiple-cursors move-text markdown-mode magit julia-mode js2-mode inf-ruby iedit htmlize highlight-indentation highlight-indent-guides helm-projectile helm-git-grep haskell-mode haml-mode god-mode go-mode git-timemachine format-sql flycheck fireplace expand-region evil-numbers esqlite-helm enh-ruby-mode edbi-sqlite discover-my-major diff-hl csv-mode csharp-mode color-theme coffee-mode cargo avy-zap anzu)))
