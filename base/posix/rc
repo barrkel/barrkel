@@ -6,8 +6,13 @@
 # prompt
 #--------------------------------------------------------------------------------
 
-# Only print hostname in prompt if SSH connection
-if [ -n "$SSH_CONNECTION" ]; then
+# The prompt is the one exception to variables that shouldn't go in this file.
+# The system /etc/bashrc will reset PS1 if it's not set herein.
+
+if [ -n "$BARRKEL_PS1" ]; then
+    export PS1="$BARRKEL_PS1"
+elif [ -n "$SSH_CONNECTION" ]; then
+    # Only print hostname in prompt if SSH connection
     export PS1='[\h] \w\$ '
 else
     export PS1='\w\$ '
