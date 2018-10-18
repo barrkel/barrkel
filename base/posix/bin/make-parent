@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Finds and makes top-most Makefile before reaching /
+
 candidate=
 while [[ "$PWD" != '/' ]]; do
     test -f Makefile && candidate="$PWD/Makefile"
