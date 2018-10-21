@@ -55,6 +55,7 @@
         kill-region
         kill-this-buffer
         kill-visual-line
+        mouse-yank-primary
         nxml-electric-slash
         org-delete-char
         org-end-of-line
@@ -84,6 +85,7 @@
         wdired-next-line
         wdired-previous-line
         yaml-electric-backspace
+        yaml-electric-bar-and-angle
         yaml-electric-dash-and-dot
         yas-expand
         zop-to-char
@@ -93,12 +95,14 @@
       '(
         ace-jump-done
         ace-jump-word-mode
+        c-electric-star
         describe-key
-        find-file
         dired-mark
         dired-sort-toggle-or-edit
+        find-file
         ido-find-file
         iedit-mode
+        iedit-switch-to-mc-mode
         mouse-set-region
         rspec-toggle-spec-and-target
         rspec-verify-single

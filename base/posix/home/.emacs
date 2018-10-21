@@ -6,7 +6,7 @@
 ;; packages
 (require 'package)
 (add-to-list 'package-archives
-         '("melpa" . "http://melpa.milkbox.net/packages/"))
+         '("melpa" . "http://melpa.org/packages/"))
 (package-initialize)
 (setq package-enable-at-startup nil)
 
@@ -85,7 +85,7 @@
 ;; - toggle electric state - keys that randomly start doing weird indenting
 ;; - dumb-newline - bind to RET for smartass modes
 ;; - visual-line-mode - you usually want this
-;; - linum-mode - disable for non-programming modes
+;; - nlinum-mode - disable for non-programming modes
 ;; - indent-line-function - define to e.g. insert-tab if it's missing or dumb
 ;; - unset weird random overrides of basic keys; M-h is a common one
 ;; - auto-fill-mode and fill-column variables
@@ -146,6 +146,7 @@
 (add-hook 'dired-mode-hook
           (lambda ()
             (define-key dired-mode-map (kbd "W") 'wdired-change-to-wdired-mode)))
+(define-key global-map (kbd "C-x C-j") 'dired-jump)
 
 ;; emacs-lisp
 (add-hook 'emacs-lisp-mode-hook
@@ -179,12 +180,12 @@
 ;; help
 (add-hook 'help-mode-hook
           (lambda ()
-            (linum-mode 0)))
+            (nlinum-mode 0)))
 
 ;; ibuffer
 (add-hook 'ibuffer-mode-hook
           (lambda ()
-            (linum-mode 0)))
+            (nlinum-mode 0)))
 
 ;; ispell
 ;; (add-hook 'ispell-initialize-spellchecker-hook
@@ -237,7 +238,7 @@
 ;; man
 (add-hook 'Man-mode-hook
           (lambda ()
-            (linum-mode 0)))
+            (nlinum-mode 0)))
 
 ;; markdown
 (add-hook 'markdown-mode-hook
@@ -356,7 +357,8 @@
 ;; xml
 (add-hook 'nxml-mode-hook
           (lambda ()
-            (define-key nxml-mode-map (kbd "M-h") nil)))
+            (define-key nxml-mode-map (kbd "M-h") nil)
+            (set-tab-style t 4)))
 
 ;; yaml
 (add-hook 'yaml-mode-hook
@@ -835,10 +837,8 @@ buffer instead of replacing the text in region."
 (setq x-selection-timeout 10)
 
 ;; line numbers
-(global-linum-mode)
-(setq linum-format "%4d ")
-(setq linum-eager nil)
-(setq linum-delay t)
+(global-nlinum-mode)
+(setq nlinum-format "%4d ")
 ;; (set-face 'linum "magenta")
 
 ;; number columns too
