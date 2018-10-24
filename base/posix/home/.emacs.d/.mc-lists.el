@@ -93,6 +93,7 @@
         ace-jump-done
         ace-jump-word-mode
         describe-key
+        dired-copy-filename-as-kill
         dired-mark
         dired-sort-toggle-or-edit
         ido-find-file
