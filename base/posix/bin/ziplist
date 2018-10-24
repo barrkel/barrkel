@@ -1,0 +1,5 @@
+#!/bin/bash
+
+for x in "$@"; do
+    zipinfo -1 "$x" | sed "s|^|$x:|"
+done

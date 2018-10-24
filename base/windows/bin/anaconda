@@ -1,0 +1,36 @@
+#!/bin/bash
+
+function find_anaconda
+{
+    local locations=(/c/ProgramData/Anaconda3)
+
+    for location in "${locations[@]}"; do
+        test -x "$location/python.exe" && {
+            export ANACONDA_ROOT="$location"
+            return
+        }
+    done
+    echo "Anaconda root directory not found"
+    exit 1
+}
+
+function build_anaconda_path
+{
+    local paths=('' Library/mingw-w64/bin Library/usr/bin Library/bin Scripts bin)
+
+    ANACONDA_PATH=''
+    local joiner=''
+    for path in "${paths[@]}"; do
+        ANACONDA_PATH="$ANACONDA_PATH""$joiner""$ANACONDA_ROOT/$path"
+        joiner=':'
+    done
+}
+
+find_anaconda
+build_anaconda_path
+
+export PATH="$ANACONDA_PATH":"$PATH"
+export PS1='<anaconda> \w\$ '
+export BARRKEL_PS1='<anaconda> \w\$ '
+
+exec /bin/bash
