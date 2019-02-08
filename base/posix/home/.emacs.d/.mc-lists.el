@@ -97,6 +97,7 @@
         ace-jump-word-mode
         c-electric-star
         describe-key
+        dired-copy-filename-as-kill
         dired-mark
         dired-sort-toggle-or-edit
         find-file
