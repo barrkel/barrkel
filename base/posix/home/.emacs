@@ -152,6 +152,7 @@
 (add-hook 'emacs-lisp-mode-hook
           (lambda ()
             (define-key emacs-lisp-mode-map (kbd "C-.") 'find-function-at-point)
+            (define-key emacs-lisp-mode-map (kbd "C-j") 'eval-print-last-sexp)
             (eldoc-mode)
             (setq fill-column 100)
             (auto-fill-mode)
@@ -180,12 +181,12 @@
 ;; help
 (add-hook 'help-mode-hook
           (lambda ()
-            (nlinum-mode 0)))
+            (display-line-numbers-mode 0)))
 
 ;; ibuffer
 (add-hook 'ibuffer-mode-hook
           (lambda ()
-            (nlinum-mode 0)))
+            (display-line-numbers-mode 0)))
 
 ;; ispell
 ;; (add-hook 'ispell-initialize-spellchecker-hook
@@ -238,7 +239,7 @@
 ;; man
 (add-hook 'Man-mode-hook
           (lambda ()
-            (nlinum-mode 0)))
+            (display-line-numbers-mode 0)))
 
 ;; markdown
 (add-hook 'markdown-mode-hook
@@ -337,7 +338,7 @@
             (set-tab-style nil 2)))
 
 ;; sql
-(add-hook 'sql-mode
+(add-hook 'sql-mode-hook
           (lambda ()
             (define-key sql-mode-map (kbd "RET") 'dumb-newline)))
 
@@ -837,8 +838,8 @@ buffer instead of replacing the text in region."
 (setq x-selection-timeout 10)
 
 ;; line numbers
-(global-nlinum-mode)
-(setq nlinum-format "%4d ")
+(global-display-line-numbers-mode)
+(setq display-line-numbers-width 4)
 ;; (set-face 'linum "magenta")
 
 ;; number columns too
@@ -1016,11 +1017,12 @@ buffer instead of replacing the text in region."
  '(magit-push-current-set-remote-if-missing nil)
  '(package-selected-packages
    (quote
-    (powershell zop-to-char yaml-mode yafolding wgrep web-mode volatile-highlights string-inflection smartrep slim-mode scss-mode rspec-mode puppet-mode ox-reveal operate-on-number multiple-cursors move-text markdown-mode magit julia-mode js2-mode inf-ruby iedit htmlize highlight-indentation highlight-indent-guides helm-projectile helm-git-grep haskell-mode haml-mode god-mode go-mode git-timemachine format-sql flycheck fireplace expand-region evil-numbers esqlite-helm enh-ruby-mode edbi-sqlite discover-my-major diff-hl csv-mode csharp-mode color-theme coffee-mode cargo avy-zap anzu)))
+    (company-lsp company ksp-cfg-mode kubel kubernetes kubernetes-helm kubernetes-tramp racer realgud-byebug realgud-pry realgud k8s-mode rjsx-mode lsp-javascript-typescript treemacs lsp-java lsp-ruby helm-lsp powershell zop-to-char yaml-mode yafolding wgrep web-mode volatile-highlights string-inflection smartrep slim-mode scss-mode rspec-mode puppet-mode ox-reveal operate-on-number multiple-cursors move-text markdown-mode magit julia-mode js2-mode inf-ruby iedit htmlize highlight-indentation highlight-indent-guides helm-projectile helm-git-grep haskell-mode haml-mode god-mode go-mode git-timemachine format-sql flycheck fireplace expand-region evil-numbers esqlite-helm enh-ruby-mode edbi-sqlite discover-my-major diff-hl csv-mode csharp-mode color-theme coffee-mode cargo avy-zap anzu)))
  '(parens-require-spaces nil)
  '(safe-local-variable-values
    (quote
-    ((docker-image-name . "duco-encvol")
+    ((dockerfile-image-name . "hadoop-in-a-box")
+     (docker-image-name . "duco-encvol")
      (docker-image-name . "ldap-for-hadoop")
      (docker-image-name . "hadoop-in-a-box")
      (docker-image-name . "cdh5-duco")
