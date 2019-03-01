@@ -1,0 +1,20 @@
+#!/bin/bash
+
+for x in /opt/bin /usr/local/bin /usr/bin; do
+    emacs="$x/emacs-nox"
+    test -x "$emacs" && break
+done
+
+test -x "$emacs" || for x in /opt/bin /usr/local/bin /usr/bin; do
+    emacs="$x/emacs"
+    test -x "$emacs" && break
+done
+
+test -x "$emacs" || {
+    echo "Could not find emacs executable"
+    exit 1
+}
+
+export LANG=utf8.en_US
+"$emacs" "$@" >/dev/null 2>&1 &
+

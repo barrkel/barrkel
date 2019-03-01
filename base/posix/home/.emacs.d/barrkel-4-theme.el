@@ -50,13 +50,18 @@
                 :underline nil
                 :slant normal
                 :weight normal
-                :height 80
+                ,@(cond ((eq window-system 'ns)
+                         '(:height 110))
+                        (t
+                         '(:height 80)))
                 :width normal
                 ;; , on its own is unquote inside a backtick quote; ,@ is a list splicing unquote
                 ,@(cond ((eq window-system 'w32)
                          '(:foundry "outline" :family "Dina TTF"))
                         ((eq window-system 'x)
                          '(:foundry "windows" :family "Dina"))
+                        ((eq window-system 'ns)
+                         '(:foundry "windows" :family "Andale Mono"))
                         (t
                          '(:foundry "default" :family "default")))))))
  `(cursor

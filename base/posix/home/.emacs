@@ -6,7 +6,7 @@
 ;; packages
 (require 'package)
 (add-to-list 'package-archives
-         '("melpa" . "http://melpa.milkbox.net/packages/"))
+         '("melpa" . "http://melpa.org/packages/"))
 (package-initialize)
 (setq package-enable-at-startup nil)
 
@@ -85,7 +85,7 @@
 ;; - toggle electric state - keys that randomly start doing weird indenting
 ;; - dumb-newline - bind to RET for smartass modes
 ;; - visual-line-mode - you usually want this
-;; - linum-mode - disable for non-programming modes
+;; - nlinum-mode - disable for non-programming modes
 ;; - indent-line-function - define to e.g. insert-tab if it's missing or dumb
 ;; - unset weird random overrides of basic keys; M-h is a common one
 ;; - auto-fill-mode and fill-column variables
@@ -146,11 +146,13 @@
 (add-hook 'dired-mode-hook
           (lambda ()
             (define-key dired-mode-map (kbd "W") 'wdired-change-to-wdired-mode)))
+(define-key global-map (kbd "C-x C-j") 'dired-jump)
 
 ;; emacs-lisp
 (add-hook 'emacs-lisp-mode-hook
           (lambda ()
             (define-key emacs-lisp-mode-map (kbd "C-.") 'find-function-at-point)
+            (define-key emacs-lisp-mode-map (kbd "C-j") 'eval-print-last-sexp)
             (eldoc-mode)
             (setq fill-column 100)
             (auto-fill-mode)
@@ -179,12 +181,12 @@
 ;; help
 (add-hook 'help-mode-hook
           (lambda ()
-            (linum-mode 0)))
+            (display-line-numbers-mode 0)))
 
 ;; ibuffer
 (add-hook 'ibuffer-mode-hook
           (lambda ()
-            (linum-mode 0)))
+            (display-line-numbers-mode 0)))
 
 ;; ispell
 ;; (add-hook 'ispell-initialize-spellchecker-hook
@@ -237,13 +239,14 @@
 ;; man
 (add-hook 'Man-mode-hook
           (lambda ()
-            (linum-mode 0)))
+            (display-line-numbers-mode 0)))
 
 ;; markdown
 (add-hook 'markdown-mode-hook
           (lambda ()
             (whitespace-mode)
             (define-key markdown-mode-map (kbd "M-n") nil)
+            (define-key markdown-mode-map (kbd "M-p") nil)
             (local-set-key (kbd "RET") 'dumb-newline)))
 
 ;; org
@@ -335,7 +338,7 @@
             (set-tab-style nil 2)))
 
 ;; sql
-(add-hook 'sql-mode
+(add-hook 'sql-mode-hook
           (lambda ()
             (define-key sql-mode-map (kbd "RET") 'dumb-newline)))
 
@@ -355,7 +358,8 @@
 ;; xml
 (add-hook 'nxml-mode-hook
           (lambda ()
-            (define-key nxml-mode-map (kbd "M-h") nil)))
+            (define-key nxml-mode-map (kbd "M-h") nil)
+            (set-tab-style t 4)))
 
 ;; yaml
 (add-hook 'yaml-mode-hook
@@ -410,6 +414,8 @@
 (define-key global-map (kbd "S-<f11>") 'helm-mini)
 (define-key global-map (kbd "M-<f12>") 'helm-resume)
 (define-key global-map (kbd "M-S-<f12>") 'helm-semantic-or-imenu)
+(define-key global-map (kbd "M-p") 'helm-pages)
+
 (eval-after-load "helm"
   '(progn
      (helm-mode)
@@ -459,6 +465,11 @@
 (define-key global-map (kbd "M-n") 'mc/mark-next-like-this)
 (define-key global-map (kbd "M-N") 'mc/unmark-next-like-this)
 (define-key global-map (kbd "C-M-n") 'mc/skip-to-next-like-this)
+;; disable inserting a | for all the fake cursors, throwing off alignments
+;; the first one in an emacs session will appear, but no more
+(add-hook 'multiple-cursors-mode-hook
+          (lambda ()
+            (defun mc/cursor-is-bar nil)))
 
 ;; projectile
 
@@ -823,11 +834,12 @@ buffer instead of replacing the text in region."
 ;; TWEAKS
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; X paste bug
+(setq x-selection-timeout 10)
+
 ;; line numbers
-(global-linum-mode)
-(setq linum-format "%4d ")
-(setq linum-eager nil)
-(setq linum-delay t)
+(global-display-line-numbers-mode)
+(setq display-line-numbers-width 4)
 ;; (set-face 'linum "magenta")
 
 ;; number columns too
@@ -1000,17 +1012,20 @@ buffer instead of replacing the text in region."
  '(custom-enabled-themes (quote (barrkel-4)))
  '(custom-safe-themes
    (quote
-    ("c7e0422d3b032d66fd1666da6099182689a815d078f03c3db4c3288e66ba6a26" "b18119d24b0b4cd9998b2ba21654ada087b7c5f7a7d2fcbdc15102c305375c65" "3afe4800dfb9d048efe2f759894424b91b0a773b0abb63973fb33cd056f96d34" "30f083d649543e3568a1547aaf903e10a59a2b45d0363e070b67acc2df8d4eb4" default)))
+    ("789d365625c25564557d728a2eb0a0141f8bc2c250c786deddf55e912d3628e3" "552d3e01a9742e7635c4a46388185ca70e3d08063cc6678212381d6fe27f6bbb" "dabaad95869f1c29ee5f78895a05f219ce28847fc33ea783342fe6478622a09c" "26ca642ed44744c966c1aa136a7f8996f43d2669aa8e4e77c3c260e4c8bad7f7" "819eee0a99068671570dc0db2a49e79194e7402c5f431cf9e5fe445f74f3a8a8" "0304f6773d997609f818be75eef73ae557351c9c284cedcdcd55f0747f6ed586" "558410d7803ff018a67c30659ac7eb48daf1a8f2f88513c57b3e3ebac71aa3fb" "c7e0422d3b032d66fd1666da6099182689a815d078f03c3db4c3288e66ba6a26" "b18119d24b0b4cd9998b2ba21654ada087b7c5f7a7d2fcbdc15102c305375c65" "3afe4800dfb9d048efe2f759894424b91b0a773b0abb63973fb33cd056f96d34" "30f083d649543e3568a1547aaf903e10a59a2b45d0363e070b67acc2df8d4eb4" default)))
  '(dired-listing-switches "-alh")
  '(magit-push-current-set-remote-if-missing nil)
-
  '(package-selected-packages
    (quote
-    (powershell zop-to-char yaml-mode yafolding wgrep web-mode volatile-highlights string-inflection smartrep slim-mode scss-mode rspec-mode puppet-mode ox-reveal operate-on-number multiple-cursors move-text markdown-mode magit julia-mode js2-mode inf-ruby iedit htmlize highlight-indentation highlight-indent-guides helm-projectile helm-git-grep haskell-mode haml-mode god-mode go-mode git-timemachine format-sql flycheck fireplace expand-region evil-numbers esqlite-helm enh-ruby-mode edbi-sqlite discover-my-major diff-hl csv-mode csharp-mode color-theme coffee-mode cargo avy-zap anzu)))
+    (company-lsp company ksp-cfg-mode kubel kubernetes kubernetes-helm kubernetes-tramp racer realgud-byebug realgud-pry realgud k8s-mode rjsx-mode lsp-javascript-typescript treemacs lsp-java lsp-ruby helm-lsp powershell zop-to-char yaml-mode yafolding wgrep web-mode volatile-highlights string-inflection smartrep slim-mode scss-mode rspec-mode puppet-mode ox-reveal operate-on-number multiple-cursors move-text markdown-mode magit julia-mode js2-mode inf-ruby iedit htmlize highlight-indentation highlight-indent-guides helm-projectile helm-git-grep haskell-mode haml-mode god-mode go-mode git-timemachine format-sql flycheck fireplace expand-region evil-numbers esqlite-helm enh-ruby-mode edbi-sqlite discover-my-major diff-hl csv-mode csharp-mode color-theme coffee-mode cargo avy-zap anzu)))
  '(parens-require-spaces nil)
  '(safe-local-variable-values
    (quote
-    ((docker-image-name . "cdh5-duco")
+    ((dockerfile-image-name . "hadoop-in-a-box")
+     (docker-image-name . "duco-encvol")
+     (docker-image-name . "ldap-for-hadoop")
+     (docker-image-name . "hadoop-in-a-box")
+     (docker-image-name . "cdh5-duco")
      (docker-image-name . "impala-builder")
      (docker-image-name . "hadoop-kitchen-sink")
      (docker-image-name . "hadoop-single")
