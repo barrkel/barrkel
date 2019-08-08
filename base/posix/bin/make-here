@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Finds first Makefile and makes it
+
 while [[ ! -f Makefile && "$PWD" != '/' ]]; do
     cd ..
 done

@@ -16,4 +16,4 @@ test -x "$emacs" || {
 }
 
 export LANG=utf8.en_US
-"$emacs" "$@"
+"$emacs" -nw "$@"
