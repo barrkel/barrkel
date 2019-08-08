@@ -52,8 +52,8 @@
                 :weight normal
                 ,@(cond ((eq window-system 'ns)
                          '(:height 110))
-                         (t
-                          (:height 80)))
+                        (t
+                         '(:height 80)))
                 :width normal
                 ;; , on its own is unquote inside a backtick quote; ,@ is a list splicing unquote
                 ,@(cond ((eq window-system 'w32)

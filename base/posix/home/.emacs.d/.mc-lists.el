@@ -84,6 +84,7 @@
         wdired-downcase-word
         wdired-next-line
         wdired-previous-line
+        wdired-upcase-word
         yaml-electric-backspace
         yaml-electric-bar-and-angle
         yaml-electric-dash-and-dot
