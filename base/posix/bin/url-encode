@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+require 'uri'
+
+puts URI.encode(ARGV.first)
+
