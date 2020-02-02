@@ -1,5 +1,8 @@
 (setq gc-cons-threshold 20000000)
 
+;; behold this command line for cleaning up ~/.emacs.d/elpa
+;; ls | sed -r 's|(.*)-20......\.[0-9]+$|\1|' | uniq -c | grep -v ' 1 ' | cut -b 9- | while read -r line; do for x in $(echo $line-*/); do echo $x; done | head -n -1; done | xargs rm -rf
+
 ;; custom stuff that I want on the load path
 (add-to-list 'load-path "~/.emacs.d/barrkel")
 
