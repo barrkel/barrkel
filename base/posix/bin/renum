@@ -39,7 +39,7 @@ function process # filename
     fi
 	
 	while true; do
-	    new_name=$(printf '%s%.3d%s' "$base_name" $num "$ext")
+	    new_name=$(printf '%s%.4d%s' "$base_name" $num "$ext")
 	    let ++num
 	    test "$old_name" == "$new_name" && continue
 	    test -e "$new_name" && continue

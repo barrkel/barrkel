@@ -176,6 +176,7 @@
 (add-hook 'haml-mode-hook
           (lambda ()
             (whitespace-mode)
+            (set-tab-style nil 2)
             (highlight-indentation-current-column-mode)))
 
 ;; help
