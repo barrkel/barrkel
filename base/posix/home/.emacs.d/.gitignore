@@ -8,3 +8,7 @@ tramp
 recentf
 elpa/archives/gnu/archive-contents.signed
 .org-id-locations
+eclipse.jdt.ls/
+transient/
+workspace/
+session.*
