@@ -1019,6 +1019,7 @@ buffer instead of replacing the text in region."
    (quote
     (company-lsp company ksp-cfg-mode kubel kubernetes kubernetes-helm kubernetes-tramp racer realgud-byebug realgud-pry realgud k8s-mode rjsx-mode lsp-javascript-typescript treemacs lsp-java lsp-ruby helm-lsp powershell zop-to-char yaml-mode yafolding wgrep web-mode volatile-highlights string-inflection smartrep slim-mode scss-mode rspec-mode puppet-mode ox-reveal operate-on-number multiple-cursors move-text markdown-mode magit julia-mode js2-mode inf-ruby iedit htmlize highlight-indentation highlight-indent-guides helm-projectile helm-git-grep haskell-mode haml-mode god-mode go-mode git-timemachine format-sql flycheck fireplace expand-region evil-numbers esqlite-helm enh-ruby-mode edbi-sqlite discover-my-major diff-hl csv-mode csharp-mode color-theme coffee-mode cargo avy-zap anzu)))
  '(parens-require-spaces nil)
+ '(ring-bell-function (quote ignore))
  '(safe-local-variable-values
    (quote
     ((dockerfile-image-name . "hadoop-in-a-box")
