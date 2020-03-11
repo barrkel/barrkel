@@ -32,6 +32,7 @@
         dired-previous-line
         dumb-newline
         duplicate-line-or-region
+        electric-graphviz-dot-semi
         end-of-buffer
         end-of-visual-line
         enh-ruby-electric-brace
@@ -105,7 +106,9 @@
         ido-find-file
         iedit-mode
         iedit-switch-to-mc-mode
+        isearch-delete-char
         mouse-set-region
+        picture-backward-clear-column
         rspec-toggle-spec-and-target
         rspec-verify-single
         save-some-buffers

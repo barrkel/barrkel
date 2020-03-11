@@ -1,4 +1,4 @@
 #!/bin/bash
 
 mkdir -p ~/notes
-gtkscratch ~/notes &
+gtkscratch ~/notes >/dev/null 2>&1 &
