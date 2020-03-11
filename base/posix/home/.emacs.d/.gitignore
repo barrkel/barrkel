@@ -3,6 +3,7 @@ projectile-bookmarks.eld
 url/cookies
 semanticdb/
 eshell/
+transient/
 tramp
 *.elc
 recentf
