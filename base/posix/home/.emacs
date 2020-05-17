@@ -1,4 +1,7 @@
-(setq gc-cons-threshold 20000000)
+(setq gc-cons-threshold 100000000)
+
+;; behold this command line for cleaning up ~/.emacs.d/elpa
+;; ls | sed -r 's|(.*)-20......\.[0-9]+$|\1|' | uniq -c | grep -v ' 1 ' | cut -b 9- | while read -r line; do for x in $(echo $line-*/); do echo $x; done | head -n -1; done | xargs rm -rf
 
 ;; custom stuff that I want on the load path
 (add-to-list 'load-path "~/.emacs.d/barrkel")
@@ -164,6 +167,11 @@
             (visual-line-mode)
             (set-tab-style t 4)))
 
+;; graphviz
+(add-hook 'graphviz-dot-mode-hook
+          (lambda ()
+            (setq graphviz-dot-auto-indent-on-semi nil)))
+
 ;; groovy
 (add-hook 'groovy-mode-hook
           (lambda ()
@@ -176,6 +184,7 @@
 (add-hook 'haml-mode-hook
           (lambda ()
             (whitespace-mode)
+            (set-tab-style nil 2)
             (highlight-indentation-current-column-mode)))
 
 ;; help
@@ -205,9 +214,13 @@
 ;; java
 (add-hook 'java-mode-hook
           (lambda()
+            ;; lsp-java has no autoloads!
+            ;(require 'lsp-java)
+            ;(lsp)
             (yafolding-mode)
             (set-tab-style t 4)
             (subword-mode)
+            (define-key java-mode-map (kbd "C-.") 'lsp-find-definition)
             ;;(whitespace-mode)
             (visual-line-mode)))
 
@@ -340,6 +353,7 @@
 ;; sql
 (add-hook 'sql-mode-hook
           (lambda ()
+            (set-tab-style nil 2)
             (define-key sql-mode-map (kbd "RET") 'dumb-newline)))
 
 ;; text
@@ -508,6 +522,13 @@
      (define-key projectile-mode-map (kbd "S-<f12>") 'projectile-switch-to-buffer)
      (define-key projectile-mode-map (kbd "<f22>") 'projectile-switch-to-buffer)))
 
+
+;; yafolding
+(eval-after-load "yafolding"
+  '(progn
+     (define-key yafolding-mode-map (kbd "C-^") 'yafolding-toggle-element)))
+
+
 ;; whitespace
 ;; global whitespace mode can't be easily undone; in particular display faces remain even when
 ;; whitespace is disabled for a buffer; thus we enable whitespace per mode, as desired
@@ -648,30 +669,30 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(autoload 'helm-occur-init-source "helm")
-(defun helm-occur-1 (initial-value)
-  "Preconfigured helm for Occur with initial input (helm-occur with mods)."
-  (interactive)
-  (helm-occur-init-source)
-  (let ((bufs (list (buffer-name (current-buffer)))))
-    (helm-attrset 'moccur-buffers bufs helm-source-occur)
-    (helm-set-local-variable 'helm-multi-occur-buffer-list bufs)
-    (helm-set-local-variable
-     'helm-multi-occur-buffer-tick
-     (cl-loop for b in bufs
-              collect (buffer-chars-modified-tick (get-buffer b)))))
-  (helm :sources 'helm-source-occur
-        :buffer "*helm occur*"
-        :history 'helm-grep-history
-        :preselect (and (memq 'helm-source-occur helm-sources-using-default-as-input)
-                        (format "%s:%d:" (buffer-name) (line-number-at-pos (point))))
-        :truncate-lines t
-        :input initial-value))
-(defun bk/helm-occur ()
-  "Invoke helm-occur with initial input configured from text at point"
-  (interactive)
-  (helm-occur-1 (get-point-text)))
-(define-key global-map (kbd "M-o") 'bk/helm-occur)
+;; (autoload 'helm-occur-init-source "helm")
+;; (defun helm-occur-1 (initial-value)
+;;   "Preconfigured helm for Occur with initial input (helm-occur with mods)."
+;;   (interactive)
+;;   (helm-occur-init-source)
+;;   (let ((bufs (list (buffer-name (current-buffer)))))
+;;     (helm-attrset 'moccur-buffers bufs helm-source-occur)
+;;     (helm-set-local-variable 'helm-multi-occur-buffer-list bufs)
+;;     (helm-set-local-variable
+;;      'helm-multi-occur-buffer-tick
+;;      (cl-loop for b in bufs
+;;               collect (buffer-chars-modified-tick (get-buffer b)))))
+;;   (helm :sources 'helm-source-occur
+;;         :buffer "*helm occur*"
+;;         :history 'helm-grep-history
+;;         :preselect (and (memq 'helm-source-occur helm-sources-using-default-as-input)
+;;                         (format "%s:%d:" (buffer-name) (line-number-at-pos (point))))
+;;         :truncate-lines t
+;;         :input initial-value))
+;; (defun bk/helm-occur ()
+;;   "Invoke helm-occur with initial input configured from text at point"
+;;   (interactive)
+;;   (helm-occur-1 (get-point-text)))
+(define-key global-map (kbd "M-o") 'helm-occur)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -1008,18 +1029,25 @@ buffer instead of replacing the text in region."
  '(ansi-color-names-vector
    ["#242424" "#e5786d" "#95e454" "#cae682" "#8ac6f2" "#333366" "#ccaa8f" "#f6f3e8"])
  '(blink-cursor-mode t)
+ '(company-idle-delay 0.2)
  '(cursor-type (quote (bar . 2)))
  '(custom-enabled-themes (quote (barrkel-4)))
  '(custom-safe-themes
    (quote
-    ("789d365625c25564557d728a2eb0a0141f8bc2c250c786deddf55e912d3628e3" "552d3e01a9742e7635c4a46388185ca70e3d08063cc6678212381d6fe27f6bbb" "dabaad95869f1c29ee5f78895a05f219ce28847fc33ea783342fe6478622a09c" "26ca642ed44744c966c1aa136a7f8996f43d2669aa8e4e77c3c260e4c8bad7f7" "819eee0a99068671570dc0db2a49e79194e7402c5f431cf9e5fe445f74f3a8a8" "0304f6773d997609f818be75eef73ae557351c9c284cedcdcd55f0747f6ed586" "558410d7803ff018a67c30659ac7eb48daf1a8f2f88513c57b3e3ebac71aa3fb" "c7e0422d3b032d66fd1666da6099182689a815d078f03c3db4c3288e66ba6a26" "b18119d24b0b4cd9998b2ba21654ada087b7c5f7a7d2fcbdc15102c305375c65" "3afe4800dfb9d048efe2f759894424b91b0a773b0abb63973fb33cd056f96d34" "30f083d649543e3568a1547aaf903e10a59a2b45d0363e070b67acc2df8d4eb4" default)))
+    ("789d365625c25564557d728a2eb0a0141f8bc2c250c786deddf55e912d3628e3" "552d3e01a9742e7635c4a46388185ca70e3d08063cc6678212381d6fe27f6bbb" "558410d7803ff018a67c30659ac7eb48daf1a8f2f88513c57b3e3ebac71aa3fb" "c7e0422d3b032d66fd1666da6099182689a815d078f03c3db4c3288e66ba6a26" "b18119d24b0b4cd9998b2ba21654ada087b7c5f7a7d2fcbdc15102c305375c65" "3afe4800dfb9d048efe2f759894424b91b0a773b0abb63973fb33cd056f96d34" "30f083d649543e3568a1547aaf903e10a59a2b45d0363e070b67acc2df8d4eb4" default)))
  '(dired-listing-switches "-alh")
+ '(lsp-ui-doc-enable nil)
+ '(lsp-ui-imenu-enable nil)
+ '(lsp-ui-peek-enable nil)
+ '(lsp-ui-sideline-enable nil)
  '(magit-push-current-set-remote-if-missing nil)
+ '(magit-remote-set-if-missing nil)
  '(package-selected-packages
    (quote
-    (company-lsp company ksp-cfg-mode kubel kubernetes kubernetes-helm kubernetes-tramp racer realgud-byebug realgud-pry realgud k8s-mode rjsx-mode lsp-javascript-typescript treemacs lsp-java lsp-ruby helm-lsp powershell zop-to-char yaml-mode yafolding wgrep web-mode volatile-highlights string-inflection smartrep slim-mode scss-mode rspec-mode puppet-mode ox-reveal operate-on-number multiple-cursors move-text markdown-mode magit julia-mode js2-mode inf-ruby iedit htmlize highlight-indentation highlight-indent-guides helm-projectile helm-git-grep haskell-mode haml-mode god-mode go-mode git-timemachine format-sql flycheck fireplace expand-region evil-numbers esqlite-helm enh-ruby-mode edbi-sqlite discover-my-major diff-hl csv-mode csharp-mode color-theme coffee-mode cargo avy-zap anzu)))
+    (anzu avy-zap cargo coffee-mode color-theme company company-lsp csharp-mode csv-mode diff-hl discover-my-major dot-mode edbi-sqlite enh-ruby-mode esqlite-helm evil-numbers expand-region fireplace flycheck format-sql git-timemachine god-mode go-mode gradle-mode haml-mode haskell-mode helm-git-grep helm-lsp helm-projectile highlight-indentation highlight-indent-guides htmlize iedit inf-ruby js2-mode julia-mode k8s-mode ksp-cfg-mode kubel kubernetes kubernetes-helm kubernetes-tramp lsp-java lsp-javascript-typescript lsp-ruby magit markdown-mode move-text multiple-cursors operate-on-number ox-reveal powershell puppet-mode racer realgud realgud-byebug realgud-pry rjsx-mode rspec-mode scss-mode slim-mode smartrep string-inflection treemacs volatile-highlights web-mode wgrep yafolding yaml-mode zop-to-char)))
  '(parens-require-spaces nil)
  '(ring-bell-function (quote ignore))
+ '(ruby-align-to-stmt-keywords nil)
  '(safe-local-variable-values
    (quote
     ((dockerfile-image-name . "hadoop-in-a-box")

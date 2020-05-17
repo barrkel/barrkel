@@ -1,0 +1,21 @@
+#!/bin/bash
+
+function usage
+{
+    echo "$(basename $0) <from> <to> [<other find args>...]"
+    echo "Find items with mtime betewen <from> and <to>, interpreted with date -d so its elaborate parsing can handle things"
+    echo "Other args are prepended with -newermt commands used to implement the range, so first other arg can be a path"
+    exit 1
+}
+
+set -e
+
+test -n "$1" || usage
+from_time=$(date -d "$1" +'%F %T')
+shift
+
+test -n "$1" || usage
+to_time=$(date -d "$1" +'%F %T')
+shift
+
+find "$@" -newermt "$from_time" '!' -newermt "$to_time"

@@ -1,0 +1,8 @@
+#!/bin/bash
+
+test -n "$1" || {
+    echo "expect a command line"
+    exit 1
+}
+
+"$@" >log 2>&1 &
