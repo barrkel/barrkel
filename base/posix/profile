@@ -15,7 +15,7 @@ unset HISTFILE
 export PAGER=/usr/bin/less
 export MANPAGER='/usr/bin/less -isrR'
 
-pathlist_ensure_prepending MANPATH /usr/local/man /opt/man /usr/share/man /usr/man
+pathlist_ensure_prepending MANPATH /usr/local/man /usr/local/share/man /opt/man /usr/share/man /usr/man
 export MANPATH
 
 pathlist_ensure_prepending INFOPATH /usr/local/info /opt/info /usr/share/info /usr/info
