@@ -215,8 +215,12 @@
 (add-hook 'java-mode-hook
           (lambda()
             ;; lsp-java has no autoloads!
-            ;(require 'lsp-java)
-            ;(lsp)
+            ;;(require 'lsp-java)
+            ;;(lsp)
+            ;;(lsp-ui-doc-enable nil)
+            ;;(lsp-ui-imenu-enable nil)
+            ;;(lsp-ui-peek-enable nil)
+            ;;(lsp-ui-sideline-enable nil)
             (yafolding-mode)
             (set-tab-style t 4)
             (subword-mode)
@@ -305,6 +309,7 @@
           (lambda ()
             (yafolding-mode)
             (set-tab-style nil 2)
+            (ruby-align-to-stmt-keywords nil)
             (visual-line-mode)))
 (add-hook 'enh-ruby-mode-hook
           (lambda ()
@@ -1029,24 +1034,18 @@ buffer instead of replacing the text in region."
  '(ansi-color-names-vector
    ["#242424" "#e5786d" "#95e454" "#cae682" "#8ac6f2" "#333366" "#ccaa8f" "#f6f3e8"])
  '(blink-cursor-mode t)
- '(company-idle-delay 0.2)
  '(cursor-type (quote (bar . 2)))
  '(custom-enabled-themes (quote (barrkel-4)))
  '(custom-safe-themes
    (quote
-    ("789d365625c25564557d728a2eb0a0141f8bc2c250c786deddf55e912d3628e3" "552d3e01a9742e7635c4a46388185ca70e3d08063cc6678212381d6fe27f6bbb" "558410d7803ff018a67c30659ac7eb48daf1a8f2f88513c57b3e3ebac71aa3fb" "c7e0422d3b032d66fd1666da6099182689a815d078f03c3db4c3288e66ba6a26" "b18119d24b0b4cd9998b2ba21654ada087b7c5f7a7d2fcbdc15102c305375c65" "3afe4800dfb9d048efe2f759894424b91b0a773b0abb63973fb33cd056f96d34" "30f083d649543e3568a1547aaf903e10a59a2b45d0363e070b67acc2df8d4eb4" default)))
+    ("789d365625c25564557d728a2eb0a0141f8bc2c250c786deddf55e912d3628e3" "552d3e01a9742e7635c4a46388185ca70e3d08063cc6678212381d6fe27f6bbb" "dabaad95869f1c29ee5f78895a05f219ce28847fc33ea783342fe6478622a09c" "26ca642ed44744c966c1aa136a7f8996f43d2669aa8e4e77c3c260e4c8bad7f7" "819eee0a99068671570dc0db2a49e79194e7402c5f431cf9e5fe445f74f3a8a8" "0304f6773d997609f818be75eef73ae557351c9c284cedcdcd55f0747f6ed586" "558410d7803ff018a67c30659ac7eb48daf1a8f2f88513c57b3e3ebac71aa3fb" "c7e0422d3b032d66fd1666da6099182689a815d078f03c3db4c3288e66ba6a26" "b18119d24b0b4cd9998b2ba21654ada087b7c5f7a7d2fcbdc15102c305375c65" "3afe4800dfb9d048efe2f759894424b91b0a773b0abb63973fb33cd056f96d34" "30f083d649543e3568a1547aaf903e10a59a2b45d0363e070b67acc2df8d4eb4" default)))
  '(dired-listing-switches "-alh")
- '(lsp-ui-doc-enable nil)
- '(lsp-ui-imenu-enable nil)
- '(lsp-ui-peek-enable nil)
- '(lsp-ui-sideline-enable nil)
+ '(magit-ellipsis 58)
  '(magit-push-current-set-remote-if-missing nil)
- '(magit-remote-set-if-missing nil)
  '(package-selected-packages
    (quote
-    (anzu avy-zap cargo coffee-mode color-theme company company-lsp csharp-mode csv-mode diff-hl discover-my-major dot-mode edbi-sqlite enh-ruby-mode esqlite-helm evil-numbers expand-region fireplace flycheck format-sql git-timemachine god-mode go-mode gradle-mode haml-mode haskell-mode helm-git-grep helm-lsp helm-projectile highlight-indentation highlight-indent-guides htmlize iedit inf-ruby js2-mode julia-mode k8s-mode ksp-cfg-mode kubel kubernetes kubernetes-helm kubernetes-tramp lsp-java lsp-javascript-typescript lsp-ruby magit markdown-mode move-text multiple-cursors operate-on-number ox-reveal powershell puppet-mode racer realgud realgud-byebug realgud-pry rjsx-mode rspec-mode scss-mode slim-mode smartrep string-inflection treemacs volatile-highlights web-mode wgrep yafolding yaml-mode zop-to-char)))
+    (avy makey edbi helm company-lsp company ksp-cfg-mode kubel kubernetes kubernetes-helm kubernetes-tramp racer realgud-byebug realgud-pry realgud k8s-mode rjsx-mode lsp-javascript-typescript treemacs lsp-java lsp-ruby helm-lsp powershell zop-to-char yaml-mode yafolding wgrep web-mode volatile-highlights string-inflection smartrep slim-mode scss-mode rspec-mode puppet-mode ox-reveal operate-on-number multiple-cursors move-text markdown-mode magit julia-mode js2-mode inf-ruby iedit htmlize highlight-indentation highlight-indent-guides helm-projectile helm-git-grep haskell-mode haml-mode god-mode go-mode git-timemachine format-sql flycheck fireplace expand-region evil-numbers esqlite-helm enh-ruby-mode edbi-sqlite discover-my-major diff-hl csv-mode csharp-mode color-theme coffee-mode cargo avy-zap anzu)))
  '(parens-require-spaces nil)
- '(ruby-align-to-stmt-keywords nil)
  '(safe-local-variable-values
    (quote
     ((dockerfile-image-name . "hadoop-in-a-box")
