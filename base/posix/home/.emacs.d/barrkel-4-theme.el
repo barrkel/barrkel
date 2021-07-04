@@ -51,7 +51,7 @@
                 :slant normal
                 :weight normal
                 ,@(cond ((eq window-system 'ns)
-                         '(:height 110))
+                         '(:height 120))
                         (t
                          '(:height 80)))
                 :width normal
