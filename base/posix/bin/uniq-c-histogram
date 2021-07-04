@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+
+ARGF.map { |x| x.strip.split(' ') }
+  .each { |c,v| printf "%10s %s\n", v, '=' * c.to_i }

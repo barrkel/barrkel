@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# requires privileged shell (Run as administrator)
+kill.exe -f $(ps -W | grep dwm | sel 1)
